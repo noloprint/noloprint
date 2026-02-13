@@ -1,97 +1,106 @@
-/* Stile Generale */
+/* Reset Base */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
     line-height: 1.6;
     color: #333;
-    scroll-behavior: smooth;
-    padding-top: 0; /* Il padding è gestito dall'header */
+    /* Impedisce lo scroll orizzontale */
+    overflow-x: hidden; 
 }
 
-/* --- HEADER E ANIMAZIONE --- */
+/* --- HEADER ANIMATO --- */
 header {
-    background: #fff;
-    padding: 40px 5%; /* Partenza GRANDE */
     position: fixed;
-    width: 100%;
     top: 0;
-    z-index: 1000;
-    box-sizing: border-box;
-    transition: all 0.4s ease-in-out; /* Animazione fluida */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-}
-
-nav {
+    left: 0;
+    width: 100%;
+    height: 100vh; /* All'inizio occupa TUTTO lo schermo */
+    background-color: #ffffff; /* Sfondo bianco coprente */
     display: flex;
-    flex-direction: column; /* Inizialmente colonna: Logo sopra, menu sotto */
     align-items: center;
     justify-content: center;
-    transition: all 0.4s ease;
+    z-index: 1000;
+    transition: all 0.5s ease-in-out; /* Animazione fluida */
+    box-shadow: none;
 }
 
-/* Stile iniziale del Logo (GRANDE) */
-#logo-img {
-    height: 120px; /* Dimensione grande */
-    transition: all 0.4s ease;
+.header-container {
+    display: flex;
+    flex-direction: column; /* Logo sopra, menu sotto all'inizio */
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    transition: all 0.5s ease;
+}
+
+/* Logo Iniziale (Grande) */
+#main-logo {
+    width: 280px; /* Dimensione grande iniziale */
+    height: auto;
+    transition: all 0.5s ease-in-out;
     margin-bottom: 20px;
 }
 
-.menu {
+/* Menu inizialmente nascosto per pulizia (opzionale, qui lo mostro discreto) */
+nav ul {
     list-style: none;
     display: flex;
-    margin: 0;
-    padding: 0;
+    gap: 20px;
+    opacity: 0; /* Nascosto all'inizio per focus sul logo */
+    transition: opacity 0.3s;
 }
 
-.menu li { margin: 0 15px; }
-.menu li a { 
-    text-decoration: none; 
-    color: #555; 
-    font-weight: 600; 
-    transition: 0.3s; 
-    font-size: 1.1rem;
+nav a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    text-transform: uppercase;
 }
-.menu li a:hover { color: #3498db; }
 
-
-/* --- CLASSE "SCROLLED" (Quando scendi giù) --- */
+/* --- STATO SCROLLED (Quando si scorre la pagina) --- */
 header.scrolled {
-    padding: 10px 5%; /* Diventa sottile */
-    background: rgba(255, 255, 255, 0.95); /* Leggermente trasparente */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    height: 80px; /* Diventa una barra normale */
+    background-color: rgba(255, 255, 255, 0.95); /* Diventa leggermente trasparente */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-header.scrolled nav {
-    flex-direction: row; /* Diventa riga orizzontale */
-    justify-content: space-between; /* Spazia gli elementi */
+header.scrolled .header-container {
+    flex-direction: row; /* Elementi in riga */
+    justify-content: space-between; /* Logo a sx, menu a dx */
 }
 
-/* Spostiamo il logo a DESTRA come richiesto */
-header.scrolled .logo-container {
-    order: 2; /* Ordine 2: va a destra */
-}
-
-header.scrolled .menu {
-    order: 1; /* Ordine 1: va a sinistra */
-}
-
-header.scrolled #logo-img {
-    height: 40px; /* Diventa PICCOLO */
+header.scrolled #main-logo {
+    width: 60px; /* Logo diventa piccolo */
     margin-bottom: 0;
 }
 
-/* --------------------------------- */
-
-
-/* Hero Section */
-.hero {
-    /* Aumentiamo il padding top perché l'header iniziale è grande */
-    padding: 300px 5% 100px; 
-    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    text-align: center;
+header.scrolled nav ul {
+    opacity: 1; /* Il menu appare */
 }
 
-.hero h1 { font-size: 3.5rem; margin-bottom: 20px; color: #2c3e50; }
+/* --- CONTENUTO PAGINA --- */
+main {
+    /* Lasciamo spazio iniziale vuoto perché c'è il logo fullscreen */
+    padding-top: 100vh; 
+}
+
+/* Hero Section (appare scorrendo) */
+.hero {
+    padding: 100px 5%;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    text-align: center;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
 
 .btn {
     display: inline-block;
@@ -101,14 +110,13 @@ header.scrolled #logo-img {
     text-decoration: none;
     border-radius: 50px;
     font-weight: bold;
-    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
     transition: 0.3s;
 }
 .btn:hover { background: #2980b9; transform: translateY(-2px); }
 
-/* Cards dei Servizi */
-.services { padding: 80px 5%; max-width: 1200px; margin: auto; }
-.services h2 { text-align: center; margin-bottom: 40px; font-size: 2.5rem; }
+/* Servizi */
+.services { padding: 80px 5%; background: white; }
+.services h2 { text-align: center; margin-bottom: 50px; font-size: 2.5rem; color: #2c3e50; }
 
 .grid {
     display: grid;
@@ -117,34 +125,35 @@ header.scrolled #logo-img {
 }
 
 .card {
-    background: white;
     padding: 30px;
-    border-radius: 15px;
+    background: #fff;
     border: 1px solid #eee;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     transition: 0.3s;
-    text-align: center;
 }
-
-.card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-.card h3 { color: #2c3e50; margin-bottom: 10px; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+.card h3 { color: #3498db; margin-bottom: 15px; }
 
 /* Footer */
 footer {
     background: #2c3e50;
     color: #ecf0f1;
-    padding: 60px 5%;
+    padding: 60px 5% 20px;
     text-align: center;
 }
-footer h2 { color: white; margin-bottom: 20px; }
-footer p { margin: 5px 0; }
+.footer-content h3 { color: #fff; margin-bottom: 20px; font-size: 1.5rem; }
+.footer-content p { margin: 10px 0; font-size: 1rem; }
+.footer-content a { color: #3498db; text-decoration: none; }
+.copyright { margin-top: 40px; font-size: 0.8rem; opacity: 0.7; border-top: 1px solid #444; padding-top: 20px;}
 
-/* Adattamento Mobile */
+/* --- SMARTPHONE --- */
 @media (max-width: 768px) {
-    .hero { padding-top: 250px; } /* Meno spazio su mobile */
-    .hero h1 { font-size: 2.2rem; }
+    #main-logo { width: 200px; } /* Logo iniziale un po' più piccolo su mobile */
+    .hero-content h1 { font-size: 2rem; }
     
-    /* Su mobile manteniamo il logo piccolo al centro quando si scrolla per non rompere il layout */
-    header.scrolled nav {
-        justify-content: space-between;
+    header.scrolled nav ul {
+        gap: 10px;
+        font-size: 0.9rem;
     }
 }
