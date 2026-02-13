@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NoloPrint | Copisteria Professionale</title>
+    <title>NOLO Print Srl | Copisteria Milano</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-    <header>
+    <header id="main-header">
         <nav>
-            <div class="logo">Nolo<span>Print</span></div>
-            <ul>
+            <div class="logo-container">
+                <img src="images/logo.png" alt="NoloPrint Logo" id="logo-img">
+            </div>
+            <ul class="menu">
                 <li><a href="#servizi">Servizi</a></li>
                 <li><a href="#contatti">Contatti</a></li>
             </ul>
@@ -19,9 +21,11 @@
     </header>
 
     <section class="hero">
-        <h1>Stampe di qualità a Nolo</h1>
-        <p>Dalle tesi di laurea ai grandi formati. Rapidità e precisione.</p>
-        <a href="mailto:info@noloprint.it" class="btn">Inviaci un file</a>
+        <div class="hero-content">
+            <h1>L'universo della stampa</h1>
+            <p>Qualità professionale in Via Padova. Rapidità e precisione.</p>
+            <a href="mailto:noloprint@gmail.com" class="btn">Richiedi Preventivo</a>
+        </div>
     </section>
 
     <section id="servizi" class="services">
@@ -43,11 +47,30 @@
     </section>
 
     <footer id="contatti">
-        <h2>NoloPrint</h2>
-        <p>📍 Via Venini, Milano (Zona NoLo)</p>
-        <p>📞 Tel: 02 1234567 | 📧 info@noloprint.it</p>
-        <p>&copy; 2026 NoloPrint - Tutti i diritti riservati</p>
+        <h2>NOLO Print Srl</h2>
+        <p>📍 Via Padova, 49 - 20127 Milano</p>
+        <p>📞 Tel. 02 2828316 | 📠 Fax 02 2894562</p>
+        <p>📧 <a href="mailto:noloprint@gmail.com" style="color: #3498db; text-decoration: none;">noloprint@gmail.com</a></p>
+        <p style="margin-top: 10px; font-size: 0.9rem;">P.IVA 11258900965</p>
+        <br>
+        <p style="font-size: 0.8rem; color: #bdc3c7;">&copy; 2026 NoloPrint - Tutti i diritti riservati</p>
     </footer>
+
+    <script>
+        // Quando l'utente scorre la pagina
+        window.onscroll = function() {scrollFunction()};
+
+        function scrollFunction() {
+            var header = document.getElementById("main-header");
+            
+            // Se scendi di più di 80px
+            if (document.body.scrollTop > 80 || document.documentElement.scrollTop > 80) {
+                header.classList.add("scrolled"); // Aggiunge la classe per rimpicciolire
+            } else {
+                header.classList.remove("scrolled"); // Torna grande se risali
+            }
+        }
+    </script>
 
 </body>
 </html>
