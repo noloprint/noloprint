@@ -5,42 +5,89 @@ body {
     line-height: 1.6;
     color: #333;
     scroll-behavior: smooth;
+    padding-top: 0; /* Il padding è gestito dall'header */
 }
 
-/* Navigazione */
+/* --- HEADER E ANIMAZIONE --- */
 header {
     background: #fff;
-    padding: 15px 5%;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    position: sticky;
+    padding: 40px 5%; /* Partenza GRANDE */
+    position: fixed;
+    width: 100%;
     top: 0;
     z-index: 1000;
+    box-sizing: border-box;
+    transition: all 0.4s ease-in-out; /* Animazione fluida */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
 nav {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column; /* Inizialmente colonna: Logo sopra, menu sotto */
     align-items: center;
+    justify-content: center;
+    transition: all 0.4s ease;
 }
 
-.logo {
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: #2c3e50;
-    letter-spacing: -1px;
+/* Stile iniziale del Logo (GRANDE) */
+#logo-img {
+    height: 120px; /* Dimensione grande */
+    transition: all 0.4s ease;
+    margin-bottom: 20px;
 }
 
-.logo span { color: #3498db; } /* Un blu moderno per NoloPrint */
+.menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
 
-nav ul { list-style: none; display: flex; margin: 0; }
-nav ul li { margin-left: 25px; }
-nav ul li a { text-decoration: none; color: #555; font-weight: 600; transition: 0.3s; }
-nav ul li a:hover { color: #3498db; }
+.menu li { margin: 0 15px; }
+.menu li a { 
+    text-decoration: none; 
+    color: #555; 
+    font-weight: 600; 
+    transition: 0.3s; 
+    font-size: 1.1rem;
+}
+.menu li a:hover { color: #3498db; }
+
+
+/* --- CLASSE "SCROLLED" (Quando scendi giù) --- */
+header.scrolled {
+    padding: 10px 5%; /* Diventa sottile */
+    background: rgba(255, 255, 255, 0.95); /* Leggermente trasparente */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+header.scrolled nav {
+    flex-direction: row; /* Diventa riga orizzontale */
+    justify-content: space-between; /* Spazia gli elementi */
+}
+
+/* Spostiamo il logo a DESTRA come richiesto */
+header.scrolled .logo-container {
+    order: 2; /* Ordine 2: va a destra */
+}
+
+header.scrolled .menu {
+    order: 1; /* Ordine 1: va a sinistra */
+}
+
+header.scrolled #logo-img {
+    height: 40px; /* Diventa PICCOLO */
+    margin-bottom: 0;
+}
+
+/* --------------------------------- */
+
 
 /* Hero Section */
 .hero {
+    /* Aumentiamo il padding top perché l'header iniziale è grande */
+    padding: 300px 5% 100px; 
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    padding: 120px 5%;
     text-align: center;
 }
 
@@ -55,7 +102,9 @@ nav ul li a:hover { color: #3498db; }
     border-radius: 50px;
     font-weight: bold;
     box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    transition: 0.3s;
 }
+.btn:hover { background: #2980b9; transform: translateY(-2px); }
 
 /* Cards dei Servizi */
 .services { padding: 80px 5%; max-width: 1200px; margin: auto; }
@@ -73,9 +122,11 @@ nav ul li a:hover { color: #3498db; }
     border-radius: 15px;
     border: 1px solid #eee;
     transition: 0.3s;
+    text-align: center;
 }
 
 .card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+.card h3 { color: #2c3e50; margin-bottom: 10px; }
 
 /* Footer */
 footer {
@@ -83,4 +134,17 @@ footer {
     color: #ecf0f1;
     padding: 60px 5%;
     text-align: center;
+}
+footer h2 { color: white; margin-bottom: 20px; }
+footer p { margin: 5px 0; }
+
+/* Adattamento Mobile */
+@media (max-width: 768px) {
+    .hero { padding-top: 250px; } /* Meno spazio su mobile */
+    .hero h1 { font-size: 2.2rem; }
+    
+    /* Su mobile manteniamo il logo piccolo al centro quando si scrolla per non rompere il layout */
+    header.scrolled nav {
+        justify-content: space-between;
+    }
 }
