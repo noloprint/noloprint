@@ -3,79 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOLO Print Srl | Copisteria Milano</title>
+    <title>NOLO Print Srl | L'universo della stampa</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
     <header id="main-header">
-        <div class="header-container">
-            <a href="#" class="logo-link">
-                <img src="images/logo.png" alt="Nolo Print Logo" id="main-logo">
-            </a>
-            
-            <nav>
-                <ul>
-                    <li><a href="#servizi">Servizi</a></li>
-                    <li><a href="#contatti">Contatti</a></li>
-                </ul>
-            </nav>
-        </div>
+        <nav>
+            <div class="nav-logo-container">
+                <img src="images/logo.png" alt="NOLO Print" class="mini-logo">
+                <div id="dynamic-title" class="nav-title">NOLO Print Srl</div>
+            </div>
+            <ul>
+                <li><a href="#servizi">Servizi</a></li>
+                <li><a href="#contatti">Contatti</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <main>
-        <section class="hero">
-            <div class="hero-content">
-                <h1>Qualità e Velocità</h1>
-                <p>La tua copisteria di fiducia a Milano.</p>
-                <a href="mailto:noloprint@gmail.com" class="btn">Richiedi Preventivo</a>
-            </div>
-        </section>
+    <section class="hero" id="hero">
+        <div class="hero-inner">
+            <img src="images/logo.png" alt="NOLO Print Logo" class="main-logo">
+            <h1 class="hero-text">L'universo della stampa</h1>
+            <p>Qualità e precisione nel cuore di Milano</p>
+            <a href="mailto:noloprint@gmail.com" class="btn">Contattaci subito</a>
+        </div>
+    </section>
 
-        <section id="servizi" class="services">
-            <h2>I Nostri Servizi</h2>
-            <div class="grid">
-                <div class="card">
-                    <h3>Stampa e Tesi</h3>
-                    <p>Rilegature, tesi di laurea e stampe digitali ad alta definizione.</p>
-                </div>
-                <div class="card">
-                    <h3>Grafica</h3>
-                    <p>Supporto grafico, impaginazione, biglietti da visita e flyer.</p>
-                </div>
-                <div class="card">
-                    <h3>Grandi Formati</h3>
-                    <p>Plotter, poster, locandine e plastificazioni.</p>
-                </div>
+    <section id="servizi" class="services">
+        <div class="section-header" data-title="I Nostri Servizi">
+            <h2>Cosa facciamo</h2>
+        </div>
+        <div class="grid">
+            <div class="card">
+                <h3>Documenti e Tesi</h3>
+                <p>Rilegature artigianali e stampe laser ad alta definizione per studenti e professionisti.</p>
             </div>
-        </section>
-    </main>
+            <div class="card">
+                <h3>Grafica e Design</h3>
+                <p>Creazione loghi, impaginazione flyer, brochure e supporto per la comunicazione visiva.</p>
+            </div>
+            <div class="card">
+                <h3>Grandi Formati</h3>
+                <p>Stampa di poster, banner pubblicitari e progetti tecnici CAD su vari supporti.</p>
+            </div>
+        </div>
+    </section>
 
     <footer id="contatti">
-        <div class="footer-content">
-            <h3>NOLO Print Srl</h3>
-            <p>📍 Via Padova, 49 - 20127 Milano</p>
-            <p>📞 Tel. 02 2828316 | 📠 Fax 02 2894562</p>
-            <p>📧 <a href="mailto:noloprint@gmail.com">noloprint@gmail.com</a></p>
-            <p>🆔 P.IVA 11258900965</p>
+        <div class="footer-grid">
+            <div class="footer-box">
+                <h3>NOLO Print Srl</h3>
+                <p>📍 Via Padova, 49 - 20127 Milano</p>
+                <p>📞 Tel. 02 2828316</p>
+                <p>📠 Fax 02 2894562</p>
+                <p>📧 noloprint@gmail.com</p>
+                <p><strong>P.IVA:</strong> 11258900965</p>
+            </div>
         </div>
-        <div class="copyright">
-            &copy; 2026 NOLO Print Srl - Tutti i diritti riservati
+        <div class="footer-bottom">
+            &copy; 2026 NOLO Print Srl - Professionalità e cortesia.
         </div>
     </footer>
 
     <script>
-        // Ascolta lo scorrimento della pagina
-        window.addEventListener('scroll', function() {
-            var header = document.getElementById('main-header');
-            // Se scorri più di 50px, aggiungi la classe "scrolled"
-            if (window.scrollY > 50) {
-                header.classList.add('scrolled');
+        window.onscroll = function() {
+            const header = document.getElementById("main-header");
+            const dynamicTitle = document.getElementById("dynamic-title");
+            const sections = document.querySelectorAll(".section-header");
+            
+            // Effetto Header comparsa
+            if (window.pageYOffset > 300) {
+                header.classList.add("header-visible");
             } else {
-                header.classList.remove('scrolled');
+                header.classList.remove("header-visible");
             }
-        });
-    </script>
 
+            // Cambia il sottotitolo accanto al logo in base alla sezione
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top >= 0 && rect.top <= 150) {
+                    dynamicTitle.innerText = section.getAttribute("data-title");
+                }
+            });
+        };
+    </script>
 </body>
 </html>
