@@ -1,1 +1,56 @@
+/* Reset e font */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    color: #333;
+}
 
+/* Header */
+header {
+    background: #000;
+    color: #fff;
+    padding: 1rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo { font-weight: bold; font-size: 1.5rem; }
+.logo span { color: #00aeef; } /* Cyan */
+
+nav ul { list-style: none; display: flex; }
+nav ul li { margin-left: 20px; }
+nav a { color: white; text-decoration: none; }
+
+/* Hero Section */
+.hero {
+    background: #f4f4f4;
+    padding: 80px 5%;
+    text-align: center;
+}
+
+.btn-main {
+    background: #00aeef;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Griglia Servizi */
+.grid-servizi {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 40px 5%;
+}
+
+.card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.card:hover { border-color: #00aeef; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
