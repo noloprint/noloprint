@@ -1,225 +1,267 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Universo della stampa</title>
-  <style>
-    /* Var colori CMYK (approssimazioni web-safe) */
-    :root{
-      --c-cmyk: #00a9e0; /* ciano */
-      --m-cmyk: #ff2d9c; /* magenta */
-      --y-cmyk: #ffd400; /* giallo */
-      --bg: #fcfcfc;    /* chiaro */
-      --text: #111;
-      --footer-bg: #000;
-      --bar-max-height: 80; /* px: altezza massima della barra */
-      --sticky-top: 0px; /* aggiornato dinamicamente */
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universo della Stampa - CMYK</title>
+    <style>
+        :root {
+            --cyan: #00ffff;
+            --magenta: #ff00ff;
+            --yellow: #ffff00;
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --header-height: 80px;
+        }
 
-    /* reset semplice */
-    *{box-sizing:border-box;margin:0;padding:0}
-    html,body{height:100%;background:var(--bg);color:var(--text);font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    /* layout */
-    main{max-width:1200px;margin:0 auto}
+        body {
+            background-color: var(--white);
+            color: var(--black);
+            overflow-x: hidden;
+        }
 
-    /* LOGO: posizionato fixed per permettere un'animazione fluida */
-    .logo-wrap{position:fixed;left:50%;top:30vh;transform:translate(-50%,-50%);z-index:40;pointer-events:none}
-    .logo{
-      width:220px;height:220px;display:flex;align-items:center;justify-content:center;flex-direction:column;pointer-events:auto
-    }
-    .logo img{display:block;width:100%;height:auto;max-width:240px}
-    .logo h1{font-size:1.25rem;margin-top:12px;text-align:center;font-weight:600}
+        /* --- LOGICA LOGO E HEADER --- */
+        #header-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: var(--header-height);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            pointer-events: none; /* Permette di cliccare sotto la barra se necessario */
+        }
 
-    /* la barra che appare sotto il logo: sfumatura bianco -> trasparente */
-    .top-bar{position:fixed;left:0;top:0;right:0;height:0px;pointer-events:none;z-index:35;overflow:hidden;}
-    .top-bar .fade{height:100%;width:100%;background:linear-gradient(to bottom, rgba(255,255,255,0.98), rgba(255,255,255,0.0));}
+        /* La barra sfumata che compare allo scroll */
+        #gradient-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
 
-    /* hero: spazio dedicato al logo e immagine sottostante */
-    .hero{min-height:100vh;display:flex;align-items:flex-end;justify-content:center;padding-top:22vh;position:relative}
-    .hero .image-area{width:100%;height:40vh;max-height:520px;background-position:center;background-size:cover;background-repeat:no-repeat;position:relative}
-    /* overlay della immagine: bianco in alto che sfuma per vedere l'immagine */
-    .image-area::before{content:"";position:absolute;left:0;right:0;top:0;height:100%;background:linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.6) 15%, rgba(255,255,255,0.0) 45%);pointer-events:none}
+        #logo {
+            position: fixed;
+            z-index: 1001;
+            width: 200px; /* Dimensione iniziale */
+            height: auto;
+            /* Posizionamento iniziale centrato */
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.1s ease-out, top 0.1s ease-out, left 0.1s ease-out, transform 0.1s ease-out;
+            will-change: transform, top, left, width;
+        }
 
-    /* zone / sezioni */
-    section{padding:120px 20px;min-height:60vh;display:flex;align-items:center;justify-content:center}
-    .section-title{font-size:2.2rem;font-weight:700;letter-spacing:0.02em}
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: var(--white);
+        }
 
-    /* singole zone colorate per i titoli (solo colore titolo richiesto) */
-    #cosa-facciamo{background:transparent}
-    #cosa-facciamo .section-title{color:var(--c-cmyk)}
+        #hero-text {
+            margin-top: 150px; /* Spazio per il logo centrato */
+            font-size: 2.5rem;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            transition: opacity 0.5s ease;
+        }
 
-    #magenta{background:transparent}
-    #magenta .section-title{color:var(--m-cmyk)}
+        /* --- AREA IMMAGINE CON SFUMATURA --- */
+        .image-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            margin: 50px auto;
+            overflow: hidden;
+        }
 
-    #giallo{background:transparent}
-    #giallo .section-title{color:var(--y-cmyk)}
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-    /* logica sticky per i titoli: si attacca al top quando tocca il soffitto */
-    .sticky-title{position:sticky;top:var(--sticky-top);display:inline-block;padding:8px 12px;background:transparent}
+        .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, 
+                rgba(255,255,255,1) 0%, 
+                rgba(255,255,255,0.5) 50%, 
+                rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
 
-    /* footer nero con dati centrati */
-    footer{background:var(--footer-bg);color:#fff;text-align:center;padding:40px 20px}
-    footer .contact{max-width:900px;margin:0 auto}
-    footer small{display:block;opacity:0.9}
+        /* --- SEZIONI CMYK --- */
+        section {
+            min-height: 100vh;
+            padding: 100px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    /* responsive */
-    @media (max-width:700px){
-      .logo{width:140px;height:140px}
-      .logo h1{font-size:1rem}
-      .section-title{font-size:1.6rem}
-    }
+        .sticky-title {
+            position: sticky;
+            top: 10px; /* Si ferma sotto il margine superiore */
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+            z-index: 500;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
 
-  </style>
+        .cyan-section { background-color: #f0ffff; }
+        .cyan-section .sticky-title { color: var(--cyan); }
+
+        .magenta-section { background-color: #fff0ff; }
+        .magenta-section .sticky-title { color: var(--magenta); }
+
+        .yellow-section { background-color: #fffff0; }
+        .yellow-section .sticky-title { color: var(--yellow); }
+
+        .content-placeholder {
+            max-width: 600px;
+            line-height: 1.6;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        /* --- FOOTER (K) --- */
+        footer {
+            background-color: var(--black);
+            color: #ccc;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .footer-content p {
+            margin: 10px 0;
+            font-size: 0.9rem;
+        }
+
+        .footer-content b {
+            color: var(--white);
+            display: block;
+            margin-bottom: 10px;
+        }
+
+    </style>
 </head>
 <body>
 
-  <!-- barra trasparente che compare dietro il logo -->
-  <div class="top-bar" id="topBar" aria-hidden="true">
-    <div class="fade"></div>
-  </div>
-
-  <!-- logo (fissa) e titolo iniziale -->
-  <div class="logo-wrap" id="logoWrap">
-    <div class="logo" id="logo">
-      <img src="images/logo.png" alt="logo Universo della stampa" id="logoImg">
-      <h1 id="logoText">Universo della stampa</h1>
+    <div id="header-nav">
+        <div id="gradient-bar"></div>
     </div>
-  </div>
 
-  <main>
-    <!-- HERO: lascia uno spazio per un'immagine con overlay gradiente -->
-    <section class="hero" id="hero">
-      <div class="image-area" id="imageArea" style="background-image: url('images/placeholder.jpg');">
-        <!-- area piccola sotto il logo per inserire immagine; la overlay in CSS gestisce la sfumatura -->
-      </div>
+    <img src="images/logo.png" id="logo" alt="Logo Universo della Stampa">
+
+    <header class="hero">
+        <h1 id="hero-text">Universo della stampa</h1>
+        
+        <div class="image-container">
+            <img src="https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&w=1200" alt="Stampa Offset">
+            <div class="image-overlay"></div>
+        </div>
+    </header>
+
+    <section class="cyan-section">
+        <h2 class="sticky-title">Cosa facciamo</h2>
+        <div class="content-placeholder">
+            <p>Esploriamo le frontiere della stampa digitale e offset, garantendo una resa cromatica perfetta per ogni tuo progetto.</p>
+        </div>
     </section>
 
-    <!-- SEZIONE 2: Cosa facciamo (ciano) -->
-    <section id="cosa-facciamo">
-      <div>
-        <div class="section-title sticky-title" id="titleCosa">Cosa facciamo</div>
-        <p style="margin-top:18px;max-width:760px;text-align:center;opacity:0.8">Testo dimostrativo: qui puoi inserire la descrizione dei servizi offerti.</p>
-      </div>
+    <section class="magenta-section">
+        <h2 class="sticky-title">Segna posto</h2>
+        <div class="content-placeholder">
+            <p>Il colore magenta è l'anima della vitalità nei nostri processi di stampa.</p>
+        </div>
     </section>
 
-    <!-- SEZIONE 3: segnaposto magenta -->
-    <section id="magenta">
-      <div>
-        <div class="section-title sticky-title" id="titleMag">Segna posto</div>
-      </div>
+    <section class="yellow-section">
+        <h2 class="sticky-title">Segna posto</h2>
+        <div class="content-placeholder">
+            <p>L'ultimo tocco di luce prima del contrasto finale.</p>
+        </div>
     </section>
 
-    <!-- SEZIONE 4: segnaposto giallo -->
-    <section id="giallo">
-      <div>
-        <div class="section-title sticky-title" id="titleYel">Segna posto</div>
-      </div>
-    </section>
+    <footer>
+        <div class="footer-content">
+            <b>UNIVERSO DELLA STAMPA SRL</b>
+            <p>Via delle Arti Grafiche, 123 - 00100 Roma (RM)</p>
+            <p>Telefono: +39 06 1234567 | P.IVA: 01234567890</p>
+            <p>&copy; 2024 - Tutti i diritti riservati</p>
+        </div>
+    </footer>
 
-  </main>
+    <script>
+        const logo = document.getElementById('logo');
+        const heroText = document.getElementById('hero-text');
+        const gradientBar = document.getElementById('gradient-bar');
 
-  <footer>
-    <div class="contact">
-      <strong>Nome Azienda SRL</strong>
-      <small>Via Esempio 1 — 00100 Roma — Tel. +39 06 1234567 — P.IVA 01234567890</small>
-    </div>
-  </footer>
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const scrollThreshold = 300; // Distanza entro cui l'animazione si completa
 
-  <script>
-    // Logica animazione: il logo si muove continuamente mentre scorriamo
-    (function(){
-      const logoWrap = document.getElementById('logoWrap');
-      const logoImg = document.getElementById('logoImg');
-      const logoText = document.getElementById('logoText');
-      const hero = document.getElementById('hero');
-      const topBar = document.getElementById('topBar');
-      const imageArea = document.getElementById('imageArea');
+            // Calcolo progresso (da 0 a 1)
+            let progress = Math.min(scrollY / scrollThreshold, 1);
 
-      // parametri target (dove deve finire il logo in px rispetto al viewport)
-      const targetLeft = 20; // px dal bordo sinistro
-      const targetTop = 18;  // px dal bordo superiore
-      const startTopPercent = 0.30; // posizione iniziale in viewport (30vh)
-      const maxBarHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bar-max-height')) || 80;
+            if (progress < 1) {
+                // Posizione iniziale: center (50%, 40%) -> Posizione finale: top-left (40px, 40px)
+                // Usiamo il calcolo per interpolare tra i due stati
+                
+                // Top: da 40% a 40px (circa 5% della viewport)
+                let currentTop = 40 - (progress * 35); 
+                // Left: da 50% a 60px (circa 5% della viewport)
+                let currentLeft = 50 - (progress * 45);
+                // Scala: da 1 a 0.5
+                let currentScale = 1 - (progress * 0.5);
 
-      // quando il progress è 0 -> logo nella posizione iniziale, 1 -> logo al target
-      function update(){
-        const heroRect = hero.getBoundingClientRect();
-        const windowH = window.innerHeight;
-        const logoRect = logoWrap.getBoundingClientRect();
-
-        // range di scroll per completare l'animazione: dall'inizio fino a quando la hero esce quasi tutta
-        const totalRange = Math.max(heroRect.height - 80, 120);
-        const scrolled = Math.min(Math.max(-heroRect.top, 0), totalRange);
-        const progress = Math.min(1, scrolled / totalRange);
-
-        // iniziali (centro iniziale in px)
-        const initialCenterX = window.innerWidth / 2;
-        const initialCenterY = windowH * startTopPercent;
-
-        // target center
-        const logoW = logoRect.width;
-        const logoH = logoRect.height;
-        const targetCenterX = targetLeft + logoW/2;
-        const targetCenterY = targetTop + logoH/2;
-
-        // centro corrente interpolato
-        const currentCenterX = initialCenterX + (targetCenterX - initialCenterX) * progress;
-        const currentCenterY = initialCenterY + (targetCenterY - initialCenterY) * progress;
-
-        // calcola traslazioni in px rispetto alla trasformazione di base translate(-50%,-50%)
-        const tx = currentCenterX - initialCenterX; // positivo = verso destra, negativo verso sx
-        const ty = currentCenterY - initialCenterY; // positivo verso il basso
-
-        // scala lieve durante lo spostamento
-        const scale = 1 - 0.28 * progress; // da 1 a ~0.72
-
-        // applica trasform
-        logoWrap.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(${scale})`;
-
-        // mostra / nascondi e regola l'altezza della top bar in base al progress
-        const barH = Math.round(maxBarHeight * progress);
-        topBar.style.height = barH + 'px';
-        topBar.style.opacity = progress < 0.02 ? 0 : 1; // invisibile quando piccolo
-
-        // aggiorna la variabile CSS --sticky-top per far aderire i titoli appena il "soffitto" è occupato
-        // lasciamo 8px di margine sotto la barra
-        document.documentElement.style.setProperty('--sticky-top', (barH + 8) + 'px');
-
-        // manteniamo logo e testo sempre opachi: manipoliamo solo la barra
-        logoImg.style.opacity = 1;
-        logoText.style.opacity = 1;
-
-        // request next frame
-        requestAnimationFrame(update);
-      }
-
-      // inizializza immagine area (sostituisci con la tua immagine se vuoi)
-      // se vuoi usare un'immagine reale nel repo: modifica l'attributo background-image dell'elemento .image-area
-      // es: images/hero.jpg
-      if(!imageArea.style.backgroundImage || imageArea.style.backgroundImage.indexOf('placeholder')!==-1){
-        // nota: lascia un'immagine placeholder nella cartella images/placeholder.jpg o modifica il path
-        imageArea.style.backgroundImage = "url('images/placeholder.jpg')";
-      }
-
-      // avvia animazione
-      requestAnimationFrame(update);
-
-      // comportamento di sicurezza per ridimensionamento
-      window.addEventListener('resize', ()=>{ /* il prossimo frame ricalcolerà */ });
-
-      // accessibilità: se l'utente preferisce animazioni ridotte, disabilitiamo l'animazione dinamica
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-      if(prefersReduced.matches){
-        topBar.style.height = '0px';
-        logoWrap.style.position = 'relative';
-        logoWrap.style.left = '50%';
-        logoWrap.style.top = '0px';
-        logoWrap.style.transform = 'translate(-50%,0)';
-      }
-
-    })();
-  </script>
+                logo.style.top = `${currentTop}%`;
+                logo.style.left = `${currentLeft}%`;
+                logo.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
+                
+                // Testo hero scompare gradualmente
+                heroText.style.opacity = 1 - (progress * 1.5);
+                
+                // Barra sfumata compare
+                gradientBar.style.opacity = progress;
+            } else {
+                // Stato finale fisso per pulizia
+                logo.style.top = '40px';
+                logo.style.left = '60px';
+                logo.style.transform = 'translate(0, -50%) scale(0.5)';
+                gradientBar.style.opacity = 1;
+                heroText.style.opacity = 0;
+            }
+        });
+    </script>
 </body>
 </html>
