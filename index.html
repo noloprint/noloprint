@@ -1,92 +1,225 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOLO Print Srl | L'universo della stampa</title>
-    <link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Universo della stampa</title>
+  <style>
+    /* Var colori CMYK (approssimazioni web-safe) */
+    :root{
+      --c-cmyk: #00a9e0; /* ciano */
+      --m-cmyk: #ff2d9c; /* magenta */
+      --y-cmyk: #ffd400; /* giallo */
+      --bg: #fcfcfc;    /* chiaro */
+      --text: #111;
+      --footer-bg: #000;
+      --bar-max-height: 80; /* px: altezza massima della barra */
+      --sticky-top: 0px; /* aggiornato dinamicamente */
+    }
+
+    /* reset semplice */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;background:var(--bg);color:var(--text);font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;}
+
+    /* layout */
+    main{max-width:1200px;margin:0 auto}
+
+    /* LOGO: posizionato fixed per permettere un'animazione fluida */
+    .logo-wrap{position:fixed;left:50%;top:30vh;transform:translate(-50%,-50%);z-index:40;pointer-events:none}
+    .logo{
+      width:220px;height:220px;display:flex;align-items:center;justify-content:center;flex-direction:column;pointer-events:auto
+    }
+    .logo img{display:block;width:100%;height:auto;max-width:240px}
+    .logo h1{font-size:1.25rem;margin-top:12px;text-align:center;font-weight:600}
+
+    /* la barra che appare sotto il logo: sfumatura bianco -> trasparente */
+    .top-bar{position:fixed;left:0;top:0;right:0;height:0px;pointer-events:none;z-index:35;overflow:hidden;}
+    .top-bar .fade{height:100%;width:100%;background:linear-gradient(to bottom, rgba(255,255,255,0.98), rgba(255,255,255,0.0));}
+
+    /* hero: spazio dedicato al logo e immagine sottostante */
+    .hero{min-height:100vh;display:flex;align-items:flex-end;justify-content:center;padding-top:22vh;position:relative}
+    .hero .image-area{width:100%;height:40vh;max-height:520px;background-position:center;background-size:cover;background-repeat:no-repeat;position:relative}
+    /* overlay della immagine: bianco in alto che sfuma per vedere l'immagine */
+    .image-area::before{content:"";position:absolute;left:0;right:0;top:0;height:100%;background:linear-gradient(to bottom, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.6) 15%, rgba(255,255,255,0.0) 45%);pointer-events:none}
+
+    /* zone / sezioni */
+    section{padding:120px 20px;min-height:60vh;display:flex;align-items:center;justify-content:center}
+    .section-title{font-size:2.2rem;font-weight:700;letter-spacing:0.02em}
+
+    /* singole zone colorate per i titoli (solo colore titolo richiesto) */
+    #cosa-facciamo{background:transparent}
+    #cosa-facciamo .section-title{color:var(--c-cmyk)}
+
+    #magenta{background:transparent}
+    #magenta .section-title{color:var(--m-cmyk)}
+
+    #giallo{background:transparent}
+    #giallo .section-title{color:var(--y-cmyk)}
+
+    /* logica sticky per i titoli: si attacca al top quando tocca il soffitto */
+    .sticky-title{position:sticky;top:var(--sticky-top);display:inline-block;padding:8px 12px;background:transparent}
+
+    /* footer nero con dati centrati */
+    footer{background:var(--footer-bg);color:#fff;text-align:center;padding:40px 20px}
+    footer .contact{max-width:900px;margin:0 auto}
+    footer small{display:block;opacity:0.9}
+
+    /* responsive */
+    @media (max-width:700px){
+      .logo{width:140px;height:140px}
+      .logo h1{font-size:1rem}
+      .section-title{font-size:1.6rem}
+    }
+
+  </style>
 </head>
 <body>
 
-    <header id="main-header">
-        <nav>
-            <div class="nav-logo-container">
-                <img src="images/logo.png" alt="NOLO Print" class="mini-logo">
-                <div id="dynamic-title" class="nav-title">NOLO Print Srl</div>
-            </div>
-            <ul>
-                <li><a href="#servizi">Servizi</a></li>
-                <li><a href="#contatti">Contatti</a></li>
-            </ul>
-        </nav>
-    </header>
+  <!-- barra trasparente che compare dietro il logo -->
+  <div class="top-bar" id="topBar" aria-hidden="true">
+    <div class="fade"></div>
+  </div>
 
+  <!-- logo (fissa) e titolo iniziale -->
+  <div class="logo-wrap" id="logoWrap">
+    <div class="logo" id="logo">
+      <img src="images/logo.png" alt="logo Universo della stampa" id="logoImg">
+      <h1 id="logoText">Universo della stampa</h1>
+    </div>
+  </div>
+
+  <main>
+    <!-- HERO: lascia uno spazio per un'immagine con overlay gradiente -->
     <section class="hero" id="hero">
-        <div class="hero-inner">
-            <img src="images/logo.png" alt="NOLO Print Logo" class="main-logo">
-            <h1 class="hero-text">L'universo della stampa</h1>
-            <p>Qualità e precisione nel cuore di Milano</p>
-            <a href="mailto:noloprint@gmail.com" class="btn">Contattaci subito</a>
-        </div>
+      <div class="image-area" id="imageArea" style="background-image: url('images/placeholder.jpg');">
+        <!-- area piccola sotto il logo per inserire immagine; la overlay in CSS gestisce la sfumatura -->
+      </div>
     </section>
 
-    <section id="servizi" class="services">
-        <div class="section-header" data-title="I Nostri Servizi">
-            <h2>Cosa facciamo</h2>
-        </div>
-        <div class="grid">
-            <div class="card">
-                <h3>Documenti e Tesi</h3>
-                <p>Rilegature artigianali e stampe laser ad alta definizione per studenti e professionisti.</p>
-            </div>
-            <div class="card">
-                <h3>Grafica e Design</h3>
-                <p>Creazione loghi, impaginazione flyer, brochure e supporto per la comunicazione visiva.</p>
-            </div>
-            <div class="card">
-                <h3>Grandi Formati</h3>
-                <p>Stampa di poster, banner pubblicitari e progetti tecnici CAD su vari supporti.</p>
-            </div>
-        </div>
+    <!-- SEZIONE 2: Cosa facciamo (ciano) -->
+    <section id="cosa-facciamo">
+      <div>
+        <div class="section-title sticky-title" id="titleCosa">Cosa facciamo</div>
+        <p style="margin-top:18px;max-width:760px;text-align:center;opacity:0.8">Testo dimostrativo: qui puoi inserire la descrizione dei servizi offerti.</p>
+      </div>
     </section>
 
-    <footer id="contatti">
-        <div class="footer-grid">
-            <div class="footer-box">
-                <h3>NOLO Print Srl</h3>
-                <p>📍 Via Padova, 49 - 20127 Milano</p>
-                <p>📞 Tel. 02 2828316</p>
-                <p>📠 Fax 02 2894562</p>
-                <p>📧 noloprint@gmail.com</p>
-                <p><strong>P.IVA:</strong> 11258900965</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            &copy; 2026 NOLO Print Srl - Professionalità e cortesia.
-        </div>
-    </footer>
+    <!-- SEZIONE 3: segnaposto magenta -->
+    <section id="magenta">
+      <div>
+        <div class="section-title sticky-title" id="titleMag">Segna posto</div>
+      </div>
+    </section>
 
-    <script>
-        window.onscroll = function() {
-            const header = document.getElementById("main-header");
-            const dynamicTitle = document.getElementById("dynamic-title");
-            const sections = document.querySelectorAll(".section-header");
-            
-            // Effetto Header comparsa
-            if (window.pageYOffset > 300) {
-                header.classList.add("header-visible");
-            } else {
-                header.classList.remove("header-visible");
-            }
+    <!-- SEZIONE 4: segnaposto giallo -->
+    <section id="giallo">
+      <div>
+        <div class="section-title sticky-title" id="titleYel">Segna posto</div>
+      </div>
+    </section>
 
-            // Cambia il sottotitolo accanto al logo in base alla sezione
-            sections.forEach(section => {
-                const rect = section.getBoundingClientRect();
-                if (rect.top >= 0 && rect.top <= 150) {
-                    dynamicTitle.innerText = section.getAttribute("data-title");
-                }
-            });
-        };
-    </script>
+  </main>
+
+  <footer>
+    <div class="contact">
+      <strong>Nome Azienda SRL</strong>
+      <small>Via Esempio 1 — 00100 Roma — Tel. +39 06 1234567 — P.IVA 01234567890</small>
+    </div>
+  </footer>
+
+  <script>
+    // Logica animazione: il logo si muove continuamente mentre scorriamo
+    (function(){
+      const logoWrap = document.getElementById('logoWrap');
+      const logoImg = document.getElementById('logoImg');
+      const logoText = document.getElementById('logoText');
+      const hero = document.getElementById('hero');
+      const topBar = document.getElementById('topBar');
+      const imageArea = document.getElementById('imageArea');
+
+      // parametri target (dove deve finire il logo in px rispetto al viewport)
+      const targetLeft = 20; // px dal bordo sinistro
+      const targetTop = 18;  // px dal bordo superiore
+      const startTopPercent = 0.30; // posizione iniziale in viewport (30vh)
+      const maxBarHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bar-max-height')) || 80;
+
+      // quando il progress è 0 -> logo nella posizione iniziale, 1 -> logo al target
+      function update(){
+        const heroRect = hero.getBoundingClientRect();
+        const windowH = window.innerHeight;
+        const logoRect = logoWrap.getBoundingClientRect();
+
+        // range di scroll per completare l'animazione: dall'inizio fino a quando la hero esce quasi tutta
+        const totalRange = Math.max(heroRect.height - 80, 120);
+        const scrolled = Math.min(Math.max(-heroRect.top, 0), totalRange);
+        const progress = Math.min(1, scrolled / totalRange);
+
+        // iniziali (centro iniziale in px)
+        const initialCenterX = window.innerWidth / 2;
+        const initialCenterY = windowH * startTopPercent;
+
+        // target center
+        const logoW = logoRect.width;
+        const logoH = logoRect.height;
+        const targetCenterX = targetLeft + logoW/2;
+        const targetCenterY = targetTop + logoH/2;
+
+        // centro corrente interpolato
+        const currentCenterX = initialCenterX + (targetCenterX - initialCenterX) * progress;
+        const currentCenterY = initialCenterY + (targetCenterY - initialCenterY) * progress;
+
+        // calcola traslazioni in px rispetto alla trasformazione di base translate(-50%,-50%)
+        const tx = currentCenterX - initialCenterX; // positivo = verso destra, negativo verso sx
+        const ty = currentCenterY - initialCenterY; // positivo verso il basso
+
+        // scala lieve durante lo spostamento
+        const scale = 1 - 0.28 * progress; // da 1 a ~0.72
+
+        // applica trasform
+        logoWrap.style.transform = `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(${scale})`;
+
+        // mostra / nascondi e regola l'altezza della top bar in base al progress
+        const barH = Math.round(maxBarHeight * progress);
+        topBar.style.height = barH + 'px';
+        topBar.style.opacity = progress < 0.02 ? 0 : 1; // invisibile quando piccolo
+
+        // aggiorna la variabile CSS --sticky-top per far aderire i titoli appena il "soffitto" è occupato
+        // lasciamo 8px di margine sotto la barra
+        document.documentElement.style.setProperty('--sticky-top', (barH + 8) + 'px');
+
+        // manteniamo logo e testo sempre opachi: manipoliamo solo la barra
+        logoImg.style.opacity = 1;
+        logoText.style.opacity = 1;
+
+        // request next frame
+        requestAnimationFrame(update);
+      }
+
+      // inizializza immagine area (sostituisci con la tua immagine se vuoi)
+      // se vuoi usare un'immagine reale nel repo: modifica l'attributo background-image dell'elemento .image-area
+      // es: images/hero.jpg
+      if(!imageArea.style.backgroundImage || imageArea.style.backgroundImage.indexOf('placeholder')!==-1){
+        // nota: lascia un'immagine placeholder nella cartella images/placeholder.jpg o modifica il path
+        imageArea.style.backgroundImage = "url('images/placeholder.jpg')";
+      }
+
+      // avvia animazione
+      requestAnimationFrame(update);
+
+      // comportamento di sicurezza per ridimensionamento
+      window.addEventListener('resize', ()=>{ /* il prossimo frame ricalcolerà */ });
+
+      // accessibilità: se l'utente preferisce animazioni ridotte, disabilitiamo l'animazione dinamica
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if(prefersReduced.matches){
+        topBar.style.height = '0px';
+        logoWrap.style.position = 'relative';
+        logoWrap.style.left = '50%';
+        logoWrap.style.top = '0px';
+        logoWrap.style.transform = 'translate(-50%,0)';
+      }
+
+    })();
+  </script>
 </body>
 </html>
