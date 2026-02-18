@@ -12,13 +12,14 @@
             --black: #1a1a1a;
             --white: #ffffff;
             --header-height: 80px;
+            --margin-lateral: 40px; /* Margine per allineamento logo */
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
         body {
@@ -27,7 +28,7 @@
             overflow-x: hidden;
         }
 
-        /* --- LOGICA LOGO E HEADER --- */
+        /* --- HEADER E BARRA SFUMATA --- */
         #header-nav {
             position: fixed;
             top: 0;
@@ -35,35 +36,29 @@
             width: 100%;
             height: var(--header-height);
             z-index: 1000;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            pointer-events: none; /* Permette di cliccare sotto la barra se necessario */
+            pointer-events: none;
         }
 
-        /* La barra sfumata che compare allo scroll */
         #gradient-bar {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+            background: linear-gradient(to bottom, rgba(255,255,255,1) 60%, rgba(255,255,255,0) 100%);
             opacity: 0;
-            transition: opacity 0.3s ease;
             z-index: -1;
         }
 
+        /* --- LOGO: LOGICA FISSA PER EVITARE RIMBALZI --- */
         #logo {
             position: fixed;
             z-index: 1001;
-            width: 200px; /* Dimensione iniziale */
+            width: 180px; /* Dimensione base un po' più piccola */
             height: auto;
-            /* Posizionamento iniziale centrato */
             top: 40%;
             left: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.1s ease-out, top 0.1s ease-out, left 0.1s ease-out, transform 0.1s ease-out;
+            transform: translate(-50%, -50%); /* Sempre centrato rispetto al suo punto di ancoraggio */
             will-change: transform, top, left, width;
         }
 
@@ -75,25 +70,27 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            background-color: var(--white);
         }
 
         #hero-text {
-            margin-top: 150px; /* Spazio per il logo centrato */
-            font-size: 2.5rem;
-            font-weight: 300;
+            margin-top: 140px;
+            font-size: 1.8rem; /* Titolo più piccolo come richiesto */
+            font-weight: 400;
             text-transform: uppercase;
-            letter-spacing: 5px;
-            transition: opacity 0.5s ease;
+            letter-spacing: 3px;
+            color: #444;
+            transform-origin: center;
+            will-change: transform, opacity;
         }
 
-        /* --- AREA IMMAGINE CON SFUMATURA --- */
+        /* --- AREA IMMAGINE SFUMATA --- */
         .image-container {
             position: relative;
-            width: 100%;
-            max-width: 800px;
-            height: 400px;
-            margin: 50px auto;
+            width: 90%;
+            max-width: 900px;
+            height: 350px;
+            margin: 60px auto;
+            border-radius: 4px;
             overflow: hidden;
         }
 
@@ -109,17 +106,17 @@
             left: 0;
             width: 100%;
             height: 100%;
+            /* Sfumatura: bianco sopra, trasparente sotto */
             background: linear-gradient(to bottom, 
                 rgba(255,255,255,1) 0%, 
-                rgba(255,255,255,0.5) 50%, 
+                rgba(255,255,255,0.4) 40%, 
                 rgba(255,255,255,0) 100%);
-            pointer-events: none;
         }
 
         /* --- SEZIONI CMYK --- */
         section {
             min-height: 100vh;
-            padding: 100px 20px;
+            padding: 120px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -127,49 +124,36 @@
 
         .sticky-title {
             position: sticky;
-            top: 10px; /* Si ferma sotto il margine superiore */
-            font-size: 4rem;
-            font-weight: 900;
+            top: 15px; /* Si ferma sotto la barra */
+            font-size: 3.5rem;
+            font-weight: 800;
             text-transform: uppercase;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
             z-index: 500;
-            background: transparent;
-            transition: all 0.3s ease;
         }
 
-        .cyan-section { background-color: #f0ffff; }
-        .cyan-section .sticky-title { color: var(--cyan); }
+        .cyan-section { background-color: #faffff; }
+        .cyan-section .sticky-title { color: var(--cyan); text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
 
-        .magenta-section { background-color: #fff0ff; }
+        .magenta-section { background-color: #fffaff; }
         .magenta-section .sticky-title { color: var(--magenta); }
 
-        .yellow-section { background-color: #fffff0; }
+        .yellow-section { background-color: #fffffa; }
         .yellow-section .sticky-title { color: var(--yellow); }
-
-        .content-placeholder {
-            max-width: 600px;
-            line-height: 1.6;
-            font-size: 1.2rem;
-            text-align: center;
-        }
 
         /* --- FOOTER (K) --- */
         footer {
             background-color: var(--black);
-            color: #ccc;
-            padding: 60px 20px;
+            color: #999;
+            padding: 80px 20px;
             text-align: center;
-        }
-
-        .footer-content p {
-            margin: 10px 0;
-            font-size: 0.9rem;
         }
 
         .footer-content b {
             color: var(--white);
+            font-size: 1.2rem;
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
     </style>
@@ -186,38 +170,31 @@
         <h1 id="hero-text">Universo della stampa</h1>
         
         <div class="image-container">
-            <img src="https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&w=1200" alt="Stampa Offset">
+            <img src="https://images.unsplash.com/photo-1516245834210-c4c142787335?auto=format&fit=crop&w=1200" alt="Grafica">
             <div class="image-overlay"></div>
         </div>
     </header>
 
     <section class="cyan-section">
         <h2 class="sticky-title">Cosa facciamo</h2>
-        <div class="content-placeholder">
-            <p>Esploriamo le frontiere della stampa digitale e offset, garantendo una resa cromatica perfetta per ogni tuo progetto.</p>
-        </div>
+        <p>Soluzioni di stampa ciano ad alta precisione.</p>
     </section>
 
     <section class="magenta-section">
         <h2 class="sticky-title">Segna posto</h2>
-        <div class="content-placeholder">
-            <p>Il colore magenta è l'anima della vitalità nei nostri processi di stampa.</p>
-        </div>
+        <p>Il cuore pulsante della quadricromia.</p>
     </section>
 
     <section class="yellow-section">
         <h2 class="sticky-title">Segna posto</h2>
-        <div class="content-placeholder">
-            <p>L'ultimo tocco di luce prima del contrasto finale.</p>
-        </div>
+        <p>Luminosità e dettaglio in ogni fibra.</p>
     </section>
 
     <footer>
         <div class="footer-content">
             <b>UNIVERSO DELLA STAMPA SRL</b>
-            <p>Via delle Arti Grafiche, 123 - 00100 Roma (RM)</p>
-            <p>Telefono: +39 06 1234567 | P.IVA: 01234567890</p>
-            <p>&copy; 2024 - Tutti i diritti riservati</p>
+            <p>Via delle Arti Grafiche, 123 - Roma</p>
+            <p>P.IVA 01234567890 | Tel: 06 998877</p>
         </div>
     </footer>
 
@@ -228,39 +205,36 @@
 
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
-            const scrollThreshold = 300; // Distanza entro cui l'animazione si completa
+            const scrollMax = 400; // Distanza entro cui finisce l'animazione
+            let progress = Math.min(scrollY / scrollMax, 1);
 
-            // Calcolo progresso (da 0 a 1)
-            let progress = Math.min(scrollY / scrollThreshold, 1);
+            // 1. ANIMAZIONE LOGO
+            // Posizione orizzontale: dal 50% (centro) al margine sinistro (calcolato in pixel)
+            // Usiamo il calcolo per evitare salti di coordinate
+            const startLeft = window.innerWidth / 2;
+            const endLeft = 100; // Distanza dal bordo sinistro per il centro del logo piccolo
+            const currentLeft = startLeft - (progress * (startLeft - endLeft));
 
-            if (progress < 1) {
-                // Posizione iniziale: center (50%, 40%) -> Posizione finale: top-left (40px, 40px)
-                // Usiamo il calcolo per interpolare tra i due stati
-                
-                // Top: da 40% a 40px (circa 5% della viewport)
-                let currentTop = 40 - (progress * 35); 
-                // Left: da 50% a 60px (circa 5% della viewport)
-                let currentLeft = 50 - (progress * 45);
-                // Scala: da 1 a 0.5
-                let currentScale = 1 - (progress * 0.5);
+            // Posizione verticale: dal 40% a 40px (centro header)
+            const startTop = window.innerHeight * 0.4;
+            const endTop = 40;
+            const currentTop = startTop - (progress * (startTop - endTop));
 
-                logo.style.top = `${currentTop}%`;
-                logo.style.left = `${currentLeft}%`;
-                logo.style.transform = `translate(-50%, -50%) scale(${currentScale})`;
-                
-                // Testo hero scompare gradualmente
-                heroText.style.opacity = 1 - (progress * 1.5);
-                
-                // Barra sfumata compare
-                gradientBar.style.opacity = progress;
-            } else {
-                // Stato finale fisso per pulizia
-                logo.style.top = '40px';
-                logo.style.left = '60px';
-                logo.style.transform = 'translate(0, -50%) scale(0.5)';
-                gradientBar.style.opacity = 1;
-                heroText.style.opacity = 0;
-            }
+            // Scala: da 1 a 0.4
+            const currentScale = 1 - (progress * 0.6);
+
+            logo.style.left = `${currentLeft}px`;
+            logo.style.top = `${currentTop}px`;
+            logo.style.width = `${180 * currentScale}px`; // Rimpicciolisce fisicamente il logo
+
+            // 2. ANIMAZIONE TITOLO HERO
+            // Diventa più piccolo e sparisce
+            const titleScale = 1 - (progress * 0.3);
+            heroText.style.transform = `scale(${titleScale})`;
+            heroText.style.opacity = 1 - (progress * 1.2);
+
+            // 3. BARRA SFUMATA
+            gradientBar.style.opacity = progress;
         });
     </script>
 </body>
