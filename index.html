@@ -1,52 +1,62 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Universo della Stampa</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universo della Stampa</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Barra in alto con sfumatura -->
-  <header id="top-bar" aria-hidden="true"></header>
 
-  <!-- HERO: logo che si muove + titolo fisso "Universo della stampa" -->
-  <section id="hero" aria-label="Hero">
-    <div class="hero-logo" aria-hidden="true">
-      <img id="logo" src="images/logo.png" alt="Logo Universo della Stampa" />
-    </div>
+    <header id="main-header">
+        <div class="header-content">
+            <img src="images/logo.png" alt="Logo" id="main-logo">
+            <div id="docked-titles"></div>
+        </div>
+    </header>
 
-    <!-- Titolo fisso e separato dal logo -->
-    <h1 id="hero-title">Universo della stampa</h1>
+    <section class="hero-section">
+        <h1 id="hero-subtitle">Universo della stampa</h1>
+        
+        <div class="image-area">
+            <div class="gradient-overlay"></div>
+            </div>
+    </section>
 
-    <!-- area immagine con overlay sfumato bianco->trasparente -->
-    <div class="hero-image">
-      <!-- metti qui la tua immagine, oppure placeholder.jpg -->
-      <img src="images/placeholder.jpg" alt="Esempio immagine" />
-      <div class="overlay"></div>
-    </div>
-  </section>
+    <section class="cmyk-section" id="sec-cyan" style="--theme-color: #00AEEF;">
+        <div class="title-wrapper" id="wrap-cyan">
+            <h2 class="section-title" data-target="wrap-cyan">Cosa facciamo</h2>
+        </div>
+        <div class="content-box">
+            <p>Contenuto della sezione ciano...</p>
+        </div>
+    </section>
 
-  <!-- Sezioni CMYK -->
-  <section id="cosa-facciamo" class="content-section">
-    <h2 class="section-heading">Cosa facciamo</h2>
-  </section>
+    <section class="cmyk-section" id="sec-magenta" style="--theme-color: #E2007A;">
+        <div class="title-wrapper" id="wrap-magenta">
+            <h2 class="section-title" data-target="wrap-magenta">Segna posto</h2>
+        </div>
+        <div class="content-box">
+            <p>Contenuto della sezione magenta...</p>
+        </div>
+    </section>
 
-  <section id="segna-1" class="content-section">
-    <h2 class="section-heading">Segna posto</h2>
-  </section>
+    <section class="cmyk-section" id="sec-yellow" style="--theme-color: #FFF200;">
+        <div class="title-wrapper" id="wrap-yellow">
+            <h2 class="section-title" data-target="wrap-yellow" style="color: #cccc00;">Segna posto</h2> </div>
+        <div class="content-box">
+            <p>Contenuto della sezione gialla...</p>
+        </div>
+    </section>
 
-  <section id="segna-2" class="content-section">
-    <h2 class="section-heading">Segna posto</h2>
-  </section>
+    <footer class="footer-black">
+        <div class="footer-data">
+            <h3>Universo della Stampa S.r.l.</h3>
+            <p>Via delle Arti Grafiche, 12 - 00100 Città (PR)</p>
+            <p>Tel: +39 012 345 6789 | P.IVA 12345678901</p>
+        </div>
+    </footer>
 
-  <!-- Footer nero -->
-  <footer id="contatti">
-    <div class="footer-inner">
-      <p>Universo della Stampa S.r.l. — Via Esempio 12, 00100 Roma — Tel. +39 06 1234567</p>
-    </div>
-  </footer>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
