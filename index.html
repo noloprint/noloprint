@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universo della Stampa - CMYK</title>
+    <title>Universo della Stampa</title>
     <style>
         :root {
             --cyan: #00ffff;
@@ -11,230 +11,219 @@
             --yellow: #ffff00;
             --black: #1a1a1a;
             --white: #ffffff;
-            --header-height: 80px;
-            --margin-lateral: 40px; /* Margine per allineamento logo */
         }
 
-        * {
+        body, html {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        }
-
-        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--white);
-            color: var(--black);
+            color: #333;
             overflow-x: hidden;
         }
 
-        /* --- HEADER E BARRA SFUMATA --- */
-        #header-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: var(--header-height);
-            z-index: 1000;
-            pointer-events: none;
-        }
-
-        #gradient-bar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(255,255,255,1) 60%, rgba(255,255,255,0) 100%);
-            opacity: 0;
-            z-index: -1;
-        }
-
-        /* --- LOGO: LOGICA FISSA PER EVITARE RIMBALZI --- */
-        #logo {
-            position: fixed;
-            z-index: 1001;
-            width: 180px; /* Dimensione base un po' più piccola */
-            height: auto;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%); /* Sempre centrato rispetto al suo punto di ancoraggio */
-            will-change: transform, top, left, width;
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
+        /* --- LOGICA HEADER E NAVBAR --- */
+        header {
             height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            text-align: center;
-        }
-
-        #hero-text {
-            margin-top: 140px;
-            font-size: 1.8rem; /* Titolo più piccolo come richiesto */
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: #444;
-            transform-origin: center;
-            will-change: transform, opacity;
-        }
-
-        /* --- AREA IMMAGINE SFUMATA --- */
-        .image-container {
             position: relative;
-            width: 90%;
-            max-width: 900px;
-            height: 350px;
-            margin: 60px auto;
-            border-radius: 4px;
-            overflow: hidden;
+            z-index: 10;
         }
 
-        .image-container img {
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+            z-index: 100;
+            pointer-events: none; /* Non blocca i click finché non serve */
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        .image-overlay {
+        .nav-bar.visible {
+            opacity: 1;
+        }
+
+        .logo-container {
+            position: fixed; /* Fondamentale per l'animazione continua */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 101;
+            transition: transform 0.1s ease-out, width 0.1s ease-out;
+            will-change: transform;
+        }
+
+        .logo-container img {
+            width: 200px; /* Dimensione iniziale */
+            height: auto;
+            transition: width 0.1s ease-out;
+        }
+
+        .logo-title {
+            margin-top: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--black);
+        }
+
+        /* --- ZONA IMMAGINE CON SFUMATURA --- */
+        .hero-image-container {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?q=80&w=1920') no-repeat center center/cover;
+            margin-top: 50px;
+        }
+
+        .hero-image-container::before {
+            content: "";
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* Sfumatura: bianco sopra, trasparente sotto */
-            background: linear-gradient(to bottom, 
-                rgba(255,255,255,1) 0%, 
-                rgba(255,255,255,0.4) 40%, 
-                rgba(255,255,255,0) 100%);
+            background: linear-gradient(to bottom, var(--white) 0%, rgba(255,255,255,0) 100%);
         }
 
         /* --- SEZIONI CMYK --- */
         section {
-            min-height: 100vh;
-            padding: 120px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            min-height: 80vh;
+            padding: 100px 10%;
+            position: relative;
         }
 
         .sticky-title {
             position: sticky;
-            top: 15px; /* Si ferma sotto la barra */
-            font-size: 3.5rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            margin-bottom: 60px;
-            z-index: 500;
+            top: 80px; /* Si ferma sotto la barra logo */
+            font-size: 3rem;
+            margin-bottom: 50px;
+            z-index: 50;
+            display: inline-block;
+            background: var(--white);
+            padding: 10px 20px;
         }
 
-        .cyan-section { background-color: #faffff; }
-        .cyan-section .sticky-title { color: var(--cyan); text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        /* Colori Sezioni */
+        .zona-ciano { border-top: 10px solid var(--cyan); }
+        .zona-ciano .sticky-title { color: var(--cyan); }
 
-        .magenta-section { background-color: #fffaff; }
-        .magenta-section .sticky-title { color: var(--magenta); }
+        .zona-magenta { border-top: 10px solid var(--magenta); }
+        .zona-magenta .sticky-title { color: var(--magenta); }
 
-        .yellow-section { background-color: #fffffa; }
-        .yellow-section .sticky-title { color: var(--yellow); }
+        .zona-giallo { border-top: 10px solid var(--yellow); }
+        .zona-giallo .sticky-title { color: var(--yellow); }
 
-        /* --- FOOTER (K) --- */
+        .content-placeholder {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #666;
+        }
+
+        /* --- FOOTER (NERO) --- */
         footer {
             background-color: var(--black);
-            color: #999;
-            padding: 80px 20px;
+            color: var(--white);
+            padding: 50px 20px;
             text-align: center;
         }
 
-        .footer-content b {
-            color: var(--white);
-            font-size: 1.2rem;
-            display: block;
-            margin-bottom: 15px;
+        footer p {
+            margin: 5px 0;
+            opacity: 0.8;
         }
+
+        /* Helper per distanziare il contenuto iniziale */
+        .spacer { height: 100vh; }
 
     </style>
 </head>
 <body>
 
-    <div id="header-nav">
-        <div id="gradient-bar"></div>
+    <div class="nav-bar" id="navbar"></div>
+
+    <div class="logo-container" id="mainLogo">
+        <img src="images/logo.png" alt="Logo" onerror="this.src='https://via.placeholder.com/200?text=LOGO'">
+        <div class="logo-title" id="logoTitle">Universo della stampa</div>
     </div>
 
-    <img src="images/logo.png" id="logo" alt="Logo Universo della Stampa">
+    <header>
+        </header>
 
-    <header class="hero">
-        <h1 id="hero-text">Universo della stampa</h1>
-        
-        <div class="image-container">
-            <img src="https://images.unsplash.com/photo-1516245834210-c4c142787335?auto=format&fit=crop&w=1200" alt="Grafica">
-            <div class="image-overlay"></div>
-        </div>
-    </header>
+    <div class="hero-image-container"></div>
 
-    <section class="cyan-section">
+    <section class="zona-ciano">
         <h2 class="sticky-title">Cosa facciamo</h2>
-        <p>Soluzioni di stampa ciano ad alta precisione.</p>
+        <div class="content-placeholder">
+            <p>Esploriamo i confini della stampa digitale e offset. La precisione del ciano incontra la perfezione del dettaglio.</p>
+            <p>Inserisci qui i tuoi testi descrittivi...</p>
+        </div>
     </section>
 
-    <section class="magenta-section">
+    <section class="zona-magenta">
         <h2 class="sticky-title">Segna posto</h2>
-        <p>Il cuore pulsante della quadricromia.</p>
+        <div class="content-placeholder">
+            <p>Contenuto della sezione Magenta. Qui puoi descrivere altri servizi o prodotti.</p>
+        </div>
     </section>
 
-    <section class="yellow-section">
+    <section class="zona-giallo">
         <h2 class="sticky-title">Segna posto</h2>
-        <p>Luminosità e dettaglio in ogni fibra.</p>
+        <div class="content-placeholder">
+            <p>Contenuto della sezione Giallo. Il tocco finale per una quadricromia perfetta.</p>
+        </div>
     </section>
 
     <footer>
-        <div class="footer-content">
-            <b>UNIVERSO DELLA STAMPA SRL</b>
-            <p>Via delle Arti Grafiche, 123 - Roma</p>
-            <p>P.IVA 01234567890 | Tel: 06 998877</p>
-        </div>
+        <h3>Universo della Stampa S.r.l.</h3>
+        <p>Via delle Industrie, 123 - 00100 Roma (RM)</p>
+        <p>Tel: +39 06 12345678 | Email: info@universostampa.it</p>
+        <p>P.IVA: 01234567890</p>
     </footer>
 
     <script>
-        const logo = document.getElementById('logo');
-        const heroText = document.getElementById('hero-text');
-        const gradientBar = document.getElementById('gradient-bar');
+        const logoContainer = document.getElementById('mainLogo');
+        const logoImg = logoContainer.querySelector('img');
+        const logoTitle = document.getElementById('logoTitle');
+        const navbar = document.getElementById('navbar');
 
         window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const scrollMax = 400; // Distanza entro cui finisce l'animazione
-            let progress = Math.min(scrollY / scrollMax, 1);
+            let scrollValue = window.scrollY;
+            let windowHeight = window.innerHeight;
+            
+            // Calcolo progresso animazione (0 a 1)
+            // L'animazione si completa entro il primo 40% della pagina
+            let progress = Math.min(scrollValue / (windowHeight * 0.4), 1);
 
-            // 1. ANIMAZIONE LOGO
-            // Posizione orizzontale: dal 50% (centro) al margine sinistro (calcolato in pixel)
-            // Usiamo il calcolo per evitare salti di coordinate
-            const startLeft = window.innerWidth / 2;
-            const endLeft = 100; // Distanza dal bordo sinistro per il centro del logo piccolo
-            const currentLeft = startLeft - (progress * (startLeft - endLeft));
-
-            // Posizione verticale: dal 40% a 40px (centro header)
-            const startTop = window.innerHeight * 0.4;
-            const endTop = 40;
-            const currentTop = startTop - (progress * (startTop - endTop));
-
-            // Scala: da 1 a 0.4
-            const currentScale = 1 - (progress * 0.6);
-
-            logo.style.left = `${currentLeft}px`;
-            logo.style.top = `${currentTop}px`;
-            logo.style.width = `${180 * currentScale}px`; // Rimpicciolisce fisicamente il logo
-
-            // 2. ANIMAZIONE TITOLO HERO
-            // Diventa più piccolo e sparisce
-            const titleScale = 1 - (progress * 0.3);
-            heroText.style.transform = `scale(${titleScale})`;
-            heroText.style.opacity = 1 - (progress * 1.2);
-
-            // 3. BARRA SFUMATA
-            gradientBar.style.opacity = progress;
+            if (progress < 1) {
+                // Posizione iniziale: Centro (50%, 50%)
+                // Posizione finale: Top-Left (60px, 40px)
+                let left = 50 - (progress * 45); // Arriva a circa 5%
+                let top = 50 - (progress * 45);  // Arriva a circa 5%
+                let scale = 1 - (progress * 0.6); // Rimpicciolisce fino al 40%
+                
+                logoContainer.style.left = left + '%';
+                logoContainer.style.top = top + '%';
+                logoContainer.style.transform = `translate(0, 0) scale(${scale})`;
+                
+                // Dissolvenza scritta centrale
+                logoTitle.style.opacity = 1 - progress;
+                navbar.classList.remove('visible');
+            } else {
+                // Posizione fissa nella barra
+                logoContainer.style.left = '20px';
+                logoContainer.style.top = '15px';
+                logoContainer.style.transform = `translate(0, 0) scale(0.4)`;
+                logoTitle.style.opacity = 0;
+                navbar.classList.add('visible');
+            }
         });
     </script>
 </body>
