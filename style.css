@@ -1,0 +1,143 @@
+/* Stile generale */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  color: #333;
+}
+
+/* Barra superiore fissa con sfumatura */
+#top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0));
+  pointer-events: none;
+}
+
+/* Sezione HERO */
+#hero {
+  background-color: #fff;
+}
+
+/* Contenitore logo e testo */
+.hero-logo {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform-origin: top left;
+}
+
+/* Stile del logo */
+#logo {
+  display: block;
+  max-width: 150px;
+  height: auto;
+}
+
+/* Titolo sotto logo */
+.hero-logo h1 {
+  margin: 10px 0 0;
+  font-size: 2em;
+}
+
+/* Sezione immagine sotto logo con sfumatura */
+.hero-image {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-image .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, white, rgba(255,255,255,0));
+}
+
+/* Sezioni successive */
+section {
+  padding: 100px 20px;
+  min-height: 50vh;
+}
+
+/* Sezione 2: sfondo ciano chiaro */
+#cosa-facciamo {
+  background-color: #e0f7fa;
+}
+#cosa-facciamo h2 {
+  color: #00bcd4; /* ciano */
+}
+
+/* Sezione 3: sfondo magenta chiaro */
+#segna-1 {
+  background-color: #fce4ec;
+}
+#segna-1 h2 {
+  color: #e91e63; /* magenta */
+}
+
+/* Sezione 4: sfondo giallo chiaro */
+#segna-2 {
+  background-color: #fff9c4;
+}
+#segna-2 h2 {
+  color: #ffeb3b; /* giallo */
+}
+
+/* Footer: sfondo nero */
+footer#contatti {
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Titoli h2 e titolo logo iniziali */
+h2, .hero-logo h1 {
+  margin: 0;
+  padding: 20px 0;
+  font-size: 2em;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+/* Quando i titoli diventano sticky (fissi in alto) */
+h2.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: white;
+  z-index: 2;
+  transform: scale(0.8);
+  text-align: right;
+  padding-right: 20px;
+}
+
+/* Titolo logo (h1) rimane nella sezione hero, non usiamo sticky */
+.hero-logo h1.sticky {
+  /* Non usato */
+}
+
+/* Responsive - dispositivi piccoli */
+@media (max-width: 768px) {
+  #logo {
+    max-width: 100px;
+  }
+  .hero-logo h1 {
+    font-size: 1.5em;
+  }
+  h2, h1 {
+    font-size: 1.5em;
+  }
+}
