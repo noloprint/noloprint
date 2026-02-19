@@ -14,24 +14,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const targetScale = 1;
     const maxScrollLogo = 350;
 
-    function calculateLogoPositions() {
-        // 1. Resettiamo la trasformazione per misurare la posizione originale (reale) del logo nell'header
-        logo.style.transform = 'none';
-        const rect = logo.getBoundingClientRect();
-        
-        // 2. Troviamo il centro esatto dello schermo
-        const screenCenterX = window.innerWidth / 2;
-        
-        // 3. Calcoliamo la distanza esatta per centrarlo
-        // Sottraiamo la posizione nativa (rect.left) e la metà della sua larghezza ingrandita
-        startX = screenCenterX - rect.left - ((rect.width * startScale) / 2);
-        
-        // 4. Distanza dal top dello schermo per la posizione iniziale (es. 150px)
-        startY = 150 - rect.top; 
-        
-        // Riapplichiamo lo scroll per non avere scatti visivi durante il ridimensionamento della finestra
-        onScroll();
-    }
+function calculateLogoPositions() {
+    logo.style.transform = 'none';
+    const rect = logo.getBoundingClientRect();
+    const screenCenterX = window.innerWidth / 2;
+    const screenCenterY = window.innerHeight / 3; // Posizionato a 1/3 dell'altezza per estetica
+
+    // Calcolo per portarlo esattamente al centro dello schermo partendo dalla sua colonna a sinistra
+    // rect.left è la posizione attuale del logo nella griglia
+    startX = screenCenterX - rect.left - (rect.width * startScale / 2);
+    
+    // Lo abbassiamo un po' rispetto all'header
+    startY = screenCenterY - rect.top; 
+    
+    onScroll();
+}
 
     function onScroll() {
         const scrollY = window.scrollY;
