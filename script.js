@@ -3,21 +3,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const titles = document.querySelectorAll('.section-title');
     const dockedContainer = document.getElementById('docked-titles');
     
-    const startScale = 4; // Logo molto grande all'inizio
-    const maxScroll = 400; // Pixel di scorrimento per finire l'animazione
-    let startX = 0;
-    let startY = 0;
+    const startScale = 5; 
+    const maxScroll = 350;
 
     function initPositions() {
         logo.style.transform = 'none';
         const rect = logo.getBoundingClientRect();
         
-        // Calcola il centro dello schermo relativo alla posizione finale del logo
+        // Calcolo centro orizzontale
         const centerX = window.innerWidth / 2;
-        const centerY = window.innerHeight / 2.5;
+        // Partenza ALTA: 50px dal top (sopra l'immagine)
+        const startYPos = 60; 
 
         startX = centerX - rect.left - (rect.width * startScale / 2);
-        startY = centerY - rect.top;
+        startY = startYPos - rect.top;
         
         update();
     }
@@ -26,18 +25,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const scrollY = window.scrollY;
         const progress = Math.min(scrollY / maxScroll, 1);
 
-        // Animazione Logo
+        // Movimento Logo: prevale lo spostamento a sinistra (X) e scala
         const curX = startX * (1 - progress);
         const curY = startY * (1 - progress);
         const curScale = startScale - ((startScale - 1) * progress);
+        
         logo.style.transform = `translate(${curX}px, ${curY}px) scale(${curScale})`;
 
-        // Animazione Titoli
+        // Gestione Titoli CMYK
         titles.forEach(title => {
             const wrapper = document.getElementById(title.dataset.target);
             const rect = wrapper.getBoundingClientRect();
 
-            if (rect.top <= 40) {
+            // Quando il titolo tocca il soffitto (barra)
+            if (rect.top <= 30) { 
                 if (title.parentNode !== dockedContainer) {
                     dockedContainer.appendChild(title);
                 }
@@ -49,9 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // Mostra solo l'ultimo titolo presente nel contenitore della barra
+        // Logica di visibilità: solo l'ultimo titolo arrivato si vede nella barra
         const docked = Array.from(dockedContainer.children);
         docked.forEach((el, idx) => {
+            // Mantiene il suo colore originale tramite lo stile inline ereditato
             el.style.display = (idx === docked.length - 1) ? 'block' : 'none';
         });
     }
