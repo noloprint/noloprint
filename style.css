@@ -22,32 +22,48 @@ body, html {
     pointer-events: none; /* Permette di cliccare attraverso la sfumatura trasparente */
 }
 
+/* Modifica questa parte nel tuo style.css */
 .header-content {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr; /* Crea 3 colonne: le esterne uguali, la centrale si adatta */
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
     height: 100%;
     padding: 0 5%;
-    pointer-events: auto; /* Riabilita i click sugli elementi dell'header */
+    pointer-events: auto;
 }
 
-/* Logo */
+/* Assicuriamoci che il logo stia nella prima colonna */
 #main-logo {
-    transform-origin: top left;
-    width: 70px; /* Dimensione finale da "ancorato" */
+    grid-column: 1;
+    justify-self: start; /* Sempre a sinistra */
+    transform-origin: center left; /* Cambiato da top left a center left per miglior allineamento */
+    width: 70px;
     height: auto;
     will-change: transform;
 }
 
-/* Contenitore Titoli Ancorati (a destra) */
+/* Il contenitore dei titoli ora sta nella colonna centrale */
 #docked-titles {
+    grid-column: 2;
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     align-items: center;
-    gap: 15px;
-    white-space: nowrap; /* Tutti in una riga senza andare a capo */
+    white-space: nowrap;
+}
+
+/* Media query per smartphone */
+@media (max-width: 768px) {
+    .header-content {
+        /* Su mobile riduciamo lo spazio laterale per far stare il titolo */
+        grid-template-columns: 80px 1fr; 
+        padding: 0 15px;
+    }
+    #docked-titles {
+        grid-column: 2;
+        justify-self: center; /* Centrato nello spazio rimanente */
+    }
 }
 
 /* Sezione Iniziale */
