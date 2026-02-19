@@ -1,66 +1,144 @@
-:root{
-  --bar-height: 64px;
-  --mobile-break: 768px;
+/* Impostazioni Base */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fdfdfd; /* Stile in chiaro */
+    color: #333;
+    overflow-x: hidden;
 }
 
-/* Reset minimale */
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  color:#222;
-  background:#fff;
-  -webkit-font-smoothing:antialiased;
+/* Header & Barra appiccicosa */
+#main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 90px;
+    z-index: 1000;
+    /* Sfumatura: bianco opaco in alto, trasparente in basso. 
+       Non intacca l'opacità degli elementi interni. */
+    background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+    pointer-events: none; /* Permette di cliccare attraverso la sfumatura trasparente */
 }
 
-/* Top bar (sfumatura) */
-#top-bar{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:var(--bar-height);
-  z-index:2;
-  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0));
-  pointer-events:none;
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+    padding: 0 5%;
+    pointer-events: auto; /* Riabilita i click sugli elementi dell'header */
 }
 
-/* HERO */
-#hero{
-  padding-top: calc(var(--bar-height) + 40px);
-  background: #fff;
+/* Logo */
+#main-logo {
+    transform-origin: top left;
+    width: 70px; /* Dimensione finale da "ancorato" */
+    height: auto;
+    will-change: transform;
 }
 
-/* Logo: posizione fissa e animata via JS */
-.hero-logo{
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%); /* partenza: centro */
-  transform-origin: top left;
-  z-index: 4; /* sopra tutto (ma sotto hero-title) */
-  pointer-events: none;
-}
-#logo{
-  display:block;
-  max-width: 220px;
-  height: auto;
-  width: auto;
+/* Contenitore Titoli Ancorati (a destra) */
+#docked-titles {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+    white-space: nowrap; /* Tutti in una riga senza andare a capo */
 }
 
-/* Titolo fisso "Universo della stampa" - rimane nella sua posizione centrale */
-#hero-title{
-  position: fixed;
-  left: 50%;
-  top: calc(28vh); /* regola se vuoi spostarlo verticalmente */
-  transform: translateX(-50%);
-  margin: 0;
-  z-index: 5;
-  font-size: clamp(20px, 3.5vw, 34px);
-  letter-spacing: 0.02em;
-  pointer-events: none;
-  color: #111;
-  background: transparent; /* IMPORTANTE: trasparente */
+/* Sezione Iniziale */
+.hero-section {
+    padding-top: 250px; /* Spazio per far respirare il logo grande al centro */
+    text-align: center;
+    min-height: 80vh;
+}
+
+#hero-subtitle {
+    font-size: 2.5rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: 50px;
+    transition: opacity 0.3s ease;
+}
+
+/* Area Immagine */
+.image-area {
+    position: relative;
+    width: 90%;
+    max-width: 800px;
+    height: 400px;
+    margin: 0 auto;
+    /* Metti qui un colore temporaneo o la tua immagine di background */
+    background: url('https://via.placeholder.com/800x400?text=La+Tua+Immagine') center/cover;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.gradient-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    /* Sfumatura bianco -> trasparente per far vedere l'immagine sotto */
+    background: linear-gradient(to bottom, #fdfdfd 0%, rgba(253,253,253,0) 100%);
+}
+
+/* Zone CMYK */
+.cmyk-section {
+    padding: 80px 5%;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 60vh;
+}
+
+/* Wrapper necessario per non far saltare la pagina quando il titolo "vola" via */
+.title-wrapper {
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    color: var(--theme-color);
+    font-size: 3rem;
+    margin: 0;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Stile dei titoli quando si attaccano alla barra (rimpiccioliti) */
+#docked-titles .section-title {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.content-box {
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+/* Footer (Nero/Key) */
+.footer-black {
+    background-color: #000000;
+    color: #ffffff;
+    text-align: center;
+    padding: 60px 20px;
+    margin-top: 100px;
+}
+
+.footer-data h3 { margin: 0 0 15px 0; color: var(--theme-color, #fff); }
+.footer-data p { margin: 5px 0; color: #ccc; }
+
+/* Adattamento Smartphone */
+@media (max-width: 768px) {
+    #main-logo { width: 50px; } /* Logo max margin a sinistra garantito dal flex-box */
+    #docked-titles .section-title { font-size: 0.8rem; }
+    #docked-titles { gap: 8px; }
+    #hero-subtitle { font-size: 1.8rem; }
+    .section-title { font-size: 2rem; }
+}  background: transparent; /* IMPORTANTE: trasparente */
   white-space: nowrap;
 }
 
