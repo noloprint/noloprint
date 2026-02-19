@@ -1,129 +1,72 @@
-window.addEventListener('load', () => {
-  const logoWrap = document.querySelector('.hero-logo');
-  const topBar = document.getElementById('top-bar');
-  const headings = Array.from(document.querySelectorAll('.section-heading'));
-  const heroTitle = document.getElementById('hero-title');
+document.addEventListener("DOMContentLoaded", () => {
+    const logo = document.getElementById('main-logo');
+    const subtitle = document.getElementById('hero-subtitle');
+    const header = document.getElementById('main-header');
+    
+    // Elementi per la logica dei titoli
+    const titles = document.querySelectorAll('.section-title');
+    const dockedContainer = document.getElementById('docked-titles');
+    
+    // Altezza dopo la quale un titolo si aggancia alla barra (circa l'altezza dell'header)
+    const dockingPoint = 80; 
 
-  // posizione iniziale: centro della viewport per il logo (calcoliamo dinamicamente)
-  const computeInitialLogoPos = () => {
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    const wrapW = logoWrap.offsetWidth;
-    const wrapH = logoWrap.offsetHeight;
-    // centro orizzontale e verticale (visibile nella hero)
-    return {
-      left: (vw - wrapW) / 2,
-      top: (vh * 0.35) - (wrapH / 2) // leggermente sopra centro per estetica
-    };
-  };
+    function onScroll() {
+        const scrollY = window.scrollY;
+        
+        // --- LOGICA LOGO CONTINUO ---
+        // Decidiamo in quanti pixel di scorrimento il logo finisce la sua animazione
+        const maxScrollLogo = 350; 
+        const progress = Math.min(scrollY / maxScrollLogo, 1); // Va da 0 a 1
 
-  let logoInitial = computeInitialLogoPos();
-  // target finale in alto a sinistra
-  const logoTarget = { left: 18, top: 12, scale: 0.78 };
-  const animDistance = 320; // scroll in px per completare l'animazione del logo
+        // Dimensioni: Inizia grande (es. scala 3.5), finisce a dimensione reale (scala 1)
+        const startScale = 3.5;
+        const targetScale = 1;
+        const currentScale = startScale - ((startScale - targetScale) * progress);
 
-  // imposto posizione fissa iniziale
-  logoWrap.style.position = 'fixed';
-  logoWrap.style.left = logoInitial.left + 'px';
-  logoWrap.style.top = logoInitial.top + 'px';
-  logoWrap.style.transform = 'translate(0,0)';
+        // Calcoliamo la posizione iniziale per tenerlo perfettamente al centro
+        // Il logo ha transform-origin: top left.
+        const headerPadding = window.innerWidth * 0.05; // 5% di padding come da CSS
+        const screenCenterX = window.innerWidth / 2;
+        const screenCenterY = 200; // Altezza iniziale dal top dello schermo
 
-  // calcola offsetY originali per ogni heading (usiamo offsetTop relativo al documento)
-  const barHeight = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--bar-height')) || 64;
-  const recalcHeadingOffsets = () => {
-    headings.forEach(h => {
-      // rimuoviamo eventuale placeholder per calcolo pulito
-      h.dataset.originalOffset = (h.getBoundingClientRect().top + window.scrollY).toString();
-      h.dataset.isSticky = 'false';
-    });
-  };
-  recalcHeadingOffsets();
+        const startX = screenCenterX - ((logo.offsetWidth * startScale) / 2) - headerPadding;
+        const startY = screenCenterY;
 
-  // Se si ridimensiona la finestra, ricalcola posizioni
-  window.addEventListener('resize', () => {
-    logoInitial = computeInitialLogoPos();
-    // se il logo non è ancora completamente "raggiunto" dal scroll, riposizionalo al centro
-    if (window.scrollY < animDistance) {
-      logoWrap.style.left = logoInitial.left + 'px';
-      logoWrap.style.top = logoInitial.top + 'px';
-      logoWrap.style.transform = 'scale(1)';
+        // Man mano che progress va a 1, currentX e currentY vanno a 0 (posizione finale in alto a sx)
+        const currentX = startX * (1 - progress);
+        const currentY = startY * (1 - progress);
+
+        logo.style.transform = `translate(${currentX}px, ${currentY}px) scale(${currentScale})`;
+
+        // Sfumiamo la scritta "Universo della stampa" mentre scorriamo
+        subtitle.style.opacity = 1 - (progress * 2);
+
+        // --- LOGICA TITOLI CHE TOCCANO IL SOFFITTO ---
+        titles.forEach(title => {
+            const wrapperId = title.getAttribute('data-target');
+            const wrapper = document.getElementById(wrapperId);
+            const wrapperRect = wrapper.getBoundingClientRect();
+
+            // Se il contenitore originale tocca o supera il soffitto (dockingPoint)
+            if (wrapperRect.top <= dockingPoint) {
+                // Spostiamo fisicamente l'elemento nella barra. 
+                // Essendo lo *stesso* elemento, la transizione CSS si attiva per il rimpicciolimento.
+                if (title.parentNode !== dockedContainer) {
+                    dockedContainer.appendChild(title);
+                }
+            } else {
+                // Se scorriamo verso l'alto, il titolo torna al suo posto originale
+                if (title.parentNode !== wrapper) {
+                    wrapper.appendChild(title);
+                }
+            }
+        });
     }
-    recalcHeadingOffsets();
-  });
 
-  // funzione helper: rendi sticky (inserisce placeholder per evitare salto)
-  function makeSticky(h) {
-    if (h.dataset.isSticky === 'true') return;
-    const placeholder = document.createElement('div');
-    placeholder.style.height = `${h.offsetHeight}px`;
-    placeholder.className = 'heading-placeholder';
-    h.parentNode.insertBefore(placeholder, h);
-    h.dataset.placeholderId = 'ph-' + Math.random().toString(36).slice(2,9);
-    h.dataset.isSticky = 'true';
-
-    h.classList.add('is-sticky');
-    // stili inline per sicurezza ( vengono rimossi quando si "unsticky" )
-    h.style.position = 'fixed';
-    h.style.top = `${barHeight}px`;
-    h.style.right = '20px';
-    h.style.left = 'auto';
-    h.style.width = `calc(100% - 40px)`;
-    h.style.transformOrigin = 'right center';
-    h.style.transform = 'scale(0.86)';
-    h.style.zIndex = 6;
-    h.style.background = 'transparent';
-  }
-
-  function removeSticky(h) {
-    if (h.dataset.isSticky !== 'true') return;
-    // rimuovo placeholder se presente (lo troviamo come elemento precedente)
-    const placeholder = h.previousElementSibling;
-    if (placeholder && placeholder.classList.contains('heading-placeholder')) {
-      placeholder.parentNode.removeChild(placeholder);
-    }
-    h.dataset.isSticky = 'false';
-    h.classList.remove('is-sticky');
-
-    // rimuovo gli stili inline impostati
-    h.style.position = '';
-    h.style.top = '';
-    h.style.right = '';
-    h.style.left = '';
-    h.style.width = '';
-    h.style.transform = '';
-    h.style.zIndex = '';
-    h.style.background = '';
-  }
-
-  // scroll handler
-  window.addEventListener('scroll', () => {
-    const s = window.scrollY;
-
-    // LOGO: interpolazione posizione e scala in base allo scroll (0..animDistance)
-    const p = Math.min(Math.max(s / animDistance, 0), 1);
-    const nx = logoInitial.left + (logoTarget.left - logoInitial.left) * p;
-    const ny = logoInitial.top + (logoTarget.top - logoInitial.top) * p;
-    const sc = 1 + (logoTarget.scale - 1) * p;
-    logoWrap.style.left = `${nx}px`;
-    logoWrap.style.top = `${ny}px`;
-    logoWrap.style.transform = `scale(${sc})`;
-
-    // Top-bar alpha progress (fa apparire la sfumatura)
-    const alphaMaxAt = 200;
-    const alpha = Math.min(s / alphaMaxAt, 1);
-    topBar.style.background = `linear-gradient(to bottom, rgba(255,255,255,${alpha}), rgba(255,255,255,0))`;
-
-    // HEADINGS: sticky quando scroll supera la loro offset originale - barHeight
-    headings.forEach(h => {
-      const originalOffset = Number(h.dataset.originalOffset || 0);
-      if (window.scrollY + barHeight >= originalOffset) {
-        makeSticky(h);
-      } else {
-        removeSticky(h);
-      }
-    });
-  });
-
-  // prima esecuzione per sincronizzare stato se la pagina viene ricaricata con scroll
-  window.dispatchEvent(new Event('scroll'));
+    // Ascoltiamo lo scroll e il resize della finestra (per ricalcolare il centro su mobile)
+    window.addEventListener('scroll', onScroll);
+    window.addEventListener('resize', onScroll);
+    
+    // Inizializza subito la posizione
+    onScroll(); 
 });
