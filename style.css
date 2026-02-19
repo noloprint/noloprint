@@ -1,76 +1,85 @@
 body, html {
     margin: 0; padding: 0;
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #ffffff; color: #1a1a1a;
-    overflow-x: hidden;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: #ffffff;
 }
 
-/* La Gabbia: Allinea tutto tra la 2a e 3a linea (50% centrale) */
+/* La Gabbia (50% centrale dello schermo) */
 .grid-limiter {
-    width: 50%; /* Occupa i due quarti centrali */
+    width: 50%; 
     margin: 0 auto;
     position: relative;
 }
 
 #main-header {
-    position: fixed; top: 0; left: 0; width: 100%; height: 80px;
+    position: fixed; top: 0; left: 0; width: 100%; height: 90px;
     z-index: 1000;
-    background: linear-gradient(to bottom, rgba(255,255,255,1) 60%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(to bottom, white 50%, rgba(255,255,255,0) 100%);
     pointer-events: none;
 }
 
 .header-content {
-    display: flex; justify-content: space-between; align-items: center;
-    height: 100%; pointer-events: auto;
+    display: flex;
+    justify-content: space-between; /* Spinge il logo a sx e i titoli a dx della gabbia */
+    align-items: center;
+    height: 100%;
+    pointer-events: auto;
 }
 
 #main-logo {
-    width: 60px; height: auto;
+    width: 60px;
+    height: auto;
     transform-origin: center left;
     will-change: transform;
 }
 
+/* Contenitore titoli nella barra: ALLINEATO A DESTRA */
 #docked-titles {
-    flex-grow: 1; display: flex; justify-content: center;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-grow: 1;
 }
 
-/* Colore Titolo nella Barra: forziamo l'ereditarietà */
+/* Stile del titolo quando è nella barra */
 #docked-titles .section-title {
-    font-size: 1rem !important;
-    color: var(--theme-color) !important;
+    font-size: 1.1rem !important;
     margin: 0;
+    /* Mantiene il colore originale della sezione */
+    color: var(--theme-color) !important; 
+    text-align: right;
 }
 
-.hero-section { padding-top: 80px; min-height: 60vh; }
-
-/* Area Immagine */
+/* Hero & Immagine */
+.hero-section { padding-top: 100px; min-height: 50vh; }
 .image-area {
-    height: 400px;
-    background: url('https://images.unsplash.com/photo-1517260911058-0fcfd733702f?q=80&w=1400') center/cover;
-    border-radius: 2px;
+    height: 450px;
+    background: #eee url('tua-immagine.jpg') center/cover;
+    border-radius: 4px;
 }
 
-.gradient-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0) 100%);
+/* Sezioni e Titoli */
+.cmyk-section { padding: 100px 0; min-height: 80vh; }
+.title-wrapper { 
+    height: 80px; 
+    display: flex; 
+    justify-content: flex-end; /* Allinea il titolo a destra della gabbia */
 }
-
-.cmyk-section { padding: 120px 0; min-height: 70vh; }
-.title-wrapper { height: 60px; }
 
 .section-title {
     color: var(--theme-color);
-    font-size: 3rem; font-weight: 900;
+    font-size: 3.5rem;
+    font-weight: 900;
     text-transform: uppercase;
+    margin: 0;
+    transition: font-size 0.2s ease;
 }
 
-.footer-black {
-    background: #000; color: #fff;
-    padding: 60px 0; text-align: center;
-}
+.footer-black { background: #000; color: #fff; padding: 50px 0; text-align: center; }
 
-/* Mobile: la gabbia si allarga per leggibilità */
+/* Responsive */
 @media (max-width: 1024px) {
-    .grid-limiter { width: 85%; }
-    .section-title { font-size: 2rem; }
+    .grid-limiter { width: 90%; }
+    .section-title { font-size: 2.2rem; }
 }
