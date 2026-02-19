@@ -1,31 +1,27 @@
-/* Impostazioni Base */
 body, html {
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #fdfdfd; /* Stile in chiaro */
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fdfdfd;
     color: #333;
     overflow-x: hidden;
 }
 
-/* Header & Barra appiccicosa */
+/* Header con sfumatura */
 #main-header {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 90px;
+    height: 80px;
     z-index: 1000;
-    /* Sfumatura: bianco opaco in alto, trasparente in basso. 
-       Non intacca l'opacità degli elementi interni. */
     background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
-    pointer-events: none; /* Permette di cliccare attraverso la sfumatura trasparente */
+    pointer-events: none;
 }
 
-/* Modifica questa parte nel tuo style.css */
 .header-content {
     display: grid;
-    grid-template-columns: 1fr auto 1fr; /* Crea 3 colonne: le esterne uguali, la centrale si adatta */
+    grid-template-columns: 1fr auto 1fr; /* Logo | Titolo (Centro) | Vuoto */
     align-items: center;
     max-width: 1400px;
     margin: 0 auto;
@@ -34,219 +30,79 @@ body, html {
     pointer-events: auto;
 }
 
-/* Assicuriamoci che il logo stia nella prima colonna */
 #main-logo {
-    grid-column: 1;
-    justify-self: start; /* Sempre a sinistra */
-    transform-origin: center left; /* Cambiato da top left a center left per miglior allineamento */
     width: 70px;
     height: auto;
+    transform-origin: center left;
     will-change: transform;
 }
 
-/* Il contenitore dei titoli ora sta nella colonna centrale */
 #docked-titles {
-    grid-column: 2;
     display: flex;
     justify-content: center;
     align-items: center;
-    white-space: nowrap;
 }
 
-/* Media query per smartphone */
-@media (max-width: 768px) {
-    .header-content {
-        /* Su mobile riduciamo lo spazio laterale per far stare il titolo */
-        grid-template-columns: 80px 1fr; 
-        padding: 0 15px;
-    }
-    #docked-titles {
-        grid-column: 2;
-        justify-self: center; /* Centrato nello spazio rimanente */
-    }
-}
-
-/* Sezione Iniziale */
-.hero-section {
-    padding-top: 250px; /* Spazio per far respirare il logo grande al centro */
+/* Titoli nella barra */
+#docked-titles .section-title {
+    font-size: 1.2rem;
+    margin: 0;
     text-align: center;
-    min-height: 80vh;
 }
 
-/* Area Immagine */
+/* Sezioni */
+.hero-section {
+    padding-top: 150px;
+    min-height: 70vh;
+}
+
 .image-area {
     position: relative;
     width: 90%;
-    max-width: 800px;
-    height: 400px;
+    max-width: 900px;
+    height: 450px;
     margin: 0 auto;
-    /* Metti qui un colore temporaneo o la tua immagine di background */
-    background: url('https://via.placeholder.com/800x400?text=La+Tua+Immagine') center/cover;
-    border-radius: 8px;
-    overflow: hidden;
+    background: url('https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&q=80&w=1000') center/cover;
+    border-radius: 4px;
 }
 
 .gradient-overlay {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    /* Sfumatura bianco -> trasparente per far vedere l'immagine sotto */
+    inset: 0;
     background: linear-gradient(to bottom, #fdfdfd 0%, rgba(253,253,253,0) 100%);
 }
 
-/* Zone CMYK */
 .cmyk-section {
-    padding: 80px 5%;
-    max-width: 1200px;
-    margin: 0 auto;
-    min-height: 60vh;
+    padding: 100px 10%;
+    min-height: 80vh;
 }
 
-/* Wrapper necessario per non far saltare la pagina quando il titolo "vola" via */
 .title-wrapper {
-    height: 60px;
-    margin-bottom: 20px;
+    height: 80px;
+    margin-bottom: 30px;
 }
 
 .section-title {
     color: var(--theme-color);
-    font-size: 3rem;
-    margin: 0;
-    font-weight: bold;
+    font-size: 3.5rem;
+    font-weight: 800;
     text-transform: uppercase;
-    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    transition: font-size 0.3s ease;
 }
 
-/* Stile dei titoli quando si attaccano alla barra (rimpiccioliti) */
-#docked-titles .section-title {
-    font-size: 1.1rem;
-    margin: 0;
-}
-
-.content-box {
-    font-size: 1.2rem;
-    line-height: 1.6;
-}
-
-/* Footer (Nero/Key) */
+/* Footer Nero */
 .footer-black {
-    background-color: #000000;
-    color: #ffffff;
+    background: #000;
+    color: #fff;
     text-align: center;
-    padding: 60px 20px;
-    margin-top: 100px;
+    padding: 50px 20px;
 }
 
-.footer-data h3 { margin: 0 0 15px 0; color: var(--theme-color, #fff); }
-.footer-data p { margin: 5px 0; color: #ccc; }
-
-/* Adattamento Smartphone */
+/* Mobile */
 @media (max-width: 768px) {
-    #main-logo { width: 50px; } /* Logo max margin a sinistra garantito dal flex-box */
-    #docked-titles .section-title { font-size: 0.8rem; }
-    #docked-titles { gap: 8px; }
-    #hero-subtitle { font-size: 1.8rem; }
-    .section-title { font-size: 2rem; }
-}  background: transparent; /* IMPORTANTE: trasparente */
-  white-space: nowrap;
-}
-
-/* area immagine con overlay sfumato bianco->trasparente */
-.hero-image{
-  margin-top: 40vh; /* lascia spazio sotto hero-title e logo */
-  width:100%;
-  height: 42vh;
-  min-height: 260px;
-  position: relative;
-  overflow: hidden;
-}
-.hero-image img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
-.hero-image .overlay{
-  position:absolute;
-  inset:0;
-  /* sfumatura: bianco in alto -> trasparente in basso */
-  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.45) 20%, rgba(255,255,255,0) 60%);
-  pointer-events:none;
-}
-
-/* Sezioni generali: separazione visiva con padding e min-height */
-.content-section{
-  min-height: 60vh;
-  padding: 56px 5vw;
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-}
-
-/* headings: senza background, su una riga sola, grandezza e transizioni */
-.section-heading{
-  margin:0;
-  font-size: clamp(22px, 4vw, 36px);
-  font-weight:700;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  transition: transform 220ms ease, font-size 220ms ease;
-  background: transparent; /* nessun bianco */
-  z-index:3;
-  width:100%;
-}
-
-/* colori CMYK per i singoli h2 (mantieni testo sopra la barra) */
-#cosa-facciamo .section-heading{ color:#00aacc; }   /* ciano */
-#segna-1 .section-heading{ color:#e1007a; }         /* magenta */
-#segna-2 .section-heading{ color:#f0c400; }         /* giallo */
-
-/* sticky style (quando JS aggiunge la classe .is-sticky) */
-.section-heading.is-sticky{
-  position: fixed;
-  top: var(--bar-height);
-  right: 20px;
-  left: auto;
-  width: calc(100% - 40px);
-  transform-origin: right center;
-  transform: scale(0.86);
-  z-index: 6; /* sopra la top-bar */
-  background: transparent;
-  text-align: right;
-  padding-right: 0;
-}
-
-/* Footer nero */
-#contatti{
-  background:#000;
-  color:#fff;
-  text-align:center;
-  padding:28px 16px;
-}
-.footer-inner p{ margin:0; font-size:0.95rem; }
-
-/* layout mobile: logo a sinistra, titoli a destra */
-@media (max-width: 768px){
-  .hero-logo{
-    left: 24px;
-    top: 18px;
-    transform: none; /* allineamento a sinistra */
-  }
-  #logo{ max-width: 120px; }
-
-  #hero-title{
-    left: auto;
-    right: 16px;
-    transform: none;
-    top: 20px;
-    text-align:right;
-  }
-
-  .section-heading.is-sticky{
-    right: 12px;
-    width: calc(100% - 28px);
-    font-size: 1.05rem;
-  }
-
-  .hero-image{ margin-top: 22vh; height: 34vh; }
+    .header-content { grid-template-columns: 60px 1fr; }
+    .header-right { display: none; }
+    #main-logo { width: 50px; }
+    .section-title { font-size: 2.2rem; }
+    #docked-titles .section-title { font-size: 0.9rem; }
 }
