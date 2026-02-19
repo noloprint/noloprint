@@ -1,108 +1,76 @@
 body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #fdfdfd;
-    color: #333;
+    margin: 0; padding: 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #ffffff; color: #1a1a1a;
     overflow-x: hidden;
 }
 
-/* Header con sfumatura */
+/* La Gabbia: Allinea tutto tra la 2a e 3a linea (50% centrale) */
+.grid-limiter {
+    width: 50%; /* Occupa i due quarti centrali */
+    margin: 0 auto;
+    position: relative;
+}
+
 #main-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 80px;
+    position: fixed; top: 0; left: 0; width: 100%; height: 80px;
     z-index: 1000;
-    background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(to bottom, rgba(255,255,255,1) 60%, rgba(255,255,255,0) 100%);
     pointer-events: none;
 }
 
 .header-content {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr; /* Logo | Titolo (Centro) | Vuoto */
-    align-items: center;
-    max-width: 1400px;
-    margin: 0 auto;
-    height: 100%;
-    padding: 0 5%;
-    pointer-events: auto;
+    display: flex; justify-content: space-between; align-items: center;
+    height: 100%; pointer-events: auto;
 }
 
 #main-logo {
-    width: 70px;
-    height: auto;
+    width: 60px; height: auto;
     transform-origin: center left;
     will-change: transform;
 }
 
 #docked-titles {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-grow: 1; display: flex; justify-content: center;
 }
 
-/* Titoli nella barra */
+/* Colore Titolo nella Barra: forziamo l'ereditarietà */
 #docked-titles .section-title {
-    font-size: 1.2rem;
+    font-size: 1rem !important;
+    color: var(--theme-color) !important;
     margin: 0;
-    text-align: center;
 }
 
-/* Sezioni */
-.hero-section {
-    padding-top: 150px;
-    min-height: 70vh;
-}
+.hero-section { padding-top: 80px; min-height: 60vh; }
 
+/* Area Immagine */
 .image-area {
-    position: relative;
-    width: 90%;
-    max-width: 900px;
-    height: 450px;
-    margin: 0 auto;
-    background: url('https://images.unsplash.com/photo-1562654501-a0ccc0fc3fb1?auto=format&fit=crop&q=80&w=1000') center/cover;
-    border-radius: 4px;
+    height: 400px;
+    background: url('https://images.unsplash.com/photo-1517260911058-0fcfd733702f?q=80&w=1400') center/cover;
+    border-radius: 2px;
 }
 
 .gradient-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, #fdfdfd 0%, rgba(253,253,253,0) 100%);
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0) 100%);
 }
 
-.cmyk-section {
-    padding: 100px 10%;
-    min-height: 80vh;
-}
-
-.title-wrapper {
-    height: 80px;
-    margin-bottom: 30px;
-}
+.cmyk-section { padding: 120px 0; min-height: 70vh; }
+.title-wrapper { height: 60px; }
 
 .section-title {
     color: var(--theme-color);
-    font-size: 3.5rem;
-    font-weight: 800;
+    font-size: 3rem; font-weight: 900;
     text-transform: uppercase;
-    transition: font-size 0.3s ease;
 }
 
-/* Footer Nero */
 .footer-black {
-    background: #000;
-    color: #fff;
-    text-align: center;
-    padding: 50px 20px;
+    background: #000; color: #fff;
+    padding: 60px 0; text-align: center;
 }
 
-/* Mobile */
-@media (max-width: 768px) {
-    .header-content { grid-template-columns: 60px 1fr; }
-    .header-right { display: none; }
-    #main-logo { width: 50px; }
-    .section-title { font-size: 2.2rem; }
-    #docked-titles .section-title { font-size: 0.9rem; }
+/* Mobile: la gabbia si allarga per leggibilità */
+@media (max-width: 1024px) {
+    .grid-limiter { width: 85%; }
+    .section-title { font-size: 2rem; }
 }
