@@ -1,46 +1,50 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Universo della Stampa</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Barra in alto con sfumatura trasparente che appare allo scroll -->
-  <header id="top-bar"></header>
+  <!-- Barra in alto con sfumatura -->
+  <header id="top-bar" aria-hidden="true"></header>
 
-  <!-- Sezione HERO con logo e sottotitolo -->
-  <section id="hero">
-    <div class="hero-logo">
+  <!-- HERO: logo che si muove + titolo fisso "Universo della stampa" -->
+  <section id="hero" aria-label="Hero">
+    <div class="hero-logo" aria-hidden="true">
       <img id="logo" src="images/logo.png" alt="Logo Universo della Stampa" />
-      <h1>Universo della stampa</h1>
     </div>
+
+    <!-- Titolo fisso e separato dal logo -->
+    <h1 id="hero-title">Universo della stampa</h1>
+
+    <!-- area immagine con overlay sfumato bianco->trasparente -->
     <div class="hero-image">
-      <img src="images/placeholder.jpg" alt="Immagine di sfondo" />
+      <!-- metti qui la tua immagine, oppure placeholder.jpg -->
+      <img src="images/placeholder.jpg" alt="Esempio immagine" />
       <div class="overlay"></div>
     </div>
   </section>
 
-  <!-- Sezione 2: "Cosa facciamo" con sfondo ciano chiaro -->
-  <section id="cosa-facciamo">
-    <h2>Cosa facciamo</h2>
-    <!-- Contenuto della seconda zona -->
+  <!-- Sezioni CMYK -->
+  <section id="cosa-facciamo" class="content-section">
+    <h2 class="section-heading">Cosa facciamo</h2>
   </section>
 
-  <!-- Sezione 3: titolo magenta (placeholder) -->
-  <section id="segna-1">
-    <h2>Segna posto</h2>
+  <section id="segna-1" class="content-section">
+    <h2 class="section-heading">Segna posto</h2>
   </section>
 
-  <!-- Sezione 4: titolo giallo (placeholder) -->
-  <section id="segna-2">
-    <h2>Segna posto</h2>
+  <section id="segna-2" class="content-section">
+    <h2 class="section-heading">Segna posto</h2>
   </section>
 
-  <!-- Footer con sfondo nero e dati di contatto -->
+  <!-- Footer nero -->
   <footer id="contatti">
-    <p>Indirizzo, Telefono, s.r.l. ...</p>
+    <div class="footer-inner">
+      <p>Universo della Stampa S.r.l. — Via Esempio 12, 00100 Roma — Tel. +39 06 1234567</p>
+    </div>
   </footer>
 
   <script src="script.js"></script>
