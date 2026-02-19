@@ -1,407 +1,48 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Universo della stampa</title>
-
-<!-- NOTE:
- - Metti il logo in: images/logo.png
- - Se vuoi cambiare i colori CMYK, modifica le variabili CSS qui sotto.
--->
-
-<style>
-  :root{
-    --c: #00AEEF;    /* ciano (modifica se vuoi) */
-    --m: #EC008C;    /* magenta */
-    --y: #FFD200;    /* giallo */
-    --k: #111111;    /* nero per footer */
-    --bar-height: 80px; /* altezza barra top (puoi variare) */
-    --max-logo-width: 260px; /* larghezza max logo su desktop */
-    --logo-mobile-max: 140px; /* larghezza logo su mobile */
-    --hero-height: 84vh;
-    --title-font: "Helvetica Neue", Arial, sans-serif;
-  }
-
-  /* Reset base */
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;font-family:var(--title-font);color:#111;background:#fff;scroll-behavior:smooth}
-  a{color:inherit;text-decoration:none}
-
-  /* Top bar: gradient white->transparent that appears while scrolling */
-  .top-bar{
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    height:var(--bar-height);
-    pointer-events:none;
-    z-index:40;
-    opacity:0;
-    transition:opacity .25s ease;
-    background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.4) 50%, rgba(255,255,255,0));
-    /* add a subtle blur */
-    backdrop-filter: blur(2px);
-  }
-
-  /* container per tutte le sezioni */
-  .section{
-    min-height:60vh;
-    padding:28px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    position:relative;
-  }
-
-  /* HERO */
-  .hero{
-    height:var(--hero-height);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-direction:column;
-    gap:18px;
-    text-align:center;
-    position:relative;
-    overflow:hidden;
-    padding-top: calc(var(--bar-height) + 20px);
-  }
-
-  /* logo wrapper: posizionamento e area per animazione */
-  .logo-wrap{
-    position:relative;
-    width:min(86%, var(--max-logo-width));
-    max-width: 420px;
-    transition:transform .12s linear;
-    will-change:transform;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    z-index:30; /* sopra la barra */
-    pointer-events:auto;
-  }
-
-  .logo-wrap img{
-    display:block;
-    width:100%;
-    height:auto;
-    max-width:100%;
-    will-change:transform;
-    /* keep crisp */
-  }
-
-  .brand-sub{
-    margin-top:10px;
-    font-weight:700;
-    font-size:clamp(16px, 2.2vw, 22px);
-    letter-spacing:0.02em;
-    color:#222;
-  }
-
-  /* piccola area immagine sotto il logo */
-  .hero-image{
-    margin-top:10px;
-    width:90%;
-    max-width:920px;
-    height:240px;
-    border-radius:6px;
-    overflow:hidden;
-    position:relative;
-  }
-
-  .hero-image img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-  }
-
-  /* overlays top & bottom: bianco -> trasparente */
-  .hero-image::before,
-  .hero-image::after{
-    content:"";
-    position:absolute;
-    left:0;right:0;
-    height:18%;
-    pointer-events:none;
-    z-index:10;
-  }
-  .hero-image::before{
-    top:0;
-    background: linear-gradient(to bottom, rgba(255,255,255,1), rgba(255,255,255,0));
-  }
-  .hero-image::after{
-    bottom:0;
-    background: linear-gradient(to top, rgba(255,255,255,1), rgba(255,255,255,0));
-  }
-
-  /* Zone con titoli: style base */
-  .zone{
-    padding:48px 28px;
-    min-height:40vh;
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-    flex-direction:column;
-    gap:18px;
-  }
-
-  /* titolo colorato: saranno posti in riga e sticky */
-  .colored-title-row{
-    display:flex;
-    gap:18px;
-    align-items:center;
-    justify-content:flex-start;
-    white-space:nowrap; /* no wrap */
-    overflow:hidden;
-    width:100%;
-    /* allow horizontal scroll if too long on small devices */
-  }
-
-  .colored-title{
-    font-weight:900;
-    font-size:clamp(28px, 4.2vw, 48px);
-    line-height:1;
-    padding:6px 8px;
-    display:inline-block;
-    transform-origin: left center;
-    transition: transform .18s ease, top .18s ease, font-size .18s ease;
-    z-index:45; /* sopra la barra */
-    position:relative;
-    white-space:nowrap;
-  }
-
-  /* colors */
-  .title-c { color:var(--c) }
-  .title-m { color:var(--m) }
-  .title-y { color:var(--y) }
-
-  /* sticky logic using a small top offset equal to bar height so titles stop under the bar */
-  .colored-title.sticky {
-    position: sticky;
-    top: calc(var(--bar-height) + 6px);
-  }
-
-  /* when it's "stuck" (detected by JS) we shrink it slightly */
-  .colored-title.stuck{
-    transform: scale(.82);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    background: transparent;
-    border-radius:3px;
-  }
-
-  /* zone backgrounds just for separation (keeps style chiaro) */
-  .zone.c{ background: linear-gradient(180deg, rgba(255,255,255,1), rgba(0,174,239,0.03)); }
-  .zone.m{ background: linear-gradient(180deg, rgba(255,255,255,1), rgba(236,0,140,0.02)); }
-  .zone.y{ background: linear-gradient(180deg, rgba(255,255,255,1), rgba(255,210,0,0.02)); }
-
-  /* simple content placeholders */
-  .placeholder{
-    margin-top:12px;
-    color:#444;
-    max-width:960px;
-    font-size:clamp(14px,1.8vw,18px);
-  }
-
-  /* footer */
-  footer{
-    background:var(--k);
-    color:#fff;
-    padding:28px 18px;
-    text-align:center;
-  }
-  footer .foot-inner{max-width:960px;margin:0 auto}
-  footer p{margin:6px 0;font-size:14px}
-
-  /* Responsive adjustments */
-  @media (max-width:880px){
-    :root{ --bar-height:64px; }
-    .hero{ padding-top: calc(var(--bar-height) + 8px) }
-    .logo-wrap{ width: min(92%, var(--max-logo-width)); align-items:flex-start; }
-    .logo-wrap img{ max-width: var(--logo-mobile-max); }
-    .brand-sub{ text-align:left; width:100% }
-    /* titles should align to right on mobile per your request */
-    .colored-title-row{ justify-content:flex-end; padding-right:12px; }
-    .colored-title{ font-size: clamp(18px, 6.5vw, 30px); }
-    .hero-image{ height:180px }
-  }
-
-  @media (max-width:420px){
-    :root{ --bar-height:56px; }
-    .logo-wrap img{ max-width: calc(var(--logo-mobile-max) - 20px) }
-    .brand-sub{ font-size:14px }
-    .colored-title{ font-size:18px }
-  }
-
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Universo della Stampa</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- Barra in alto con sfumatura trasparente che appare allo scroll -->
+  <header id="top-bar"></header>
 
-  <!-- Barra top che appare in scroll (sfumatura bianco->trasparente) -->
-  <div class="top-bar" id="topBar" aria-hidden="true"></div>
-
-  <!-- HERO: logo + subtitle + hero image -->
-  <main>
-    <header class="hero" id="hero">
-      <div class="logo-wrap" id="logoWrap" aria-label="Logo Universo della stampa">
-        <img src="images/logo.png" alt="Logo - Universo della stampa" id="logoImg" />
-        <div class="brand-sub">Universo della stampa</div>
-
-        <!-- area immagine (modifica src qui sotto con la tua immagine) -->
-        <div class="hero-image" aria-hidden="false">
-          <img src="https://picsum.photos/1200/600?random=1" alt="Anteprima immagine" />
-        </div>
-      </div>
-    </header>
-
-    <!-- 2: Cosa facciamo (ciano) -->
-    <section class="zone c" id="cosa-facciamo">
-      <div class="colored-title-row" aria-hidden="false">
-        <h2 class="colored-title title-c" id="titleC">Cosa facciamo</h2>
-        <!-- mantenuto in riga: aggiungi altri titoli qui se serve -->
-      </div>
-      <div class="placeholder">
-        <p>Breve descrizione dei servizi qui. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Modifica questo testo con i contenuti reali.</p>
-      </div>
-    </section>
-
-    <!-- 3: Segna posto (magenta) -->
-    <section class="zone m" id="segna-m">
-      <div class="colored-title-row">
-        <h2 class="colored-title title-m" id="titleM">Segna posto</h2>
-      </div>
-      <div class="placeholder">
-        <p>Area di segnaposto magenta. Sostituisci con contenuti reali.</p>
-      </div>
-    </section>
-
-    <!-- 4: Segna posto (giallo) -->
-    <section class="zone y" id="segna-y">
-      <div class="colored-title-row">
-        <h2 class="colored-title title-y" id="titleY">Segna posto</h2>
-      </div>
-      <div class="placeholder">
-        <p>Area di segnaposto giallo. Sostituisci con contenuti reali.</p>
-      </div>
-    </section>
-  </main>
-
-  <!-- Footer nero con dati centrati -->
-  <footer>
-    <div class="foot-inner">
-      <p><strong>Nome Azienda S.r.l.</strong></p>
-      <p>Via Esempio 123 • 00100 Città • P.IVA 000000000</p>
-      <p>tel: +39 012 345 6789 • email: info@esempio.it</p>
+  <!-- Sezione HERO con logo e sottotitolo -->
+  <section id="hero">
+    <div class="hero-logo">
+      <img id="logo" src="images/logo.png" alt="Logo Universo della Stampa" />
+      <h1>Universo della stampa</h1>
     </div>
+    <div class="hero-image">
+      <img src="images/placeholder.jpg" alt="Immagine di sfondo" />
+      <div class="overlay"></div>
+    </div>
+  </section>
+
+  <!-- Sezione 2: "Cosa facciamo" con sfondo ciano chiaro -->
+  <section id="cosa-facciamo">
+    <h2>Cosa facciamo</h2>
+    <!-- Contenuto della seconda zona -->
+  </section>
+
+  <!-- Sezione 3: titolo magenta (placeholder) -->
+  <section id="segna-1">
+    <h2>Segna posto</h2>
+  </section>
+
+  <!-- Sezione 4: titolo giallo (placeholder) -->
+  <section id="segna-2">
+    <h2>Segna posto</h2>
+  </section>
+
+  <!-- Footer con sfondo nero e dati di contatto -->
+  <footer id="contatti">
+    <p>Indirizzo, Telefono, s.r.l. ...</p>
   </footer>
 
-<script>
-/*
-  JS per:
-   - animazione continua del logo durante lo scroll: spostamento verso sinistra-alto
-   - far comparire la barra top con sfumatura
-   - gestione "stuck" dei titoli (rimpicciolimento quando toccano il soffitto)
-   - logica responsive minima
-*/
-
-(function(){
-  const topBar = document.getElementById('topBar');
-  const hero = document.getElementById('hero');
-  const logoWrap = document.getElementById('logoWrap');
-  const logoImg = document.getElementById('logoImg');
-  const titleC = document.getElementById('titleC');
-  const titleM = document.getElementById('titleM');
-  const titleY = document.getElementById('titleY');
-  const titles = [titleC, titleM, titleY].filter(Boolean);
-  const barHeightPx = () => parseInt(getComputedStyle(document.documentElement).getPropertyValue('--bar-height')) || 80;
-
-  // constraints for logo movement
-  function computeLogoTransforms(scrollY){
-    const heroRect = hero.getBoundingClientRect();
-    // distance scrolled inside hero: how much of hero has been scrolled past top
-    const heroTop = heroRect.top;
-    const heroHeight = heroRect.height;
-    // progress from 0 (top of hero visible) to 1 (scrolled past hero)
-    // we want movement as we scroll down from top of page to hero center approx
-    const docScroll = window.scrollY || window.pageYOffset;
-    const heroOffsetTop = hero.offsetTop;
-    const maxProgressAt = Math.max(120, heroHeight * 0.9); // when movement completes
-    let progress = (docScroll / (maxProgressAt));
-    progress = Math.max(0, Math.min(1, progress));
-
-    // calculate translate values (px)
-    const maxTranslateX = Math.min(window.innerWidth * 0.28, 260); // how far left
-    const maxTranslateY = Math.min(heroHeight * 0.42, 180); // how far up (positive)
-    const tx = - maxTranslateX * progress;
-    const ty = - maxTranslateY * progress;
-
-    // optional slight scale down to help shrinking in the flow (keeps logo visible)
-    const scaleMin = 0.78;
-    const scale = 1 - ( (1 - scaleMin) * progress );
-
-    return {tx, ty, scale, progress};
-  }
-
-  function onScroll(){
-    const s = computeLogoTransforms(window.scrollY);
-    logoWrap.style.transform = `translate(${s.tx}px, ${s.ty}px) scale(${s.scale})`;
-    // show top bar when progress>0.04 for smoother UX
-    if(s.progress > 0.04){
-      topBar.style.opacity = Math.min(1, (s.progress - 0.04) / 0.96);
-    } else {
-      topBar.style.opacity = 0;
-    }
-
-    // Titles: if a title's bounding top <= barHeight + small offset we mark it as stuck (and sticky via css)
-    const barH = barHeightPx();
-    titles.forEach(t => {
-      if(!t) return;
-      const rect = t.getBoundingClientRect();
-      // condition: when its top is at or above the bar height + 4px (touching "soffitto")
-      if(rect.top <= barH + 4){
-        t.classList.add('stuck');
-        t.classList.add('sticky'); // ensures CSS sticky position applied
-      } else {
-        t.classList.remove('stuck');
-        // keep sticky only if not near top of its container (will revert)
-        t.classList.remove('sticky');
-      }
-    });
-  }
-
-  // initial call
-  window.addEventListener('scroll', onScroll, {passive:true});
-  window.addEventListener('resize', onScroll);
-  onScroll();
-
-  // touch up: ensure logo doesn't go out of viewport on narrow screens, adjust transform origin
-  function adjustLogoOrigin(){
-    if(window.matchMedia("(max-width:880px)").matches){
-      logoWrap.style.transformOrigin = 'left top';
-    } else {
-      logoWrap.style.transformOrigin = 'center center';
-    }
-  }
-  window.addEventListener('resize', adjustLogoOrigin);
-  adjustLogoOrigin();
-
-  // Accessibility: allow reduced-motion preference
-  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if(mq.matches){
-    // disable animated transforms
-    logoWrap.style.transition = 'none';
-    topBar.style.transition = 'none';
-    titles.forEach(t => t.style.transition = 'none');
-    window.removeEventListener('scroll', onScroll);
-    // minimal static positioning
-    logoWrap.style.transform = 'translate(0,0) scale(1)';
-    topBar.style.opacity = 0;
-  }
-
-  // small enhancement: allow horizontal scroll on title row if necessary (no wrap) - nothing else required
-})();
-
-</script>
+  <script src="script.js"></script>
 </body>
 </html>
