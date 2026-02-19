@@ -1,113 +1,143 @@
-/* Reset e Base */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* Stile generale */
 body {
-    font-family: 'Segoe UI', sans-serif;
-    color: #333;
-    line-height: 1.6;
-    overflow-x: hidden;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  color: #333;
 }
 
-/* Header a scomparsa/comparsa */
-header {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(5px);
-    padding: 10px 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 2000;
-    transform: translateY(-100%);
-    transition: transform 0.4s ease-in-out;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+/* Barra superiore fissa con sfumatura */
+#top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0));
+  pointer-events: none;
 }
 
-.header-visible { transform: translateY(0); }
-
-.nav-logo-container { display: flex; align-items: center; gap: 15px; }
-.mini-logo { height: 40px; width: auto; }
-.nav-title { font-weight: bold; color: #2c3e50; transition: 0.3s; }
-
-nav ul { display: flex; list-style: none; }
-nav ul li { margin-left: 20px; }
-nav ul li a { text-decoration: none; color: #333; font-weight: 600; }
-
-/* Hero Section con Logo Grande */
-.hero {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    background: radial-gradient(circle, #ffffff 0%, #f0f2f5 100%);
-    padding: 20px;
+/* Sezione HERO */
+#hero {
+  background-color: #fff;
 }
 
-.main-logo {
-    width: 250px; /* Logo grande al centro */
-    height: auto;
-    margin-bottom: 20px;
-    transition: 0.8s ease;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+/* Contenitore logo e testo */
+.hero-logo {
+  position: fixed;
+  left: 0;
+  top: 0;
+  transform-origin: top left;
 }
 
-.hero-text {
-    font-size: 3rem;
-    color: #2c3e50;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+/* Stile del logo */
+#logo {
+  display: block;
+  max-width: 150px;
+  height: auto;
 }
 
-/* Animazione allo scroll (simulata tramite le classi del corpo) */
-.hero p { font-size: 1.2rem; color: #7f8c8d; margin-bottom: 30px; }
-
-/* Servizi */
-.services { padding: 100px 10%; background: #fff; }
-.section-header { margin-bottom: 50px; }
-
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
+/* Titolo sotto logo */
+.hero-logo h1 {
+  margin: 10px 0 0;
+  font-size: 2em;
 }
 
-.card {
-    background: #fdfdfd;
-    padding: 40px;
-    border-radius: 20px;
-    border: 1px solid #eee;
-    transition: 0.4s;
+/* Sezione immagine sotto logo con sfumatura */
+.hero-image {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+}
+.hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-image .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, white, rgba(255,255,255,0));
 }
 
-.card:hover { 
-    transform: translateY(-10px); 
-    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-    border-color: #3498db;
+/* Sezioni successive */
+section {
+  padding: 100px 20px;
+  min-height: 50vh;
 }
 
-/* Footer */
-footer {
-    background: #2c3e50;
-    color: #fff;
-    padding: 60px 10% 20px;
+/* Sezione 2: sfondo ciano chiaro */
+#cosa-facciamo {
+  background-color: #e0f7fa;
+}
+#cosa-facciamo h2 {
+  color: #00bcd4; /* ciano */
 }
 
-.footer-box h3 { margin-bottom: 20px; font-size: 1.5rem; color: #3498db; }
-.footer-box p { margin: 10px 0; font-size: 1rem; color: #bdc3c7; }
-
-.footer-bottom {
-    margin-top: 50px;
-    padding-top: 20px;
-    border-top: 1px solid #3e4f5f;
-    text-align: center;
-    font-size: 0.8rem;
+/* Sezione 3: sfondo magenta chiaro */
+#segna-1 {
+  background-color: #fce4ec;
+}
+#segna-1 h2 {
+  color: #e91e63; /* magenta */
 }
 
-/* Smartphone Optimization */
+/* Sezione 4: sfondo giallo chiaro */
+#segna-2 {
+  background-color: #fff9c4;
+}
+#segna-2 h2 {
+  color: #ffeb3b; /* giallo */
+}
+
+/* Footer: sfondo nero */
+footer#contatti {
+  background-color: #000;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Titoli h2 e titolo logo iniziali */
+h2, .hero-logo h1 {
+  margin: 0;
+  padding: 20px 0;
+  font-size: 2em;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+/* Quando i titoli diventano sticky (fissi in alto) */
+h2.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: white;
+  z-index: 2;
+  transform: scale(0.8);
+  text-align: right;
+  padding-right: 20px;
+}
+
+/* Titolo logo (h1) rimane nella sezione hero, non usiamo sticky */
+.hero-logo h1.sticky {
+  /* Non usato */
+}
+
+/* Responsive - dispositivi piccoli */
 @media (max-width: 768px) {
-    .main-logo { width: 150px; }
-    .hero-text { font-size: 2rem; }
-    .nav-links { display: none; }
+  #logo {
+    max-width: 100px;
+  }
+  .hero-logo h1 {
+    font-size: 1.5em;
+  }
+  h2, h1 {
+    font-size: 1.5em;
+  }
 }
