@@ -1,143 +1,166 @@
-/* Stile generale */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #fff;
-  color: #333;
+:root{
+  --bar-height: 64px;
+  --mobile-break: 768px;
 }
 
-/* Barra superiore fissa con sfumatura */
-#top-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
-  z-index: 1;
+/* Reset minimale */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color:#222;
+  background:#fff;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* Top bar (sfumatura) */
+#top-bar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:var(--bar-height);
+  z-index:2;
   background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0));
+  pointer-events:none;
+}
+
+/* HERO */
+#hero{
+  padding-top: calc(var(--bar-height) + 40px);
+  background: #fff;
+}
+
+/* Logo: posizione fissa e animata via JS */
+.hero-logo{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%); /* partenza: centro */
+  transform-origin: top left;
+  z-index: 4; /* sopra tutto (ma sotto hero-title) */
   pointer-events: none;
 }
-
-/* Sezione HERO */
-#hero {
-  background-color: #fff;
-}
-
-/* Contenitore logo e testo */
-.hero-logo {
-  position: fixed;
-  left: 0;
-  top: 0;
-  transform-origin: top left;
-}
-
-/* Stile del logo */
-#logo {
-  display: block;
-  max-width: 150px;
+#logo{
+  display:block;
+  max-width: 220px;
   height: auto;
+  width: auto;
 }
 
-/* Titolo sotto logo */
-.hero-logo h1 {
-  margin: 10px 0 0;
-  font-size: 2em;
+/* Titolo fisso "Universo della stampa" - rimane nella sua posizione centrale */
+#hero-title{
+  position: fixed;
+  left: 50%;
+  top: calc(28vh); /* regola se vuoi spostarlo verticalmente */
+  transform: translateX(-50%);
+  margin: 0;
+  z-index: 5;
+  font-size: clamp(20px, 3.5vw, 34px);
+  letter-spacing: 0.02em;
+  pointer-events: none;
+  color: #111;
+  background: transparent; /* IMPORTANTE: trasparente */
+  white-space: nowrap;
 }
 
-/* Sezione immagine sotto logo con sfumatura */
-.hero-image {
+/* area immagine con overlay sfumato bianco->trasparente */
+.hero-image{
+  margin-top: 40vh; /* lascia spazio sotto hero-title e logo */
+  width:100%;
+  height: 42vh;
+  min-height: 260px;
   position: relative;
-  width: 100%;
-  height: 300px;
   overflow: hidden;
 }
-.hero-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.hero-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
-.hero-image .overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, white, rgba(255,255,255,0));
-}
-
-/* Sezioni successive */
-section {
-  padding: 100px 20px;
-  min-height: 50vh;
+.hero-image .overlay{
+  position:absolute;
+  inset:0;
+  /* sfumatura: bianco in alto -> trasparente in basso */
+  background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0.45) 20%, rgba(255,255,255,0) 60%);
+  pointer-events:none;
 }
 
-/* Sezione 2: sfondo ciano chiaro */
-#cosa-facciamo {
-  background-color: #e0f7fa;
-}
-#cosa-facciamo h2 {
-  color: #00bcd4; /* ciano */
-}
-
-/* Sezione 3: sfondo magenta chiaro */
-#segna-1 {
-  background-color: #fce4ec;
-}
-#segna-1 h2 {
-  color: #e91e63; /* magenta */
+/* Sezioni generali: separazione visiva con padding e min-height */
+.content-section{
+  min-height: 60vh;
+  padding: 56px 5vw;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
 }
 
-/* Sezione 4: sfondo giallo chiaro */
-#segna-2 {
-  background-color: #fff9c4;
-}
-#segna-2 h2 {
-  color: #ffeb3b; /* giallo */
-}
-
-/* Footer: sfondo nero */
-footer#contatti {
-  background-color: #000;
-  color: #fff;
-  text-align: center;
-  padding: 20px;
+/* headings: senza background, su una riga sola, grandezza e transizioni */
+.section-heading{
+  margin:0;
+  font-size: clamp(22px, 4vw, 36px);
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  transition: transform 220ms ease, font-size 220ms ease;
+  background: transparent; /* nessun bianco */
+  z-index:3;
+  width:100%;
 }
 
-/* Titoli h2 e titolo logo iniziali */
-h2, .hero-logo h1 {
-  margin: 0;
-  padding: 20px 0;
-  font-size: 2em;
-  background: white;
-  transition: all 0.3s ease;
-}
+/* colori CMYK per i singoli h2 (mantieni testo sopra la barra) */
+#cosa-facciamo .section-heading{ color:#00aacc; }   /* ciano */
+#segna-1 .section-heading{ color:#e1007a; }         /* magenta */
+#segna-2 .section-heading{ color:#f0c400; }         /* giallo */
 
-/* Quando i titoli diventano sticky (fissi in alto) */
-h2.sticky {
+/* sticky style (quando JS aggiunge la classe .is-sticky) */
+.section-heading.is-sticky{
   position: fixed;
-  top: 0;
-  width: 100%;
-  background: white;
-  z-index: 2;
-  transform: scale(0.8);
+  top: var(--bar-height);
+  right: 20px;
+  left: auto;
+  width: calc(100% - 40px);
+  transform-origin: right center;
+  transform: scale(0.86);
+  z-index: 6; /* sopra la top-bar */
+  background: transparent;
   text-align: right;
-  padding-right: 20px;
+  padding-right: 0;
 }
 
-/* Titolo logo (h1) rimane nella sezione hero, non usiamo sticky */
-.hero-logo h1.sticky {
-  /* Non usato */
+/* Footer nero */
+#contatti{
+  background:#000;
+  color:#fff;
+  text-align:center;
+  padding:28px 16px;
 }
+.footer-inner p{ margin:0; font-size:0.95rem; }
 
-/* Responsive - dispositivi piccoli */
-@media (max-width: 768px) {
-  #logo {
-    max-width: 100px;
+/* layout mobile: logo a sinistra, titoli a destra */
+@media (max-width: 768px){
+  .hero-logo{
+    left: 24px;
+    top: 18px;
+    transform: none; /* allineamento a sinistra */
   }
-  .hero-logo h1 {
-    font-size: 1.5em;
+  #logo{ max-width: 120px; }
+
+  #hero-title{
+    left: auto;
+    right: 16px;
+    transform: none;
+    top: 20px;
+    text-align:right;
   }
-  h2, h1 {
-    font-size: 1.5em;
+
+  .section-heading.is-sticky{
+    right: 12px;
+    width: calc(100% - 28px);
+    font-size: 1.05rem;
   }
+
+  .hero-image{ margin-top: 22vh; height: 34vh; }
 }
