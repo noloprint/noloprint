@@ -12,13 +12,13 @@
             background-color: #ffffff;
         }
 
-        /* La Gabbia (50% centrale dello schermo) */
         .grid-limiter {
             width: 50%; 
             margin: 0 auto;
             position: relative;
         }
 
+        /* Header fisso */
         #main-header {
             position: fixed; top: 0; left: 0; width: 100%; height: 90px;
             z-index: 1000;
@@ -28,7 +28,7 @@
 
         .header-content {
             display: flex;
-            justify-content: space-between; /* Spinge il logo a sx e i titoli a dx della gabbia */
+            justify-content: space-between; 
             align-items: center;
             height: 100%;
             pointer-events: auto;
@@ -41,25 +41,24 @@
             will-change: transform;
         }
 
-        /* Contenitore titoli nella barra: ALLINEATO A DESTRA */
+        /* BARRA: Allineamento a DESTRA per i titoli dockati */
         #docked-titles {
-            text-align: right;
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-end; 
             align-items: center;
             flex-grow: 1;
+            text-align: right;
         }
 
-        /* Stile del titolo quando è nella barra */
+        /* Stile titolo nella barra: mantiene il colore della variabile --theme-color */
         #docked-titles .section-title {
             font-size: 1.1rem !important;
             margin: 0;
-            /* Mantiene il colore originale della sezione */
             color: var(--theme-color) !important; 
             text-align: right;
         }
 
-        /* Hero & Immagine */
+        /* Hero */
         .hero-section { padding-top: 100px; min-height: 50vh; }
         .image-area {
             height: 450px;
@@ -67,12 +66,14 @@
             border-radius: 4px;
         }
 
-        /* Sezioni e Titoli */
+        /* SEZIONI: Titolo allineato a SINISTRA */
         .cmyk-section { padding: 100px 0; min-height: 80vh; }
+        
         .title-wrapper { 
             height: 80px; 
             display: flex; 
-            justify-content: flex-end; /* Allinea il titolo a destra della gabbia */
+            justify-content: flex-start; /* MODIFICA: Titolo a sinistra nella sezione */
+            align-items: center;
         }
 
         .section-title {
@@ -81,7 +82,7 @@
             font-weight: 900;
             text-transform: uppercase;
             margin: 0;
-            transition: font-size 0.2s ease;
+            transition: font-size 0.2s ease, color 0.2s ease;
         }
 
         .content-box {
@@ -92,7 +93,6 @@
 
         .footer-black { background: #000; color: #fff; padding: 50px 0; text-align: center; }
 
-        /* Responsive */
         @media (max-width: 1024px) {
             .grid-limiter { width: 90%; }
             .section-title { font-size: 2.2rem; }
@@ -156,7 +156,6 @@
     </footer>
 
     <script>
-        /* --- LOGICA JAVASCRIPT --- */
         document.addEventListener("DOMContentLoaded", () => {
             const logo = document.getElementById('main-logo');
             const titles = document.querySelectorAll('.section-title');
@@ -164,19 +163,14 @@
             
             const startScale = 4.5; 
             const maxScroll = 400;
-            let startX = 0;
-            let startY = 0;
+            let startX = 0, startY = 0;
 
             function initPositions() {
                 logo.style.transform = 'none';
                 const rect = logo.getBoundingClientRect();
-                
-                // Centro dello schermo
                 const centerX = window.innerWidth / 2;
-                // Partenza molto in alto
                 const startYPos = 50; 
 
-                // Calcolo spostamento: parte dal centro e finisce nella sua posizione naturale nell'header
                 startX = centerX - rect.left - (rect.width * startScale / 2);
                 startY = startYPos - rect.top;
                 
@@ -201,7 +195,7 @@
 
                     const rect = wrapper.getBoundingClientRect();
 
-                    // Quando il titolo della sezione tocca la barra (90px dal top)
+                    // Se il wrapper tocca la soglia dei 90px (header)
                     if (rect.top <= 90) { 
                         if (title.parentNode !== dockedContainer) {
                             dockedContainer.appendChild(title);
@@ -213,7 +207,7 @@
                     }
                 });
 
-                // Mostra solo l'ultimo titolo agganciato e mantiene il colore originale
+                // Gestione visibilità titoli nella barra (mostra solo l'ultimo arrivato)
                 const docked = Array.from(dockedContainer.children);
                 docked.forEach((el, idx) => {
                     el.style.display = (idx === docked.length - 1) ? 'block' : 'none';
