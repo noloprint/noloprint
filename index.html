@@ -7,10 +7,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- STILE APPLE --- */
         :root {
             --font-main: 'Montserrat', sans-serif;
-            --apple-bg: #f5f5f7; /* Il grigio Apple */
+            --apple-bg: #f5f5f7;
             --apple-card-shadow: 0 2px 5px rgba(0,0,0,0.04), 0 8px 20px rgba(0,0,0,0.03);
             --apple-card-hover-shadow: 0 12px 25px rgba(0,0,0,0.08), 0 25px 50px rgba(0,0,0,0.1);
             --transition-apple: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
@@ -32,13 +31,13 @@
 
         /* HEADER */
         #main-header {
-            position: fixed; top: 0; left: 0; width: 100%; height: 90px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100px; /* Altezza leggermente aumentata */
             z-index: 1000;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             pointer-events: none;
-            /* Rimuoviamo il bordo per un look più fluido con la hero */
+            border-bottom: 1px solid rgba(0,0,0,0.05);
         }
 
         .header-content {
@@ -50,7 +49,7 @@
         }
 
         #main-logo {
-            width: 55px;
+            width: 70px; /* Logo nella barra ingrandito */
             height: auto;
             transform-origin: center left;
             will-change: transform;
@@ -64,38 +63,36 @@
         }
 
         #docked-titles .section-title {
-            font-size: 0.95rem !important;
-            font-weight: 600;
+            font-size: 1.2rem !important; /* Titolo nella barra ingrandito */
+            font-weight: 700;
             margin: 0;
             color: var(--theme-color) !important;
+            letter-spacing: -0.5px;
         }
 
-        /* --- NUOVA HERO FULL WIDTH (Stile iOS/Apple) --- */
+        /* HERO FULL WIDTH */
         .hero-full-width {
             width: 100%;
-            min-height: 75vh; /* Altezza generosa come Apple */
-            background-color: var(--apple-bg); /* Sfondo grigio chiaro */
+            height: 85vh; /* Un po' più alta per gestire il terzo superiore */
+            background-color: var(--apple-bg);
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start; /* Allinea al top */
             align-items: center;
             text-align: center;
-            padding-top: 90px; /* Spazio per l'header fisso */
-        }
-
-        .hero-content {
-            /* Qui puoi inserire testi o slogan */
+            padding-top: 100px; 
         }
 
         .hero-headline {
-            font-size: 4.5rem;
+            font-size: 4rem;
             font-weight: 800;
             letter-spacing: -2px;
-            margin-top: 20px;
             line-height: 1.1;
+            margin-top: 20vh; /* Posiziona il titolo circa nel terzo superiore */
+            z-index: 1;
         }
 
-        /* SEZIONI CONTENUTO */
+        /* SEZIONI */
         .cmyk-section { padding: 100px 0; min-height: 80vh; background-color: #ffffff; }
         
         .title-wrapper { 
@@ -133,7 +130,6 @@
             cursor: pointer;
             box-shadow: var(--apple-card-shadow);
             border: none;
-            will-change: transform, box-shadow;
         }
 
         .service-card:hover {
@@ -167,7 +163,6 @@
         .footer-content { line-height: 1.6; font-size: 0.9rem; opacity: 0.85; }
         .footer-content a { color: #2997ff; text-decoration: none; }
 
-        /* RESPONSIVE */
         @media (max-width: 1200px) { .grid-limiter { width: 90%; } .hero-headline { font-size: 3rem; } }
         @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }
     </style>
@@ -184,7 +179,7 @@
     </header>
 
     <section class="hero-full-width">
-        <div class="grid-limiter hero-content">
+        <div class="grid-limiter">
             <h1 class="hero-headline">Un universo di stampa.<br>A portata di mano.</h1>
         </div>
     </section>
@@ -198,9 +193,7 @@
             <div class="services-grid">
                 <div class="service-card" style="--theme-color: #00AEEF;">
                     <img src="images/stampe_digitale/sdig1.png" alt="Piccolo formato" class="service-card-img">
-                    <div class="card-header">
-                        <h3 class="card-title">Stampa digitale piccolo formato</h3>
-                    </div>
+                    <div class="card-header"><h3 class="card-title">Stampa digitale piccolo formato</h3></div>
                 </div>
                 <div class="service-card" style="--theme-color: #00AEEF; background: var(--apple-bg);">
                    <div class="card-header"><h3 class="card-title">Stampa digitale grande formato</h3></div>
@@ -246,8 +239,8 @@
             const titles = document.querySelectorAll('.section-title');
             const dockedContainer = document.getElementById('docked-titles');
             
-            const startScale = 4.5; 
-            const maxScroll = 500; // Aumentato leggermente per dare respiro alla hero
+            const startScale = 4.0; // Scala iniziale leggermente ridotta per non coprire troppo
+            const maxScroll = 450; 
             let startX = 0, startY = 0;
 
             function initPositions() {
@@ -255,8 +248,8 @@
                 const rect = logo.getBoundingClientRect();
                 const centerX = window.innerWidth / 2;
                 
-                // Il logo parte esattamente a metà della sezione hero
-                const startYPos = window.innerHeight * 0.35; 
+                // Logo posizionato più in alto (12% dell'altezza invece del 35%)
+                const startYPos = window.innerHeight * 0.12; 
 
                 startX = centerX - rect.left - (rect.width * startScale / 2);
                 startY = startYPos - rect.top;
@@ -277,7 +270,7 @@
                     const wrapper = document.getElementById(wrapperId);
                     if (!wrapper) return;
                     const rect = wrapper.getBoundingClientRect();
-                    if (rect.top <= 90) { 
+                    if (rect.top <= 100) { // Allineato alla nuova altezza header
                         if (title.parentNode !== dockedContainer) dockedContainer.appendChild(title);
                     } else {
                         if (title.parentNode !== wrapper) wrapper.appendChild(title);
