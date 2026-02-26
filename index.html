@@ -4,7 +4,100 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Universo della Stampa</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- STILI CSS --- */
+        body, html {
+            margin: 0; padding: 0;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #ffffff;
+        }
+
+        /* La Gabbia (50% centrale dello schermo) */
+        .grid-limiter {
+            width: 50%; 
+            margin: 0 auto;
+            position: relative;
+        }
+
+        #main-header {
+            position: fixed; top: 0; left: 0; width: 100%; height: 90px;
+            z-index: 1000;
+            background: linear-gradient(to bottom, white 50%, rgba(255,255,255,0) 100%);
+            pointer-events: none;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between; /* Spinge il logo a sx e i titoli a dx della gabbia */
+            align-items: center;
+            height: 100%;
+            pointer-events: auto;
+        }
+
+        #main-logo {
+            width: 60px;
+            height: auto;
+            transform-origin: center left;
+            will-change: transform;
+        }
+
+        /* Contenitore titoli nella barra: ALLINEATO A DESTRA */
+        #docked-titles {
+            text-align: right;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        /* Stile del titolo quando è nella barra */
+        #docked-titles .section-title {
+            font-size: 1.1rem !important;
+            margin: 0;
+            /* Mantiene il colore originale della sezione */
+            color: var(--theme-color) !important; 
+            text-align: right;
+        }
+
+        /* Hero & Immagine */
+        .hero-section { padding-top: 100px; min-height: 50vh; }
+        .image-area {
+            height: 450px;
+            background: #eee url('tua-immagine.jpg') center/cover;
+            border-radius: 4px;
+        }
+
+        /* Sezioni e Titoli */
+        .cmyk-section { padding: 100px 0; min-height: 80vh; }
+        .title-wrapper { 
+            height: 80px; 
+            display: flex; 
+            justify-content: flex-end; /* Allinea il titolo a destra della gabbia */
+        }
+
+        .section-title {
+            color: var(--theme-color);
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin: 0;
+            transition: font-size 0.2s ease;
+        }
+
+        .content-box {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+
+        .footer-black { background: #000; color: #fff; padding: 50px 0; text-align: center; }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .grid-limiter { width: 90%; }
+            .section-title { font-size: 2.2rem; }
+        }
+    </style>
 </head>
 <body>
 
@@ -62,6 +155,77 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        /* --- LOGICA JAVASCRIPT --- */
+        document.addEventListener("DOMContentLoaded", () => {
+            const logo = document.getElementById('main-logo');
+            const titles = document.querySelectorAll('.section-title');
+            const dockedContainer = document.getElementById('docked-titles');
+            
+            const startScale = 4.5; 
+            const maxScroll = 400;
+            let startX = 0;
+            let startY = 0;
+
+            function initPositions() {
+                logo.style.transform = 'none';
+                const rect = logo.getBoundingClientRect();
+                
+                // Centro dello schermo
+                const centerX = window.innerWidth / 2;
+                // Partenza molto in alto
+                const startYPos = 50; 
+
+                // Calcolo spostamento: parte dal centro e finisce nella sua posizione naturale nell'header
+                startX = centerX - rect.left - (rect.width * startScale / 2);
+                startY = startYPos - rect.top;
+                
+                update();
+            }
+
+            function update() {
+                const scrollY = window.scrollY;
+                const progress = Math.min(scrollY / maxScroll, 1);
+
+                // Animazione Logo
+                const curX = startX * (1 - progress);
+                const curY = startY * (1 - progress);
+                const curScale = startScale - ((startScale - 1) * progress);
+                logo.style.transform = `translate(${curX}px, ${curY}px) scale(${curScale})`;
+
+                // Gestione Titoli
+                titles.forEach(title => {
+                    const wrapperId = title.getAttribute('data-target');
+                    const wrapper = document.getElementById(wrapperId);
+                    if (!wrapper) return;
+
+                    const rect = wrapper.getBoundingClientRect();
+
+                    // Quando il titolo della sezione tocca la barra (90px dal top)
+                    if (rect.top <= 90) { 
+                        if (title.parentNode !== dockedContainer) {
+                            dockedContainer.appendChild(title);
+                        }
+                    } else {
+                        if (title.parentNode !== wrapper) {
+                            wrapper.appendChild(title);
+                        }
+                    }
+                });
+
+                // Mostra solo l'ultimo titolo agganciato e mantiene il colore originale
+                const docked = Array.from(dockedContainer.children);
+                docked.forEach((el, idx) => {
+                    el.style.display = (idx === docked.length - 1) ? 'block' : 'none';
+                });
+            }
+
+            window.addEventListener('scroll', update);
+            window.addEventListener('resize', initPositions);
+            window.addEventListener('load', initPositions);
+            
+            initPositions();
+        });
+    </script>
 </body>
 </html>
