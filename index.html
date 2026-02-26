@@ -7,22 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- VARIABILI STILE APPLE CON OMBRE MIGLIORATE --- */
+        /* --- STILE APPLE --- */
         :root {
             --font-main: 'Montserrat', sans-serif;
-            --apple-bg: #f5f5f7;
-            
-            /* NUOVA OMBRA BASE: Doppia, leggerissima, appena percettibile */
-            --apple-card-shadow: 
-                0 2px 5px rgba(0,0,0,0.04), 
-                0 8px 20px rgba(0,0,0,0.03);
-
-            /* NUOVA OMBRA HOVER: Più profonda, diffusa e multistrato */
-            --apple-card-hover-shadow: 
-                0 12px 25px rgba(0,0,0,0.08), 
-                0 25px 50px rgba(0,0,0,0.1);
-
-            /* Transizione più elastica per un effetto "pop" */
+            --apple-bg: #f5f5f7; /* Il grigio Apple */
+            --apple-card-shadow: 0 2px 5px rgba(0,0,0,0.04), 0 8px 20px rgba(0,0,0,0.03);
+            --apple-card-hover-shadow: 0 12px 25px rgba(0,0,0,0.08), 0 25px 50px rgba(0,0,0,0.1);
             --transition-apple: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
@@ -44,11 +34,11 @@
         #main-header {
             position: fixed; top: 0; left: 0; width: 100%; height: 90px;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.85); /* Leggermente più opaco */
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             pointer-events: none;
-            border-bottom: 1px solid rgba(0,0,0,0.05); /* Sottilissima linea di separazione */
+            /* Rimuoviamo il bordo per un look più fluido con la hero */
         }
 
         .header-content {
@@ -80,25 +70,40 @@
             color: var(--theme-color) !important;
         }
 
-        /* HERO */
-        .hero-section { padding-top: 140px; min-height: 30vh; }
-        .image-area {
-            height: 350px;
-            background: var(--apple-bg);
-            border-radius: 24px;
-            /* Applichiamo anche qui la nuova ombra base */
-            box-shadow: var(--apple-card-shadow);
+        /* --- NUOVA HERO FULL WIDTH (Stile iOS/Apple) --- */
+        .hero-full-width {
+            width: 100%;
+            min-height: 75vh; /* Altezza generosa come Apple */
+            background-color: var(--apple-bg); /* Sfondo grigio chiaro */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 90px; /* Spazio per l'header fisso */
         }
 
-        /* SEZIONI */
-        .cmyk-section { padding: 80px 0; min-height: 80vh; }
+        .hero-content {
+            /* Qui puoi inserire testi o slogan */
+        }
+
+        .hero-headline {
+            font-size: 4.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-top: 20px;
+            line-height: 1.1;
+        }
+
+        /* SEZIONI CONTENUTO */
+        .cmyk-section { padding: 100px 0; min-height: 80vh; background-color: #ffffff; }
         
         .title-wrapper { 
             height: 60px; 
             display: flex; 
             justify-content: flex-start; 
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .section-title {
@@ -109,11 +114,11 @@
             letter-spacing: -0.5px;
         }
 
-        /* --- GRID COMPATTA STILE APPLE STORE --- */
+        /* GRID CASELLE */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 25px; /* Gap leggermente aumentato per far respirare le ombre */
+            gap: 25px;
         }
 
         .service-card {
@@ -124,16 +129,15 @@
             aspect-ratio: 1.1 / 1;
             display: flex;
             flex-direction: column;
-            /* La transizione gestisce sia il movimento che l'ombra */
             transition: var(--transition-apple);
             cursor: pointer;
             box-shadow: var(--apple-card-shadow);
             border: none;
-            will-change: transform, box-shadow; /* Ottimizzazione performance */
+            will-change: transform, box-shadow;
         }
 
         .service-card:hover {
-            transform: translateY(-5px) scale(1.01); /* Si alza leggermente di più */
+            transform: translateY(-5px) scale(1.01);
             box-shadow: var(--apple-card-hover-shadow);
         }
 
@@ -145,11 +149,6 @@
             transition: var(--transition-apple);
         }
 
-        .service-card:hover .service-card-img {
-            transform: scale(1.04); /* Zoom leggero sull'immagine */
-        }
-
-        /* SFUMATURA BIANCA */
         .service-card::after {
             content: '';
             position: absolute;
@@ -160,29 +159,17 @@
             pointer-events: none;
         }
 
-        .card-header {
-            position: relative;
-            z-index: 2;
-            padding: 25px;
-        }
-
-        .card-title {
-            font-weight: 700;
-            font-size: 1.3rem;
-            color: #1d1d1f;
-            line-height: 1.2;
-            margin: 0;
-            letter-spacing: -0.3px;
-        }
+        .card-header { position: relative; z-index: 2; padding: 25px; }
+        .card-title { font-weight: 700; font-size: 1.3rem; color: #1d1d1f; line-height: 1.2; margin: 0; }
 
         /* FOOTER */
         .footer-black { background: #000; color: #f5f5f7; padding: 70px 0; text-align: center; }
         .footer-content { line-height: 1.6; font-size: 0.9rem; opacity: 0.85; }
-        .footer-content a { color: #2997ff; text-decoration: none; } /* Blu Apple più brillante */
+        .footer-content a { color: #2997ff; text-decoration: none; }
 
         /* RESPONSIVE */
-        @media (max-width: 1200px) { .grid-limiter { width: 90%; } }
-        @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } .section-title { font-size: 2rem; } }
+        @media (max-width: 1200px) { .grid-limiter { width: 90%; } .hero-headline { font-size: 3rem; } }
+        @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -196,8 +183,10 @@
         </div>
     </header>
 
-    <section class="hero-section">
-        <div class="image-area grid-limiter"></div>
+    <section class="hero-full-width">
+        <div class="grid-limiter hero-content">
+            <h1 class="hero-headline">Un universo di stampa.<br>A portata di mano.</h1>
+        </div>
     </section>
 
     <section class="cmyk-section" id="sec-cyan">
@@ -213,35 +202,20 @@
                         <h3 class="card-title">Stampa digitale piccolo formato</h3>
                     </div>
                 </div>
-
                 <div class="service-card" style="--theme-color: #00AEEF; background: var(--apple-bg);">
-                   <div class="card-header">
-                        <h3 class="card-title">Stampa digitale grande formato</h3>
-                    </div>
+                   <div class="card-header"><h3 class="card-title">Stampa digitale grande formato</h3></div>
                 </div>
-
                 <div class="service-card" style="--theme-color: #00AEEF; background: var(--apple-bg);">
-                    <div class="card-header">
-                        <h3 class="card-title">Allestimenti</h3>
-                    </div>
+                    <div class="card-header"><h3 class="card-title">Allestimenti</h3></div>
                 </div>
-
                 <div class="service-card" style="--theme-color: #00AEEF; background: var(--apple-bg);">
-                    <div class="card-header">
-                        <h3 class="card-title">Packaging</h3>
-                    </div>
+                    <div class="card-header"><h3 class="card-title">Packaging</h3></div>
                 </div>
-
                 <div class="service-card" style="--theme-color: #00AEEF; background: var(--apple-bg);">
-                    <div class="card-header">
-                        <h3 class="card-title">Personalizzazione</h3>
-                    </div>
+                    <div class="card-header"><h3 class="card-title">Personalizzazione</h3></div>
                 </div>
-
                 <div class="service-card" style="--theme-color: #00AEEF; background: var(--apple-bg);">
-                    <div class="card-header">
-                        <h3 class="card-title">Consulenza tecnica</h3>
-                    </div>
+                    <div class="card-header"><h3 class="card-title">Consulenza tecnica</h3></div>
                 </div>
             </div>
         </div>
@@ -255,23 +229,12 @@
         </div>
     </section>
 
-    <section class="cmyk-section" id="sec-yellow">
-        <div class="grid-limiter">
-            <div class="title-wrapper" id="wrap-yellow">
-                <h2 class="section-title" data-target="wrap-yellow" style="--theme-color: #cccc00;">Contatti</h2> 
-            </div>
-        </div>
-    </section>
-
     <footer class="footer-black">
         <div class="grid-limiter">
             <div class="footer-content">
                 <p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 5px;">NOLO Print Srl</p>
                 <p>Via Padova, 49 - 20127 Milano</p>
-                <p>
-                    Tel. 02 288316 – Fax 02 2894562<br>
-                    <a href="mailto:noloprint@gmail.com">noloprint@gmail.com</a>
-                </p>
+                <p>Tel. 02 288316 – <a href="mailto:noloprint@gmail.com">noloprint@gmail.com</a></p>
                 <p style="margin-top: 25px; font-size: 0.8rem; color: #888;">P.IVA 11258900965</p>
             </div>
         </div>
@@ -284,14 +247,17 @@
             const dockedContainer = document.getElementById('docked-titles');
             
             const startScale = 4.5; 
-            const maxScroll = 400;
+            const maxScroll = 500; // Aumentato leggermente per dare respiro alla hero
             let startX = 0, startY = 0;
 
             function initPositions() {
                 logo.style.transform = 'none';
                 const rect = logo.getBoundingClientRect();
                 const centerX = window.innerWidth / 2;
-                const startYPos = 50; 
+                
+                // Il logo parte esattamente a metà della sezione hero
+                const startYPos = window.innerHeight * 0.35; 
+
                 startX = centerX - rect.left - (rect.width * startScale / 2);
                 startY = startYPos - rect.top;
                 update();
@@ -310,16 +276,11 @@
                     const wrapperId = title.getAttribute('data-target');
                     const wrapper = document.getElementById(wrapperId);
                     if (!wrapper) return;
-
                     const rect = wrapper.getBoundingClientRect();
                     if (rect.top <= 90) { 
-                        if (title.parentNode !== dockedContainer) {
-                            dockedContainer.appendChild(title);
-                        }
+                        if (title.parentNode !== dockedContainer) dockedContainer.appendChild(title);
                     } else {
-                        if (title.parentNode !== wrapper) {
-                            wrapper.appendChild(title);
-                        }
+                        if (title.parentNode !== wrapper) wrapper.appendChild(title);
                     }
                 });
 
