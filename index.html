@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NOLO Print - Universo della Stampa</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -13,6 +13,7 @@
             --apple-card-shadow: 0 2px 5px rgba(0,0,0,0.04), 0 8px 20px rgba(0,0,0,0.03);
             --apple-card-hover-shadow: 0 12px 25px rgba(0,0,0,0.08), 0 25px 50px rgba(0,0,0,0.1);
             --transition-apple: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --header-height: 90px; /* Altezza barra fissa */
         }
 
         body, html {
@@ -29,9 +30,10 @@
             position: relative;
         }
 
-        /* HEADER */
+        /* HEADER - BARRA SOTTILE */
         #main-header {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100px; /* Altezza leggermente aumentata */
+            position: fixed; top: 0; left: 0; width: 100%; 
+            height: var(--header-height);
             z-index: 1000;
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
@@ -48,8 +50,9 @@
             pointer-events: auto;
         }
 
+        /* Logo nella barra più grande (occupa quasi tutta l'altezza) */
         #main-logo {
-            width: 70px; /* Logo nella barra ingrandito */
+            width: 80px; 
             height: auto;
             transform-origin: center left;
             will-change: transform;
@@ -62,38 +65,39 @@
             flex-grow: 1;
         }
 
+        /* Titolo nella barra più grande */
         #docked-titles .section-title {
-            font-size: 1.2rem !important; /* Titolo nella barra ingrandito */
+            font-size: 1.4rem !important; 
             font-weight: 700;
             margin: 0;
             color: var(--theme-color) !important;
             letter-spacing: -0.5px;
         }
 
-        /* HERO FULL WIDTH */
+        /* HERO AREA */
         .hero-full-width {
             width: 100%;
-            height: 85vh; /* Un po' più alta per gestire il terzo superiore */
+            height: 85vh;
             background-color: var(--apple-bg);
             display: flex;
             flex-direction: column;
-            justify-content: flex-start; /* Allinea al top */
+            justify-content: flex-start;
             align-items: center;
             text-align: center;
-            padding-top: 100px; 
+            padding-top: var(--header-height); 
         }
 
         .hero-headline {
-            font-size: 4rem;
+            font-size: 4.2rem;
             font-weight: 800;
             letter-spacing: -2px;
             line-height: 1.1;
-            margin-top: 20vh; /* Posiziona il titolo circa nel terzo superiore */
+            margin-top: 28vh; /* Titolo posizionato per lasciare spazio al logo intermedio */
             z-index: 1;
         }
 
-        /* SEZIONI */
-        .cmyk-section { padding: 100px 0; min-height: 80vh; background-color: #ffffff; }
+        /* SEZIONI E GRID */
+        .cmyk-section { padding: 100px 0; background-color: #ffffff; }
         
         .title-wrapper { 
             height: 60px; 
@@ -108,10 +112,8 @@
             font-size: 2.8rem;
             font-weight: 800;
             margin: 0;
-            letter-spacing: -0.5px;
         }
 
-        /* GRID CASELLE */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -124,12 +126,9 @@
             border-radius: 22px;
             overflow: hidden;
             aspect-ratio: 1.1 / 1;
-            display: flex;
-            flex-direction: column;
             transition: var(--transition-apple);
             cursor: pointer;
             box-shadow: var(--apple-card-shadow);
-            border: none;
         }
 
         .service-card:hover {
@@ -141,18 +140,15 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             object-fit: cover;
-            z-index: 0;
             transition: var(--transition-apple);
         }
 
         .service-card::after {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 100%;
-            height: 45%; 
+            top: 0; left: 0; width: 100%; height: 45%; 
             background: linear-gradient(to bottom, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 100%);
             z-index: 1;
-            pointer-events: none;
         }
 
         .card-header { position: relative; z-index: 2; padding: 25px; }
@@ -160,7 +156,7 @@
 
         /* FOOTER */
         .footer-black { background: #000; color: #f5f5f7; padding: 70px 0; text-align: center; }
-        .footer-content { line-height: 1.6; font-size: 0.9rem; opacity: 0.85; }
+        .footer-content { line-height: 1.6; font-size: 0.9rem; }
         .footer-content a { color: #2997ff; text-decoration: none; }
 
         @media (max-width: 1200px) { .grid-limiter { width: 90%; } .hero-headline { font-size: 3rem; } }
@@ -204,20 +200,6 @@
                 <div class="service-card" style="--theme-color: #00AEEF; background: var(--apple-bg);">
                     <div class="card-header"><h3 class="card-title">Packaging</h3></div>
                 </div>
-                <div class="service-card" style="--theme-color: #00AEEF; background: var(--apple-bg);">
-                    <div class="card-header"><h3 class="card-title">Personalizzazione</h3></div>
-                </div>
-                <div class="service-card" style="--theme-color: #00AEEF; background: var(--apple-bg);">
-                    <div class="card-header"><h3 class="card-title">Consulenza tecnica</h3></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="cmyk-section" id="sec-magenta">
-        <div class="grid-limiter">
-            <div class="title-wrapper" id="wrap-magenta">
-                <h2 class="section-title" data-target="wrap-magenta" style="--theme-color: #E2007A;">Progetti</h2>
             </div>
         </div>
     </section>
@@ -227,7 +209,7 @@
             <div class="footer-content">
                 <p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 5px;">NOLO Print Srl</p>
                 <p>Via Padova, 49 - 20127 Milano</p>
-                <p>Tel. 02 288316 – <a href="mailto:noloprint@gmail.com">noloprint@gmail.com</a></p>
+                <p>Tel. 02 288316 – <a href="mailto:noloprint@gmail.com" style="color:#2997ff;">noloprint@gmail.com</a></p>
                 <p style="margin-top: 25px; font-size: 0.8rem; color: #888;">P.IVA 11258900965</p>
             </div>
         </div>
@@ -239,8 +221,8 @@
             const titles = document.querySelectorAll('.section-title');
             const dockedContainer = document.getElementById('docked-titles');
             
-            const startScale = 4.0; // Scala iniziale leggermente ridotta per non coprire troppo
-            const maxScroll = 450; 
+            const startScale = 3.5; 
+            const maxScroll = 500; 
             let startX = 0, startY = 0;
 
             function initPositions() {
@@ -248,8 +230,8 @@
                 const rect = logo.getBoundingClientRect();
                 const centerX = window.innerWidth / 2;
                 
-                // Logo posizionato più in alto (12% dell'altezza invece del 35%)
-                const startYPos = window.innerHeight * 0.12; 
+                // Logo INTERMEDIO: Circa al 18% dell'altezza dello schermo
+                const startYPos = window.innerHeight * 0.18; 
 
                 startX = centerX - rect.left - (rect.width * startScale / 2);
                 startY = startYPos - rect.top;
@@ -270,7 +252,7 @@
                     const wrapper = document.getElementById(wrapperId);
                     if (!wrapper) return;
                     const rect = wrapper.getBoundingClientRect();
-                    if (rect.top <= 100) { // Allineato alla nuova altezza header
+                    if (rect.top <= 90) { 
                         if (title.parentNode !== dockedContainer) dockedContainer.appendChild(title);
                     } else {
                         if (title.parentNode !== wrapper) wrapper.appendChild(title);
