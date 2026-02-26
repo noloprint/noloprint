@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Universo della Stampa</title>
+    <title>NOLO Print - Universo della Stampa</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        /* --- RESET E VARIABILI --- */
+        /* --- RESET E STILI GENERALI --- */
         :root {
             --font-main: 'Montserrat', sans-serif;
-            --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --transition-smooth: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
         body, html {
@@ -18,20 +18,21 @@
             font-family: var(--font-main);
             background-color: #ffffff;
             color: #333;
+            overflow-x: hidden;
         }
 
-        /* La Gabbia */
+        /* La Gabbia (50% centrale) */
         .grid-limiter {
             width: 50%; 
             margin: 0 auto;
             position: relative;
         }
 
-        /* Header */
+        /* HEADER FISSO */
         #main-header {
             position: fixed; top: 0; left: 0; width: 100%; height: 90px;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.9);
             backdrop-filter: blur(10px);
             pointer-events: none;
         }
@@ -45,12 +46,13 @@
         }
 
         #main-logo {
-            width: 60px;
+            width: 65px;
             height: auto;
             transform-origin: center left;
             will-change: transform;
         }
 
+        /* CONTENITORE TITOLI NELLA BARRA (A DESTRA) */
         #docked-titles {
             display: flex;
             justify-content: flex-end;
@@ -66,24 +68,24 @@
             letter-spacing: 1px;
         }
 
-        /* Hero */
-        .hero-section { padding-top: 100px; min-height: 40vh; }
+        /* HERO SECTION */
+        .hero-section { padding-top: 120px; min-height: 40vh; }
         .image-area {
             height: 400px;
-            background: #f4f4f4 url('tua-immagine.jpg') center/cover;
-            border-radius: 12px;
+            background: #f0f0f0 url('images/hero-placeholder.jpg') center/cover;
+            border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        /* Sezioni */
-        .cmyk-section { padding: 120px 0; min-height: 80vh; }
+        /* SEZIONI E TITOLI */
+        .cmyk-section { padding: 100px 0; min-height: 80vh; }
         
         .title-wrapper { 
             height: 100px; 
             display: flex; 
-            justify-content: flex-start; 
+            justify-content: flex-start; /* Titolo nasce a sinistra */
             align-items: center;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
 
         .section-title {
@@ -93,55 +95,52 @@
             text-transform: uppercase;
             margin: 0;
             letter-spacing: -2px;
+            line-height: 1;
         }
 
-        /* --- GRID DELLE CASELLE --- */
+        /* GRIGLIA SERVIZI */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr); /* 2 colonne data la gabbia stretta al 50% */
-            gap: 25px;
-            margin-top: 20px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
         }
 
         .service-card {
             background: #fff;
-            border: 1px solid #eee;
-            border-radius: 15px;
+            border: 1px solid #f0f0f0;
+            border-radius: 20px;
             overflow: hidden;
             aspect-ratio: 1 / 1.1;
             display: flex;
             flex-direction: column;
             transition: var(--transition-smooth);
             cursor: pointer;
-            position: relative;
         }
 
         .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             border-color: var(--theme-color);
         }
 
-        /* Spazio per la foto */
         .card-image {
             flex-grow: 1;
-            background: #f9f9f9;
+            background: #fafafa;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ccc;
-            font-size: 0.8rem;
-            text-transform: uppercase;
+            font-size: 0.7rem;
+            color: #bbb;
+            letter-spacing: 1px;
         }
 
-        /* Etichetta Titolo Casella */
         .card-title {
-            padding: 20px;
-            background: white;
+            padding: 25px;
+            background: #fff;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             text-transform: uppercase;
-            border-top: 1px solid #eee;
+            border-top: 1px solid #f0f0f0;
             transition: var(--transition-smooth);
         }
 
@@ -150,12 +149,33 @@
             color: white;
         }
 
-        .footer-black { background: #000; color: #fff; padding: 60px 0; text-align: center; font-size: 0.8rem; letter-spacing: 2px; }
+        /* FOOTER */
+        .footer-black { 
+            background: #000; 
+            color: #fff; 
+            padding: 80px 0; 
+            text-align: center;
+        }
 
-        /* Responsive */
+        .footer-content {
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .footer-content a {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid #333;
+            transition: 0.3s;
+        }
+
+        .footer-content a:hover {
+            border-color: #fff;
+        }
+
+        /* RESPONSIVE */
         @media (max-width: 1200px) {
             .grid-limiter { width: 85%; }
-            .services-grid { grid-template-columns: repeat(3, 1fr); } /* Più spazio, più colonne */
         }
 
         @media (max-width: 768px) {
@@ -187,27 +207,27 @@
             
             <div class="services-grid">
                 <div class="service-card" style="--theme-color: #00AEEF;">
-                    <div class="card-image">Immagine Qui</div>
+                    <div class="card-image">Immagine Prodotto</div>
                     <div class="card-title">Stampa digitale piccolo formato</div>
                 </div>
                 <div class="service-card" style="--theme-color: #00AEEF;">
-                    <div class="card-image">Immagine Qui</div>
+                    <div class="card-image">Immagine Prodotto</div>
                     <div class="card-title">Stampa digitale grande formato</div>
                 </div>
                 <div class="service-card" style="--theme-color: #00AEEF;">
-                    <div class="card-image">Immagine Qui</div>
+                    <div class="card-image">Immagine Prodotto</div>
                     <div class="card-title">Allestimenti</div>
                 </div>
                 <div class="service-card" style="--theme-color: #00AEEF;">
-                    <div class="card-image">Immagine Qui</div>
+                    <div class="card-image">Immagine Prodotto</div>
                     <div class="card-title">Packaging</div>
                 </div>
                 <div class="service-card" style="--theme-color: #00AEEF;">
-                    <div class="card-image">Immagine Qui</div>
+                    <div class="card-image">Immagine Prodotto</div>
                     <div class="card-title">Personalizzazione</div>
                 </div>
                 <div class="service-card" style="--theme-color: #00AEEF;">
-                    <div class="card-image">Immagine Qui</div>
+                    <div class="card-image">Immagine Prodotto</div>
                     <div class="card-title">Consulenza tecnica</div>
                 </div>
             </div>
@@ -219,7 +239,7 @@
             <div class="title-wrapper" id="wrap-magenta">
                 <h2 class="section-title" data-target="wrap-magenta" style="--theme-color: #E2007A;">Progetti</h2>
             </div>
-        </div>
+            </div>
     </section>
 
     <section class="cmyk-section" id="sec-yellow">
@@ -232,7 +252,15 @@
 
     <footer class="footer-black">
         <div class="grid-limiter">
-            <p>UNIVERSO DELLA STAMPA S.R.L. © 2024</p>
+            <div class="footer-content">
+                <p style="font-weight: 700; font-size: 1.2rem; margin-bottom: 10px; letter-spacing: 1px;">NOLO Print Srl</p>
+                <p>Via Padova, 49 - 20127 Milano</p>
+                <p>
+                    Tel. 02 288316 – Fax 02 2894562<br>
+                    <a href="mailto:noloprint@gmail.com">noloprint@gmail.com</a>
+                </p>
+                <p style="margin-top: 25px; font-size: 0.7rem; color: #555; letter-spacing: 1px;">P.IVA 11258900965</p>
+            </div>
         </div>
     </footer>
 
@@ -260,11 +288,13 @@
                 const scrollY = window.scrollY;
                 const progress = Math.min(scrollY / maxScroll, 1);
 
+                // Animazione Logo
                 const curX = startX * (1 - progress);
                 const curY = startY * (1 - progress);
                 const curScale = startScale - ((startScale - 1) * progress);
                 logo.style.transform = `translate(${curX}px, ${curY}px) scale(${curScale})`;
 
+                // Gestione Titoli (da Sinistra a Barra Destra)
                 titles.forEach(title => {
                     const wrapperId = title.getAttribute('data-target');
                     const wrapper = document.getElementById(wrapperId);
@@ -283,6 +313,7 @@
                     }
                 });
 
+                // Mostra solo l'ultimo titolo attivo
                 const docked = Array.from(dockedContainer.children);
                 docked.forEach((el, idx) => {
                     el.style.display = (idx === docked.length - 1) ? 'block' : 'none';
