@@ -13,7 +13,7 @@
             --apple-card-shadow: 0 2px 5px rgba(0,0,0,0.04), 0 8px 20px rgba(0,0,0,0.03);
             --apple-card-hover-shadow: 0 12px 25px rgba(0,0,0,0.08), 0 25px 50px rgba(0,0,0,0.1);
             --transition-apple: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --header-height: 90px; /* Altezza barra fissa */
+            --header-height: 90px;
         }
 
         body, html {
@@ -30,7 +30,7 @@
             position: relative;
         }
 
-        /* HEADER - BARRA SOTTILE */
+        /* HEADER SOTTILE CON CONTENUTI GRANDI */
         #main-header {
             position: fixed; top: 0; left: 0; width: 100%; 
             height: var(--header-height);
@@ -50,7 +50,6 @@
             pointer-events: auto;
         }
 
-        /* Logo nella barra più grande (occupa quasi tutta l'altezza) */
         #main-logo {
             width: 80px; 
             height: auto;
@@ -65,7 +64,6 @@
             flex-grow: 1;
         }
 
-        /* Titolo nella barra più grande */
         #docked-titles .section-title {
             font-size: 1.4rem !important; 
             font-weight: 700;
@@ -77,7 +75,7 @@
         /* HERO AREA */
         .hero-full-width {
             width: 100%;
-            height: 85vh;
+            height: 80vh;
             background-color: var(--apple-bg);
             display: flex;
             flex-direction: column;
@@ -92,12 +90,12 @@
             font-weight: 800;
             letter-spacing: -2px;
             line-height: 1.1;
-            margin-top: 28vh; /* Titolo posizionato per lasciare spazio al logo intermedio */
+            margin-top: 25vh; 
             z-index: 1;
         }
 
-        /* SEZIONI E GRID */
-        .cmyk-section { padding: 100px 0; background-color: #ffffff; }
+        /* SEZIONI CMYK */
+        .cmyk-section { padding: 100px 0; background-color: #ffffff; min-height: 60vh; }
         
         .title-wrapper { 
             height: 60px; 
@@ -112,8 +110,10 @@
             font-size: 2.8rem;
             font-weight: 800;
             margin: 0;
+            letter-spacing: -1px;
         }
 
+        /* GRID SERVIZI */
         .services-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -156,8 +156,7 @@
 
         /* FOOTER */
         .footer-black { background: #000; color: #f5f5f7; padding: 70px 0; text-align: center; }
-        .footer-content { line-height: 1.6; font-size: 0.9rem; }
-        .footer-content a { color: #2997ff; text-decoration: none; }
+        .footer-content { line-height: 1.6; font-size: 0.9rem; opacity: 0.8; }
 
         @media (max-width: 1200px) { .grid-limiter { width: 90%; } .hero-headline { font-size: 3rem; } }
         @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }
@@ -204,13 +203,35 @@
         </div>
     </section>
 
+    <section class="cmyk-section" id="sec-magenta">
+        <div class="grid-limiter">
+            <div class="title-wrapper" id="wrap-magenta">
+                <h2 class="section-title" data-target="wrap-magenta" style="--theme-color: #E2007A;">Progetti</h2>
+            </div>
+            <div style="height: 300px; background: #fafafa; border-radius: 22px; display: flex; align-items: center; justify-content: center; color: #ccc;">
+                Contenuto Progetti in arrivo...
+            </div>
+        </div>
+    </section>
+
+    <section class="cmyk-section" id="sec-yellow">
+        <div class="grid-limiter">
+            <div class="title-wrapper" id="wrap-yellow">
+                <h2 class="section-title" data-target="wrap-yellow" style="--theme-color: #FFCC00;">Contatti</h2>
+            </div>
+            <div style="height: 300px; background: #fafafa; border-radius: 22px; display: flex; align-items: center; justify-content: center; color: #ccc;">
+                Modulo contatti in arrivo...
+            </div>
+        </div>
+    </section>
+
     <footer class="footer-black">
         <div class="grid-limiter">
             <div class="footer-content">
                 <p style="font-weight: 600; font-size: 1.1rem; margin-bottom: 5px;">NOLO Print Srl</p>
                 <p>Via Padova, 49 - 20127 Milano</p>
-                <p>Tel. 02 288316 – <a href="mailto:noloprint@gmail.com" style="color:#2997ff;">noloprint@gmail.com</a></p>
-                <p style="margin-top: 25px; font-size: 0.8rem; color: #888;">P.IVA 11258900965</p>
+                <p>Tel. 02 288316 – <a href="mailto:noloprint@gmail.com" style="color:#2997ff; text-decoration:none;">noloprint@gmail.com</a></p>
+                <p style="margin-top: 25px; font-size: 0.8rem; color: #666;">P.IVA 11258900965</p>
             </div>
         </div>
     </footer>
@@ -222,7 +243,7 @@
             const dockedContainer = document.getElementById('docked-titles');
             
             const startScale = 3.5; 
-            const maxScroll = 500; 
+            const maxScroll = 300; // VELOCIZZATO: Il logo arriva in posizione prima
             let startX = 0, startY = 0;
 
             function initPositions() {
@@ -230,7 +251,7 @@
                 const rect = logo.getBoundingClientRect();
                 const centerX = window.innerWidth / 2;
                 
-                // Logo INTERMEDIO: Circa al 18% dell'altezza dello schermo
+                // Posizione intermedio: 18% dell'altezza viewport
                 const startYPos = window.innerHeight * 0.18; 
 
                 startX = centerX - rect.left - (rect.width * startScale / 2);
@@ -252,6 +273,7 @@
                     const wrapper = document.getElementById(wrapperId);
                     if (!wrapper) return;
                     const rect = wrapper.getBoundingClientRect();
+                    // Il titolo si aggancia quando tocca la barra (90px)
                     if (rect.top <= 90) { 
                         if (title.parentNode !== dockedContainer) dockedContainer.appendChild(title);
                     } else {
