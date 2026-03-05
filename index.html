@@ -25,31 +25,6 @@
             overflow-x: hidden;
         }
 
-        /* BACKGROUND STRIP: centro posizionato al 2/3 della viewport, altezza 2/3 della viewport, opacità 80% */
-        .bg-strip {
-            position: fixed;
-            left: 0;
-            width: 100%;
-            /* 2/3 dell'altezza della viewport */
-            height: 66.6666vh;
-            /* posiziona il centro della strip a 66.6666vh => top = centro - metà altezza = 66.6666vh - 33.3333vh = 33.3333vh */
-            top: 33.3333vh;
-            background-image: url('images/sfondo_striscia.png');
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-            opacity: 0.8; /* 80% opacità */
-            z-index: 0; /* sotto i contenuti ma sopra il background del body */
-            pointer-events: none; /* non interferisce con click/interazioni */
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-        }
-
-        /* Piccola protezione per schermi molto piccoli: riduci l'altezza minima */
-        @media (max-height: 600px) {
-            .bg-strip { height: 55vh; top: calc(66.6666vh - 27.5vh); }
-        }
-
         .grid-limiter {
             width: 50%; 
             margin: 0 auto;
@@ -250,10 +225,7 @@
         @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
-<body class="is-at-top"> 
-    <div class="bg-strip" aria-hidden="true"></div>
-
-    <header id="main-header">
+<body class="is-at-top"> <header id="main-header">
         <div class="header-content grid-limiter">
             <div class="header-left">
                 <img src="images/logo.png" alt="Logo" id="main-logo">
