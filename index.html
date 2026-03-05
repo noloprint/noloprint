@@ -25,19 +25,19 @@
             overflow-x: hidden;
         }
 
-        /* STRIP DECORATIVA — arriva fino al bordo superiore (riempie sopra e sotto)
-           - centro verticale regolato per far sì che la strip tocchi il top della viewport
-           - altezza aumentata a 90vh per coprire ampiamente sopra/sotto
-           - angoli superiori squadrati, angoli inferiori arrotondati
-           - mantiene parallax fluido e fade al footer
+        /*
+         DECORATIVE STRIP - FULL-VIEWPORT VERTICAL COVER
+         - height: 100vh, top: 50vh so it fills from top to bottom of viewport
+         - remains non full-width (width limited)
+         - parallax inside + smooth RAF interpolation + fade when overlapping footer
         */
         .bg-strip {
             position: fixed;
             left: calc(50% + 18vw);    /* spostata a destra come richiesto */
-            top: 45vh;                 /* centro verticale posizionato per rendere top della strip = 0 */
+            top: 50vh;                 /* centro verticale = 50vh => strip estende 50vh up / 50vh down */
             transform: translate(-50%, -50%);
-            width: min(42.5vw, 600px); /* larghezza contenuta (metà della pagina circa) */
-            height: 90vh;              /* AUMENTATA: copre molto sopra e sotto */
+            width: min(42.5vw, 600px); /* larghezza contenuta */
+            height: 100vh;             /* copre tutta la viewport verticalmente (top -> bottom) */
             background-image: url('images/sfondo_striscia.png');
             background-repeat: no-repeat;
             background-position: center 50%;
@@ -45,7 +45,7 @@
             opacity: var(--strip-opacity);
             pointer-events: none;
             z-index: 0;                /* sotto i contenuti principali */
-            border-radius: 0 0 18px 18px; /* angoli superiori squadrati per non mostrare "buchi" */
+            border-radius: 0;          /* angoli squadrati per non lasciare spazio in alto/basso */
             filter: drop-shadow(0 10px 18px rgba(0,0,0,0.06));
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
@@ -53,25 +53,15 @@
             transition: opacity 260ms linear;
         }
 
-        /* Regole responsive aggiornate per la strip molto alta */
+        /* Responsive: manteniamo l'effetto ma limitiamo dimensioni su schermi piccoli */
         @media (max-width: 1200px) {
-            .bg-strip { left: calc(50% + 12vw); width: min(46vw, 520px); height: 82vh; top: 44vh; }
+            .bg-strip { left: calc(50% + 12vw); width: min(46vw, 520px); }
         }
         @media (max-width: 900px) {
-            .bg-strip { left: calc(50% + 8vw); width: 44vw; height: 74vh; border-radius: 0 0 14px 14px; top: 43vh; }
+            .bg-strip { left: calc(50% + 8vw); width: 44vw; }
         }
         @media (max-width: 600px) {
-            .bg-strip { left: calc(50% + 4vw); width: 86vw; height: 66vh; top: 42vh; transform: translate(-50%, -50%); }
-        }
-        /* Se lo schermo è molto basso riduciamo altezza e spostiamo leggermente verso l'alto per non tagliare troppo */
-        @media (max-height: 1000px) {
-            .bg-strip { height: 82vh; top: 43vh; }
-        }
-        @media (max-height: 800px) {
-            .bg-strip { height: 74vh; top: 42.5vh; }
-        }
-        @media (max-height: 600px) {
-            .bg-strip { height: 64vh; top: 41vh; }
+            .bg-strip { left: calc(50% + 4vw); width: 86vw; }
         }
 
         .grid-limiter {
@@ -198,7 +188,7 @@
 </head>
 <body class="is-at-top"> 
 
-    <!-- STRIP: centro spostato in modo che la strip tocchi il top; angoli superiori squadrati -->
+    <!-- STRIP: ora verticalmente estesa (tocca top e bottom), non full-width -->
     <div class="bg-strip" aria-hidden="true"></div>
 
     <header id="main-header">
@@ -396,7 +386,7 @@
                 });
 
                 // Parallax target (non applicato direttamente, viene interpolato in RAF)
-                targetYPercent = 50 + Math.round(window.scrollY * parallaxSpeed);
+                targetYPercent = 50 + (window.scrollY * parallaxSpeed);
 
                 // Fade when overlapping footer
                 if (bg && footer) {
