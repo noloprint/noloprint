@@ -25,31 +25,46 @@
             overflow-x: hidden;
         }
 
-        /* BACKGROUND STRIP (immagine come elemento non-stretched in larghezza):
-           - il centro dell'immagine è posizionato a 2/3 dell'altezza della viewport (top: 66.6666vh)
-           - l'immagine mantiene la sua larghezza naturale (width: auto) e si adatta in altezza (max-height)
-           - opacità 80%
+        /* DECORATIVE BACKGROUND STRIP
+           - posizionata in modo che il suo centro verticale sia a 2/3 dell'altezza della viewport
+           - spostata leggermente a destra (calc(50% + 8vw))
+           - non occupa tutta la larghezza della pagina (max-width impostato)
+           - più spessa in altezza (34vh) per effetto decorazione
+           - opacità 0.8 (80%)
         */
         .bg-strip {
             position: fixed;
-            left: 50%;
-            top: 66.6666vh;
-            transform: translate(-50%, -50%); /* centra l'elemento esattamente sul punto desiderato */
-            height: auto;                 /* non forziamo un'altezza fissa: adattabile */
-            max-height: 66.6666vh;        /* non superare 2/3 della viewport in altezza */
-            width: auto;                  /* mantieni la larghezza naturale dell'immagine */
-            max-width: 95vw;              /* sicurezza per schermi molto stretti: evita overflow orizzontale */
-            opacity: 0.8;                 /* 80% opacità */
-            pointer-events: none;         /* non interferisce con click/interazioni */
-            z-index: 0;                   /* sotto i contenuti (header ha z-index:1000) */
+            left: calc(50% + 8vw);        /* spostamento verso destra */
+            top: 66.6666vh;               /* centro verticale posizionato al 2/3 */
+            transform: translate(-50%, -50%); /* centra l'elemento sul punto scelto */
+            width: min(85vw, 1200px);     /* non tutta la larghezza, si adatta e resta limitata */
+            height: 34vh;                 /* più "corporea", non sottile */
+            background-image: url('images/sfondo_striscia.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;       /* riempi l'area mantenendo look decorativo */
+            opacity: 0.8;                 /* 80% opacità richiesti */
+            pointer-events: none;         /* non blocca click */
+            z-index: 0;                   /* sotto i contenuti principali (header ha z-index:1000) */
+            border-radius: 18px;          /* look decorativo, morbido */
+            filter: drop-shadow(0 10px 18px rgba(0,0,0,0.06)); /* lieve profondità */
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            display: block;
+            will-change: transform, opacity;
         }
 
-        /* Protezioni responsive — se lo schermo è molto basso riduciamo l'altezza massima */
+        /* Variante responsiva: schermi stretti o alti ridotti */
+        @media (max-width: 1200px) {
+            .bg-strip { left: calc(50% + 6vw); width: min(90vw, 1000px); height: 30vh; }
+        }
+        @media (max-width: 900px) {
+            .bg-strip { left: calc(50% + 4vw); width: 92vw; height: 26vh; border-radius: 14px; }
+        }
+        @media (max-width: 600px) {
+            .bg-strip { left: 50%; transform: translate(-50%, -50%); width: 95vw; height: 20vh; top: 66vh; }
+        }
         @media (max-height: 600px) {
-            .bg-strip { max-height: 55vh; }
+            .bg-strip { height: 22vh; top: 62vh; }
         }
 
         .grid-limiter {
@@ -168,7 +183,7 @@
             letter-spacing: -2px;
             line-height: 1.1;
             margin-top: 25vh; 
-            z-index: 1;
+            z-index: 2; /* sopra la bg-strip */
         }
 
         /* SEZIONI */
@@ -254,9 +269,8 @@
 </head>
 <body class="is-at-top"> 
 
-    <!-- ELEMENTO STRIP: immagine non-stretched in larghezza, centrata orizzontalmente;
-         il centro dell'immagine è posizionato al 2/3 dell'altezza della viewport -->
-    <img src="images/sfondo_striscia.png" alt="" class="bg-strip" aria-hidden="true">
+    <!-- ELEMENTO STRIP DECORATIVO (posizionato al 2/3, spostato a destra, non full-width, opacità 80%) -->
+    <div class="bg-strip" aria-hidden="true"></div>
 
     <header id="main-header">
         <div class="header-content grid-limiter">
