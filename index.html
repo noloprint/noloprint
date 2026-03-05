@@ -25,43 +25,46 @@
             overflow-x: hidden;
         }
 
-        /* DECORATIVE BACKGROUND STRIP
-           - posizionata in modo che il suo centro verticale sia a 2/3 dell'altezza della viewport
-           - spostata leggermente a destra (calc(50% + 8vw))
-           - non occupa tutta la larghezza della pagina (max-width impostato)
-           - più spessa in altezza (34vh) per effetto decorazione
-           - opacità 0.8 (80%)
+        /* DECORATIVE BACKGROUND STRIP — aggiornamento:
+           - spostata ancora più a destra
+           - larghezza dimezzata rispetto alla precedente (minore impatto orizzontale)
+           - più "corporea" (altezza), bordi arrotondati
+           - opacità 80%
+           - parallax: lo sfondo interno si muove su/giù mentre scorri
         */
         .bg-strip {
             position: fixed;
-            left: calc(50% + 8vw);        /* spostamento verso destra */
-            top: 66.6666vh;               /* centro verticale posizionato al 2/3 */
-            transform: translate(-50%, -50%); /* centra l'elemento sul punto scelto */
-            width: min(85vw, 1200px);     /* non tutta la larghezza, si adatta e resta limitata */
-            height: 34vh;                 /* più "corporea", non sottile */
+            /* ancora più a destra rispetto alle versioni precedenti */
+            left: calc(50% + 18vw);
+            /* posiziona il centro verticale della strip al 2/3 della viewport */
+            top: 66.6666vh;
+            transform: translate(-50%, -50%);
+            /* larghezza ridotta (circa metà della versione precedente) */
+            width: min(42.5vw, 600px);
+            height: 34vh;                 /* aspetto "più spesso", non sottile */
             background-image: url('images/sfondo_striscia.png');
             background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;       /* riempi l'area mantenendo look decorativo */
-            opacity: 0.8;                 /* 80% opacità richiesti */
-            pointer-events: none;         /* non blocca click */
-            z-index: 0;                   /* sotto i contenuti principali (header ha z-index:1000) */
-            border-radius: 18px;          /* look decorativo, morbido */
-            filter: drop-shadow(0 10px 18px rgba(0,0,0,0.06)); /* lieve profondità */
+            background-position: center 50%;
+            background-size: cover;       /* riempi l'area della strip */
+            opacity: 0.8;                 /* 80% opacità */
+            pointer-events: none;
+            z-index: 0;
+            border-radius: 16px;
+            filter: drop-shadow(0 10px 18px rgba(0,0,0,0.06));
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
-            will-change: transform, opacity;
+            will-change: transform, background-position;
         }
 
-        /* Variante responsiva: schermi stretti o alti ridotti */
+        /* Regole responsive */
         @media (max-width: 1200px) {
-            .bg-strip { left: calc(50% + 6vw); width: min(90vw, 1000px); height: 30vh; }
+            .bg-strip { left: calc(50% + 12vw); width: min(46vw, 520px); height: 30vh; }
         }
         @media (max-width: 900px) {
-            .bg-strip { left: calc(50% + 4vw); width: 92vw; height: 26vh; border-radius: 14px; }
+            .bg-strip { left: calc(50% + 8vw); width: 44vw; height: 26vh; border-radius: 14px; }
         }
         @media (max-width: 600px) {
-            .bg-strip { left: 50%; transform: translate(-50%, -50%); width: 95vw; height: 20vh; top: 66vh; }
+            .bg-strip { left: calc(50% + 4vw); width: 80vw; height: 20vh; top: 66vh; transform: translate(-50%, -50%); }
         }
         @media (max-height: 600px) {
             .bg-strip { height: 22vh; top: 62vh; }
@@ -269,7 +272,7 @@
 </head>
 <body class="is-at-top"> 
 
-    <!-- ELEMENTO STRIP DECORATIVO (posizionato al 2/3, spostato a destra, non full-width, opacità 80%) -->
+    <!-- ELEMENTO STRIP DECORATIVO (spostato a destra, larghezza dimezzata, parallax interno) -->
     <div class="bg-strip" aria-hidden="true"></div>
 
     <header id="main-header">
@@ -400,7 +403,8 @@
             const titles = document.querySelectorAll('.section-title');
             const dockedContainer = document.getElementById('docked-titles');
             const body = document.body;
-            
+            const bg = document.querySelector('.bg-strip');
+
             const startScale = 3.5; 
             const maxScroll = 300; 
             let startX = 0, startY = 0;
@@ -413,6 +417,7 @@
                 startX = centerX - rect.left - (rect.width * startScale / 2);
                 startY = startYPos - rect.top;
                 update();
+                updateBg(); // inizializza posizione background strip
             }
 
             function update() {
@@ -452,8 +457,23 @@
                 docked.forEach((el, idx) => {
                     el.style.display = (idx === docked.length - 1) ? 'block' : 'none';
                 });
+
+                // aggiorna parallax bg
+                updateBg();
             }
 
+            // Parallax / spostamento dell'immagine interna alla strip mentre scorri
+            function updateBg() {
+                if (!bg) return;
+                // velocità parallax (aggiustala se vuoi effetto più o meno marcato)
+                const speed = 0.035;
+                // calcola percentuale di spostamento basata sullo scroll della pagina
+                // partiamo dal 50% (centro) e muoviamo nel range [0,100]
+                let yPercent = 50 + Math.round(window.scrollY * speed);
+                // clamp tra 0 e 100
+                yPercent = Math.max(0, Math.min(100, yPercent));
+                bg.style.backgroundPosition = `center ${yPercent}%`;
+            }
 
             function scrollToSectionTitle(title) {
                 const wrapperId = title.getAttribute('data-target');
