@@ -14,7 +14,7 @@
             --apple-card-hover-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
             --transition-apple: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             --header-height: 90px;
-            --strip-opacity: 0.8; /* valore di default usato dallo script */
+            --strip-opacity: 0.5; /* Opacità abbassata al 50% */
         }
 
         body, html {
@@ -27,25 +27,22 @@
 
         /*
          DECORATIVE STRIP - FULL-VIEWPORT VERTICAL COVER
-         - height: 100vh, top: 50vh so it fills from top to bottom of viewport
-         - remains non full-width (width limited)
-         - parallax inside + smooth RAF interpolation + fade when overlapping footer
         */
         .bg-strip {
             position: fixed;
-            left: calc(50% + 18vw);    /* spostata a destra come richiesto */
-            top: 50vh;                 /* centro verticale = 50vh => strip estende 50vh up / 50vh down */
+            left: calc(50% + 18vw);
+            top: 50vh;
             transform: translate(-50%, -50%);
-            width: min(42.5vw, 600px); /* larghezza contenuta */
-            height: 100vh;             /* copre tutta la viewport verticalmente (top -> bottom) */
+            width: min(42.5vw, 600px);
+            height: 100vh;
             background-image: url('images/sfondo_striscia.png');
             background-repeat: no-repeat;
             background-position: center 50%;
             background-size: cover;
             opacity: var(--strip-opacity);
             pointer-events: none;
-            z-index: 0;                /* sotto i contenuti principali */
-            border-radius: 0;          /* angoli squadrati per non lasciare spazio in alto/basso */
+            z-index: 0;
+            border-radius: 0;
             filter: drop-shadow(0 10px 18px rgba(0,0,0,0.06));
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
@@ -53,7 +50,6 @@
             transition: opacity 260ms linear;
         }
 
-        /* Responsive: manteniamo l'effetto ma limitiamo dimensioni su schermi piccoli */
         @media (max-width: 1200px) {
             .bg-strip { left: calc(50% + 12vw); width: min(46vw, 520px); }
         }
@@ -68,7 +64,7 @@
             width: 50%; 
             margin: 0 auto;
             position: relative;
-            z-index: 2; /* contenuti sopra la strip */
+            z-index: 2;
         }
 
         /* HEADER */
@@ -101,8 +97,37 @@
         }
 
         .is-at-top #docked-titles { opacity: 0; }
+        .is-at-top #main-nav { opacity: 0; pointer-events: none; } /* Nasconde il nav all'inizio per non disturbare l'animazione */
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
 
         #main-logo { width: 80px; height: auto; transform-origin: center left; will-change: transform; }
+
+        /* MENU NAVIGAZIONE AGGIUNTO */
+        #main-nav {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            transition: opacity 0.4s ease;
+        }
+
+        #main-nav a {
+            text-decoration: none;
+            color: #1d1d1f;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.3s ease;
+        }
+
+        #main-nav a:hover {
+            color: #E2007A; /* Colore accento al passaggio del mouse */
+        }
 
         #docked-titles { display: flex; justify-content: flex-end; align-items: center; flex-grow: 1; transition: opacity 0.4s ease; }
 
@@ -147,13 +172,13 @@
 
         .hero-full-width .grid-limiter { position: relative; z-index: 2; }
 
-        .hero-headline {
-            font-size: 4.2rem;
-            font-weight: 800;
-            letter-spacing: -2px;
-            line-height: 1.1;
+        /* IMMAGINE SOTTOLOGO AL POSTO DEL TITOLO */
+        .hero-sottologo {
             margin-top: 25vh; 
-            z-index: 2; /* sopra la bg-strip */
+            max-width: 100%;
+            height: auto;
+            max-height: 250px; /* Evita che diventi troppo grande */
+            z-index: 2;
         }
 
         /* SEZIONI */
@@ -182,19 +207,24 @@
         .footer-black { background: #000; color: #f5f5f7; padding: 70px 0; text-align: center; z-index: 3; position: relative; }
         .footer-content { line-height: 1.8; font-size: 0.9rem; opacity: 0.8; }
 
-        @media (max-width: 1200px) { .grid-limiter { width: 90%; } .hero-headline { font-size: 3rem; } .services-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 1200px) { .grid-limiter { width: 90%; } .services-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } #main-nav { display: none; } /* Nascondi menu su mobile per ora */ }
     </style>
 </head>
 <body class="is-at-top"> 
 
-    <!-- STRIP: ora verticalmente estesa (tocca top e bottom), non full-width -->
     <div class="bg-strip" aria-hidden="true"></div>
 
     <header id="main-header">
         <div class="header-content grid-limiter">
             <div class="header-left">
                 <img src="images/logo.png" alt="Logo" id="main-logo">
+                <nav id="main-nav">
+                    <a href="#chi-siamo">chi siamo</a>
+                    <a href="#sec-cyan">cosa facciamo</a>
+                    <a href="#sec-magenta">progetto</a>
+                    <a href="#dove-siamo">dove siamo</a>
+                </nav>
             </div>
             <div id="docked-titles"></div>
         </div>
@@ -202,9 +232,11 @@
 
     <section class="hero-full-width">
         <div class="grid-limiter">
-            <h1 class="hero-headline">UNIVERSO STAMPA</h1>
+            <img src="images/sottologo.png" alt="Universo Stampa Sottologo" class="hero-sottologo">
         </div>
     </section>
+
+    <div id="chi-siamo"></div>
 
     <section class="cmyk-section" id="sec-cyan">
         <div class="grid-limiter">
@@ -294,11 +326,13 @@
     <section class="cmyk-section" id="sec-magenta">
         <div class="grid-limiter">
             <div class="title-wrapper" id="wrap-magenta">
-                <h2 class="section-title" data-target="wrap-magenta" style="--theme-color: #E2007A;">Progetti</h2>
+                <h2 class="section-title" data-target="wrap-magenta" style="--theme-color: #E2007A;">Progetto</h2>
             </div>
             <div style="height: 200px; background: #fafafa; border-radius: 22px; box-shadow: var(--apple-card-shadow);"></div>
         </div>
     </section>
+
+    <div id="dove-siamo"></div>
 
     <footer class="footer-black">
         <div class="grid-limiter">
@@ -326,13 +360,13 @@
             const maxScroll = 300; 
             let startX = 0, startY = 0;
 
-            // Parallax smoothing vars
             let targetYPercent = 50;
             let currentYPercent = 50;
-            let targetOpacity = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || 0.8;
+            // Opacità prelevata dal css aggiornato
+            let targetOpacity = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || 0.5;
             let currentOpacity = targetOpacity;
-            const parallaxSpeed = 0.03; // regola intensità parallax
-            const smoothing = 0.12;     // 0..1 (più alto = meno smoothing)
+            const parallaxSpeed = 0.03; 
+            const smoothing = 0.12;     
 
             let rafId = null;
 
@@ -343,7 +377,7 @@
                 const startYPos = window.innerHeight * 0.11; 
                 startX = centerX - rect.left - (rect.width * startScale / 2);
                 startY = startYPos - rect.top;
-                update(); // stato iniziale
+                update(); 
                 if (!rafId) rafLoop();
             }
 
@@ -352,7 +386,6 @@
                 const progress = Math.min(scrollY / maxScroll, 1);
                 const easedProgress = 1 - Math.pow(1 - progress, 3);
                 
-                // Header visibility
                 if (scrollY > 50) {
                     header.classList.add('scrolled');
                     body.classList.remove('is-at-top');
@@ -361,13 +394,11 @@
                     body.classList.add('is-at-top');
                 }
 
-                // Logo animation
                 const curX = startX * (1 - easedProgress);
                 const curY = startY * (1 - easedProgress);
                 const curScale = startScale - ((startScale - 1) * easedProgress);
                 logo.style.transform = `translate(${curX}px, ${curY}px) scale(${curScale})`;
 
-                // Titles docking behavior
                 titles.forEach(title => {
                     const wrapperId = title.getAttribute('data-target');
                     const wrapper = document.getElementById(wrapperId);
@@ -385,24 +416,21 @@
                     el.style.display = (idx === docked.length - 1) ? 'block' : 'none';
                 });
 
-                // Parallax target (non applicato direttamente, viene interpolato in RAF)
                 targetYPercent = 50 + (window.scrollY * parallaxSpeed);
 
-                // Fade when overlapping footer
                 if (bg && footer) {
                     const bgRect = bg.getBoundingClientRect();
                     const footerRect = footer.getBoundingClientRect();
                     if (bgRect.bottom > footerRect.top) {
                         const overlap = bgRect.bottom - footerRect.top;
                         const fadeFactor = Math.max(0, Math.min(1, overlap / bgRect.height));
-                        targetOpacity = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || 0.8) * (1 - fadeFactor);
+                        targetOpacity = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || 0.5) * (1 - fadeFactor);
                     } else {
-                        targetOpacity = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || 0.8;
+                        targetOpacity = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || 0.5;
                     }
                 }
             }
 
-            // RAF loop for smooth parallax & fade
             function rafLoop() {
                 currentYPercent += (targetYPercent - currentYPercent) * smoothing;
                 currentOpacity += (targetOpacity - currentOpacity) * smoothing;
@@ -439,7 +467,18 @@
                 });
             });
 
-            // Light scroll listener: compute targets only
+            // Smooth scroll links per l'header nuovo aggiunto
+            document.querySelectorAll('#main-nav a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetEl = document.querySelector(this.getAttribute('href'));
+                    if (targetEl) {
+                        const destination = window.scrollY + targetEl.getBoundingClientRect().top - 100;
+                        window.scrollTo({ top: Math.max(destination, 0), behavior: 'smooth' });
+                    }
+                });
+            });
+
             window.addEventListener('scroll', () => {
                 update();
             }, { passive: true });
