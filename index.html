@@ -25,17 +25,18 @@
             overflow-x: hidden;
         }
 
-        /* STRIP DECORATIVA — maggiorata in altezza per coprire meglio il fondo pagina
-           - mantiene posizionamento al 2/3 verticale, spostata a destra, larghezza ridotta
-           - fade automatico se sovrappone il footer e parallax fluido
+        /* STRIP DECORATIVA — ALLUNGATA (copre più sopra e sotto)
+           - centro verticale mantenuto attorno ai 2/3 della viewport
+           - altezza base aumentata a 80vh per maggiore copertura
+           - conserva parallax fluido e fade al footer
         */
         .bg-strip {
             position: fixed;
             left: calc(50% + 18vw);   /* spostata a destra */
-            top: 66.6666vh;           /* centro verticale al 2/3 */
+            top: 66.6666vh;           /* centro verticale al ~2/3 */
             transform: translate(-50%, -50%);
-            width: min(42.5vw, 600px);/* larghezza ridotta */
-            height: 50vh;             /* AUMENTATA: copre più area inferiore */
+            width: min(42.5vw, 600px);/* larghezza contenuta */
+            height: 80vh;             /* AUMENTATA: copre molto sopra e sotto */
             background-image: url('images/sfondo_striscia.png');
             background-repeat: no-repeat;
             background-position: center 50%;
@@ -51,22 +52,25 @@
             transition: opacity 260ms linear;
         }
 
-        /* Regole responsive aggiornate: mantengono la strip larga ma non invadente */
+        /* Regole responsive aggiornate per la strip più alta */
         @media (max-width: 1200px) {
-            .bg-strip { left: calc(50% + 12vw); width: min(46vw, 520px); height: 44vh; }
+            .bg-strip { left: calc(50% + 12vw); width: min(46vw, 520px); height: 72vh; }
         }
         @media (max-width: 900px) {
-            .bg-strip { left: calc(50% + 8vw); width: 44vw; height: 38vh; border-radius: 14px; }
+            .bg-strip { left: calc(50% + 8vw); width: 44vw; height: 64vh; border-radius: 14px; }
         }
         @media (max-width: 600px) {
-            .bg-strip { left: calc(50% + 4vw); width: 86vw; height: 34vh; top: 66vh; transform: translate(-50%, -50%); }
+            .bg-strip { left: calc(50% + 4vw); width: 86vw; height: 56vh; top: 66vh; transform: translate(-50%, -50%); }
         }
         /* Se lo schermo è molto basso riduciamo altezza e spostiamo leggermente verso l'alto per non tagliare troppo */
+        @media (max-height: 900px) {
+            .bg-strip { height: 72vh; top: 64vh; }
+        }
         @media (max-height: 700px) {
-            .bg-strip { height: 36vh; top: 64vh; }
+            .bg-strip { height: 60vh; top: 62vh; }
         }
         @media (max-height: 600px) {
-            .bg-strip { height: 30vh; top: 62vh; }
+            .bg-strip { height: 50vh; top: 61vh; }
         }
 
         .grid-limiter {
@@ -193,7 +197,7 @@
 </head>
 <body class="is-at-top"> 
 
-    <!-- STRIP: ora più alta (50vh) per coprire meglio la parte bassa della pagina -->
+    <!-- STRIP: ora ancora più alta (80vh base) per coprire meglio sopra e sotto -->
     <div class="bg-strip" aria-hidden="true"></div>
 
     <header id="main-header">
