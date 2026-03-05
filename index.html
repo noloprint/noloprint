@@ -95,13 +95,37 @@
         .hero-full-width {
             width: 100%;
             height: 80vh;
-            background: url('images/zonaintro_1.jpg') center/cover no-repeat;
+            background-color: var(--apple-bg);
+            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
             text-align: center;
             padding-top: var(--header-height); 
+            overflow: hidden;
+        }
+
+        .hero-full-width::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('images/zonaintro_1.jpg') center/cover no-repeat;
+            opacity: 0.6;
+            z-index: 0;
+        }
+
+        .hero-full-width::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 45%, rgba(255, 255, 255, 0.95) 100%);
+            z-index: 1;
+        }
+
+        .hero-full-width .grid-limiter {
+            position: relative;
+            z-index: 2;
         }
 
         .hero-headline {
@@ -135,7 +159,7 @@
         /* GRID SERVIZI */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 25px;
         }
 
@@ -190,7 +214,7 @@
         .footer-black { background: #000; color: #f5f5f7; padding: 70px 0; text-align: center; }
         .footer-content { line-height: 1.8; font-size: 0.9rem; opacity: 0.8; }
 
-        @media (max-width: 1200px) { .grid-limiter { width: 90%; } .hero-headline { font-size: 3rem; } }
+        @media (max-width: 1200px) { .grid-limiter { width: 90%; } .hero-headline { font-size: 3rem; } .services-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -205,7 +229,7 @@
 
     <section class="hero-full-width">
         <div class="grid-limiter">
-            <h1 class="hero-headline">Un universo di stampa.<br>A portata di mano.</h1>
+            <h1 class="hero-headline">UNIVERSO STAMPA</h1>
         </div>
     </section>
 
@@ -217,22 +241,77 @@
             
             <div class="services-grid">
                 <div class="service-card">
-                    <img src="images/stampe_digitale/sdig1.png" alt="Piccolo formato" class="service-card-img">
+                    <img src="images/stampe_digitale/sdig1.png" alt="Stampa digitale piccolo formato" class="service-card-img">
                     <div class="card-header">
                         <span class="card-overline">PRECISIONE DA VICINO</span>
                         <h3 class="card-title">Stampa digitale piccolo formato</h3>
                     </div>
                 </div>
+                <div class="service-card">
+                    <img src="images/stampe_digitale/bdig1.png" alt="Stampa digitale grande formato" class="service-card-img">
+                    <div class="card-header">
+                        <span class="card-overline">GRANDE IMPATTO</span>
+                        <h3 class="card-title">Stampa digitale GRANDE formato</h3>
+                    </div>
+                </div>
                 <div class="service-card" style="background: var(--apple-bg);">
                     <div class="card-header">
-                        <span class="card-overline">ARTIGIANALITÀ</span>
+                        <span class="card-overline">PERSONALIZZAZIONE</span>
+                        <h3 class="card-title">Stampe a trasferimento termico - Gadget</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">PROGETTAZIONE VISIVA</span>
+                        <h3 class="card-title">Grafica</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">ADESIVI E PACKAGING</span>
+                        <h3 class="card-title">Stikers etichette</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">COMUNICAZIONE VISIVA</span>
+                        <h3 class="card-title">Soluzioni espositive (es. banner)</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">RICORDI IN ALTA QUALITÀ</span>
+                        <h3 class="card-title">Stampa foto</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">ARCHIVIO SMART</span>
+                        <h3 class="card-title">Archiviazione digitale e scansioni</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">UFFICI E AZIENDE</span>
+                        <h3 class="card-title">Timbri</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">FINITURE PROFESSIONALI</span>
                         <h3 class="card-title">Rilegatura</h3>
                     </div>
                 </div>
                 <div class="service-card" style="background: var(--apple-bg);">
                     <div class="card-header">
-                        <span class="card-overline">VELOCITÀ E QUALITÀ</span>
+                        <span class="card-overline">SERVIZIO RAPIDO</span>
                         <h3 class="card-title">Centro copie</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">PROTEZIONE DOCUMENTI</span>
+                        <h3 class="card-title">Plastificazione</h3>
                     </div>
                 </div>
             </div>
