@@ -89,6 +89,13 @@
             margin: 0;
             color: var(--theme-color) !important;
             letter-spacing: -0.5px;
+            cursor: pointer;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        #docked-titles .section-title.title-click-fade {
+            opacity: 0;
+            transform: translateY(-10px);
         }
 
         /* HERO AREA */
@@ -96,12 +103,36 @@
             width: 100%;
             height: 80vh;
             background-color: var(--apple-bg);
+            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
             align-items: center;
             text-align: center;
             padding-top: var(--header-height); 
+            overflow: hidden;
+        }
+
+        .hero-full-width::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('images/zonaintro_1.jpg') center/cover no-repeat;
+            opacity: 0.6;
+            z-index: 0;
+        }
+
+        .hero-full-width::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 45%, rgba(255, 255, 255, 0.95) 100%);
+            z-index: 1;
+        }
+
+        .hero-full-width .grid-limiter {
+            position: relative;
+            z-index: 2;
         }
 
         .hero-headline {
@@ -135,7 +166,7 @@
         /* GRID SERVIZI */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 25px;
         }
 
@@ -190,7 +221,7 @@
         .footer-black { background: #000; color: #f5f5f7; padding: 70px 0; text-align: center; }
         .footer-content { line-height: 1.8; font-size: 0.9rem; opacity: 0.8; }
 
-        @media (max-width: 1200px) { .grid-limiter { width: 90%; } .hero-headline { font-size: 3rem; } }
+        @media (max-width: 1200px) { .grid-limiter { width: 90%; } .hero-headline { font-size: 3rem; } .services-grid { grid-template-columns: repeat(2, 1fr); } }
         @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -205,7 +236,7 @@
 
     <section class="hero-full-width">
         <div class="grid-limiter">
-            <h1 class="hero-headline">Un universo di stampa.<br>A portata di mano.</h1>
+            <h1 class="hero-headline">UNIVERSO STAMPA</h1>
         </div>
     </section>
 
@@ -217,22 +248,77 @@
             
             <div class="services-grid">
                 <div class="service-card">
-                    <img src="images/stampe_digitale/sdig1.png" alt="Piccolo formato" class="service-card-img">
+                    <img src="images/stampe_digitale/sdig1.png" alt="Stampa digitale piccolo formato" class="service-card-img">
                     <div class="card-header">
                         <span class="card-overline">PRECISIONE DA VICINO</span>
                         <h3 class="card-title">Stampa digitale piccolo formato</h3>
                     </div>
                 </div>
+                <div class="service-card">
+                    <img src="images/stampe_digitale/bdig1.png" alt="Stampa digitale grande formato" class="service-card-img">
+                    <div class="card-header">
+                        <span class="card-overline">GRANDE IMPATTO</span>
+                        <h3 class="card-title">Stampa digitale GRANDE formato</h3>
+                    </div>
+                </div>
                 <div class="service-card" style="background: var(--apple-bg);">
                     <div class="card-header">
-                        <span class="card-overline">ARTIGIANALITÀ</span>
+                        <span class="card-overline">PERSONALIZZAZIONE</span>
+                        <h3 class="card-title">Stampe a trasferimento termico - Gadget</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">PROGETTAZIONE VISIVA</span>
+                        <h3 class="card-title">Grafica</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">ADESIVI E PACKAGING</span>
+                        <h3 class="card-title">Stikers etichette</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">COMUNICAZIONE VISIVA</span>
+                        <h3 class="card-title">Soluzioni espositive (es. banner)</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">RICORDI IN ALTA QUALITÀ</span>
+                        <h3 class="card-title">Stampa foto</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">ARCHIVIO SMART</span>
+                        <h3 class="card-title">Archiviazione digitale e scansioni</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">UFFICI E AZIENDE</span>
+                        <h3 class="card-title">Timbri</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">FINITURE PROFESSIONALI</span>
                         <h3 class="card-title">Rilegatura</h3>
                     </div>
                 </div>
                 <div class="service-card" style="background: var(--apple-bg);">
                     <div class="card-header">
-                        <span class="card-overline">VELOCITÀ E QUALITÀ</span>
+                        <span class="card-overline">SERVIZIO RAPIDO</span>
                         <h3 class="card-title">Centro copie</h3>
+                    </div>
+                </div>
+                <div class="service-card" style="background: var(--apple-bg);">
+                    <div class="card-header">
+                        <span class="card-overline">PROTEZIONE DOCUMENTI</span>
+                        <h3 class="card-title">Plastificazione</h3>
                     </div>
                 </div>
             </div>
@@ -253,6 +339,8 @@
             <div class="footer-content">
                 <p style="font-weight: 700; font-size: 1.2rem; margin-bottom: 10px;">NOLO Print Srl</p>
                 <p>Via Padova, 49 - 20127 Milano</p>
+                <p>Tel. 02 2828316 · Fax 02 2894562</p>
+                <p>noloprint@gmail.com · P.IVA 11258900965</p>
                 <p style="margin-top: 30px; font-size: 0.8rem; color: #666;">© 2024 NOLO Print Srl. Tutti i diritti riservati.</p>
             </div>
         </div>
@@ -274,7 +362,7 @@
                 logo.style.transform = 'none';
                 const rect = logo.getBoundingClientRect();
                 const centerX = window.innerWidth / 2;
-                const startYPos = window.innerHeight * 0.18; 
+                const startYPos = window.innerHeight * 0.11; 
                 startX = centerX - rect.left - (rect.width * startScale / 2);
                 startY = startYPos - rect.top;
                 update();
@@ -283,6 +371,7 @@
             function update() {
                 const scrollY = window.scrollY;
                 const progress = Math.min(scrollY / maxScroll, 1);
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
                 
                 // GESTIONE VISIBILITÀ BARRA
                 if (scrollY > 50) {
@@ -294,9 +383,9 @@
                 }
 
                 // Animazione Logo
-                const curX = startX * (1 - progress);
-                const curY = startY * (1 - progress);
-                const curScale = startScale - ((startScale - 1) * progress);
+                const curX = startX * (1 - easedProgress);
+                const curY = startY * (1 - easedProgress);
+                const curScale = startScale - ((startScale - 1) * easedProgress);
                 logo.style.transform = `translate(${curX}px, ${curY}px) scale(${curScale})`;
 
                 // Gestione Titoli Sezioni
@@ -317,6 +406,30 @@
                     el.style.display = (idx === docked.length - 1) ? 'block' : 'none';
                 });
             }
+
+
+            function scrollToSectionTitle(title) {
+                const wrapperId = title.getAttribute('data-target');
+                const wrapper = document.getElementById(wrapperId);
+                if (!wrapper) return;
+                const destination = window.scrollY + wrapper.getBoundingClientRect().top - 100;
+                window.scrollTo({ top: Math.max(destination, 0), behavior: 'smooth' });
+            }
+
+            logo.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            titles.forEach(title => {
+                title.addEventListener('click', () => {
+                    if (title.parentNode !== dockedContainer) return;
+                    title.classList.add('title-click-fade');
+                    scrollToSectionTitle(title);
+                    setTimeout(() => {
+                        title.classList.remove('title-click-fade');
+                    }, 450);
+                });
+            });
 
             window.addEventListener('scroll', update);
             window.addEventListener('resize', initPositions);
