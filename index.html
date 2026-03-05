@@ -25,26 +25,27 @@
             overflow-x: hidden;
         }
 
-        /* STRIP DECORATIVA — ALLUNGATA (copre più sopra e sotto)
-           - centro verticale mantenuto attorno ai 2/3 della viewport
-           - altezza base aumentata a 80vh per maggiore copertura
-           - conserva parallax fluido e fade al footer
+        /* STRIP DECORATIVA — arriva fino al bordo superiore (riempie sopra e sotto)
+           - centro verticale regolato per far sì che la strip tocchi il top della viewport
+           - altezza aumentata a 90vh per coprire ampiamente sopra/sotto
+           - angoli superiori squadrati, angoli inferiori arrotondati
+           - mantiene parallax fluido e fade al footer
         */
         .bg-strip {
             position: fixed;
-            left: calc(50% + 18vw);   /* spostata a destra */
-            top: 66.6666vh;           /* centro verticale al ~2/3 */
+            left: calc(50% + 18vw);    /* spostata a destra come richiesto */
+            top: 45vh;                 /* centro verticale posizionato per rendere top della strip = 0 */
             transform: translate(-50%, -50%);
-            width: min(42.5vw, 600px);/* larghezza contenuta */
-            height: 80vh;             /* AUMENTATA: copre molto sopra e sotto */
+            width: min(42.5vw, 600px); /* larghezza contenuta (metà della pagina circa) */
+            height: 90vh;              /* AUMENTATA: copre molto sopra e sotto */
             background-image: url('images/sfondo_striscia.png');
             background-repeat: no-repeat;
             background-position: center 50%;
             background-size: cover;
             opacity: var(--strip-opacity);
             pointer-events: none;
-            z-index: 0;               /* sotto i contenuti principali */
-            border-radius: 16px;
+            z-index: 0;                /* sotto i contenuti principali */
+            border-radius: 0 0 18px 18px; /* angoli superiori squadrati per non mostrare "buchi" */
             filter: drop-shadow(0 10px 18px rgba(0,0,0,0.06));
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
@@ -52,25 +53,25 @@
             transition: opacity 260ms linear;
         }
 
-        /* Regole responsive aggiornate per la strip più alta */
+        /* Regole responsive aggiornate per la strip molto alta */
         @media (max-width: 1200px) {
-            .bg-strip { left: calc(50% + 12vw); width: min(46vw, 520px); height: 72vh; }
+            .bg-strip { left: calc(50% + 12vw); width: min(46vw, 520px); height: 82vh; top: 44vh; }
         }
         @media (max-width: 900px) {
-            .bg-strip { left: calc(50% + 8vw); width: 44vw; height: 64vh; border-radius: 14px; }
+            .bg-strip { left: calc(50% + 8vw); width: 44vw; height: 74vh; border-radius: 0 0 14px 14px; top: 43vh; }
         }
         @media (max-width: 600px) {
-            .bg-strip { left: calc(50% + 4vw); width: 86vw; height: 56vh; top: 66vh; transform: translate(-50%, -50%); }
+            .bg-strip { left: calc(50% + 4vw); width: 86vw; height: 66vh; top: 42vh; transform: translate(-50%, -50%); }
         }
         /* Se lo schermo è molto basso riduciamo altezza e spostiamo leggermente verso l'alto per non tagliare troppo */
-        @media (max-height: 900px) {
-            .bg-strip { height: 72vh; top: 64vh; }
+        @media (max-height: 1000px) {
+            .bg-strip { height: 82vh; top: 43vh; }
         }
-        @media (max-height: 700px) {
-            .bg-strip { height: 60vh; top: 62vh; }
+        @media (max-height: 800px) {
+            .bg-strip { height: 74vh; top: 42.5vh; }
         }
         @media (max-height: 600px) {
-            .bg-strip { height: 50vh; top: 61vh; }
+            .bg-strip { height: 64vh; top: 41vh; }
         }
 
         .grid-limiter {
@@ -197,7 +198,7 @@
 </head>
 <body class="is-at-top"> 
 
-    <!-- STRIP: ora ancora più alta (80vh base) per coprire meglio sopra e sotto -->
+    <!-- STRIP: centro spostato in modo che la strip tocchi il top; angoli superiori squadrati -->
     <div class="bg-strip" aria-hidden="true"></div>
 
     <header id="main-header">
