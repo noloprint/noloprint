@@ -355,7 +355,7 @@
                 logo.style.transform = 'none';
                 const rect = logo.getBoundingClientRect();
                 const centerX = window.innerWidth / 2;
-                const startYPos = window.innerHeight * 0.18; 
+                const startYPos = window.innerHeight * 0.11; 
                 startX = centerX - rect.left - (rect.width * startScale / 2);
                 startY = startYPos - rect.top;
                 update();
@@ -364,6 +364,7 @@
             function update() {
                 const scrollY = window.scrollY;
                 const progress = Math.min(scrollY / maxScroll, 1);
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
                 
                 // GESTIONE VISIBILITÀ BARRA
                 if (scrollY > 50) {
@@ -375,9 +376,9 @@
                 }
 
                 // Animazione Logo
-                const curX = startX * (1 - progress);
-                const curY = startY * (1 - progress);
-                const curScale = startScale - ((startScale - 1) * progress);
+                const curX = startX * (1 - easedProgress);
+                const curY = startY * (1 - easedProgress);
+                const curScale = startScale - ((startScale - 1) * easedProgress);
                 logo.style.transform = `translate(${curX}px, ${curY}px) scale(${curScale})`;
 
                 // Gestione Titoli Sezioni
