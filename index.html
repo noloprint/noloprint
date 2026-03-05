@@ -25,14 +25,17 @@
             overflow-x: hidden;
         }
 
-        /* DECORATIVE BACKGROUND STRIP — lato visuale */
+        /* STRIP DECORATIVA — maggiorata in altezza per coprire meglio il fondo pagina
+           - mantiene posizionamento al 2/3 verticale, spostata a destra, larghezza ridotta
+           - fade automatico se sovrappone il footer e parallax fluido
+        */
         .bg-strip {
             position: fixed;
             left: calc(50% + 18vw);   /* spostata a destra */
             top: 66.6666vh;           /* centro verticale al 2/3 */
             transform: translate(-50%, -50%);
             width: min(42.5vw, 600px);/* larghezza ridotta */
-            height: 34vh;             /* non sottile */
+            height: 50vh;             /* AUMENTATA: copre più area inferiore */
             background-image: url('images/sfondo_striscia.png');
             background-repeat: no-repeat;
             background-position: center 50%;
@@ -45,24 +48,25 @@
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             will-change: transform, background-position, opacity;
-            transition: opacity 260ms linear; /* fallback per cambi d'opacità rapidi */
+            transition: opacity 260ms linear;
         }
 
-        /* Se vuoi che il footer sia sopra tutto per sicurezza puoi usare z-index sul footer
-           ma in questo script la strip si dissolve automaticamente quando si sovrappone. */
-
-        /* Regole responsive */
+        /* Regole responsive aggiornate: mantengono la strip larga ma non invadente */
         @media (max-width: 1200px) {
-            .bg-strip { left: calc(50% + 12vw); width: min(46vw, 520px); height: 30vh; }
+            .bg-strip { left: calc(50% + 12vw); width: min(46vw, 520px); height: 44vh; }
         }
         @media (max-width: 900px) {
-            .bg-strip { left: calc(50% + 8vw); width: 44vw; height: 26vh; border-radius: 14px; }
+            .bg-strip { left: calc(50% + 8vw); width: 44vw; height: 38vh; border-radius: 14px; }
         }
         @media (max-width: 600px) {
-            .bg-strip { left: calc(50% + 4vw); width: 80vw; height: 20vh; top: 66vh; transform: translate(-50%, -50%); }
+            .bg-strip { left: calc(50% + 4vw); width: 86vw; height: 34vh; top: 66vh; transform: translate(-50%, -50%); }
+        }
+        /* Se lo schermo è molto basso riduciamo altezza e spostiamo leggermente verso l'alto per non tagliare troppo */
+        @media (max-height: 700px) {
+            .bg-strip { height: 36vh; top: 64vh; }
         }
         @media (max-height: 600px) {
-            .bg-strip { height: 22vh; top: 62vh; }
+            .bg-strip { height: 30vh; top: 62vh; }
         }
 
         .grid-limiter {
@@ -72,7 +76,7 @@
             z-index: 2; /* contenuti sopra la strip */
         }
 
-        /* HEADER MODIFICATO */
+        /* HEADER */
         #main-header {
             position: fixed; top: 0; left: 0; width: 100%; 
             height: var(--header-height);
@@ -189,7 +193,7 @@
 </head>
 <body class="is-at-top"> 
 
-    <!-- STRIP DECORATIVA: posizione a destra, larghezza dimezzata, parallax inside -->
+    <!-- STRIP: ora più alta (50vh) per coprire meglio la parte bassa della pagina -->
     <div class="bg-strip" aria-hidden="true"></div>
 
     <header id="main-header">
@@ -332,11 +336,10 @@
             let currentYPercent = 50;
             let targetOpacity = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || 0.8;
             let currentOpacity = targetOpacity;
-            const parallaxSpeed = 0.03; // regola l'intensità del parallax (0.01..0.06)
+            const parallaxSpeed = 0.03; // regola intensità parallax
             const smoothing = 0.12;     // 0..1 (più alto = meno smoothing)
 
             let rafId = null;
-            let lastScrollY = window.scrollY;
 
             function initPositions() {
                 logo.style.transform = 'none';
@@ -345,8 +348,7 @@
                 const startYPos = window.innerHeight * 0.11; 
                 startX = centerX - rect.left - (rect.width * startScale / 2);
                 startY = startYPos - rect.top;
-                update(); // aggiorna stato iniziale
-                // start RAF loop
+                update(); // stato iniziale
                 if (!rafId) rafLoop();
             }
 
@@ -355,7 +357,7 @@
                 const progress = Math.min(scrollY / maxScroll, 1);
                 const easedProgress = 1 - Math.pow(1 - progress, 3);
                 
-                // GESTIONE VISIBILITÀ BARRA
+                // Header visibility
                 if (scrollY > 50) {
                     header.classList.add('scrolled');
                     body.classList.remove('is-at-top');
@@ -364,13 +366,13 @@
                     body.classList.add('is-at-top');
                 }
 
-                // Animazione Logo
+                // Logo animation
                 const curX = startX * (1 - easedProgress);
                 const curY = startY * (1 - easedProgress);
                 const curScale = startScale - ((startScale - 1) * easedProgress);
                 logo.style.transform = `translate(${curX}px, ${curY}px) scale(${curScale})`;
 
-                // Gestione Titoli Sezioni
+                // Titles docking behavior
                 titles.forEach(title => {
                     const wrapperId = title.getAttribute('data-target');
                     const wrapper = document.getElementById(wrapperId);
@@ -388,41 +390,31 @@
                     el.style.display = (idx === docked.length - 1) ? 'block' : 'none';
                 });
 
-                // Parallax target update (non applicare direttamente; usiamo RAF per lerp)
+                // Parallax target (non applicato direttamente, viene interpolato in RAF)
                 targetYPercent = 50 + Math.round(window.scrollY * parallaxSpeed);
 
-                // gestione overlap con footer: se la strip entra in sovrapposizione con il footer la sfumi
+                // Fade when overlapping footer
                 if (bg && footer) {
                     const bgRect = bg.getBoundingClientRect();
                     const footerRect = footer.getBoundingClientRect();
-
-                    // se il fondo della strip > top del footer => sovrapposizione
                     if (bgRect.bottom > footerRect.top) {
                         const overlap = bgRect.bottom - footerRect.top;
-                        // fadeFactor 0..1
                         const fadeFactor = Math.max(0, Math.min(1, overlap / bgRect.height));
-                        // calcola target opacity: diminuisce linearmente fino a 0
                         targetOpacity = (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || 0.8) * (1 - fadeFactor);
                     } else {
                         targetOpacity = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || 0.8;
                     }
                 }
-
-                lastScrollY = scrollY;
             }
 
-            // RAF loop per animazioni fluide (parallax + fade)
+            // RAF loop for smooth parallax & fade
             function rafLoop() {
-                // interpola verso target (lerp)
                 currentYPercent += (targetYPercent - currentYPercent) * smoothing;
                 currentOpacity += (targetOpacity - currentOpacity) * smoothing;
 
-                // applica valori
                 if (bg) {
-                    // clamp currentYPercent per sicurezza
                     const y = Math.max(0, Math.min(100, currentYPercent));
                     bg.style.backgroundPosition = `center ${y}%`;
-                    // applica opacità con precisione
                     bg.style.opacity = currentOpacity.toFixed(3);
                 }
 
@@ -452,10 +444,8 @@
                 });
             });
 
-            // scroll listener leggero: aggiorna le variabili target; la parte pesante avviene in RAF
+            // Light scroll listener: compute targets only
             window.addEventListener('scroll', () => {
-                // chiamiamo update in modo "leggero"
-                // update calcola targetYPercent e targetOpacity (usa getBoundingClientRect quando necessario)
                 update();
             }, { passive: true });
 
@@ -467,7 +457,6 @@
                 initPositions();
             });
 
-            // inizializza subito
             initPositions();
         });
     </script>
