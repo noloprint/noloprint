@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NOLO Print</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
             --font-main: 'Montserrat', sans-serif;
@@ -213,21 +213,12 @@
         .where-we-are-section { padding-top: 60px; min-height: auto; }
         .where-we-are-layout {
             display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 32px;
             grid-template-columns: 1.45fr 0.85fr;
             gap: 24px;
             align-items: stretch;
         }
-        .maps-embed-wrap {
-            border-radius: 24px;
-            overflow: hidden;
-            box-shadow: var(--apple-card-shadow);
-            min-height: 0;
-        }
-        .maps-frame {
-            width: 100%;
-            height: 100%;
-            min-height: 0;
-            border: 0;
         .maps-link-preview {
             display: block;
             border-radius: 24px;
@@ -238,6 +229,9 @@
         .maps-frame {
             width: 100%;
             min-height: 420px;
+            border: 0;
+            border-radius: 24px;
+            box-shadow: var(--apple-card-shadow);
             height: 100%;
             object-fit: cover;
             display: block;
@@ -257,8 +251,9 @@
         .where-we-are-photo {
             width: 100%;
             border-radius: 16px;
-            height: 210px;
+            height: 220px;
             object-fit: cover;
+            box-shadow: var(--apple-card-shadow);
         }
         .visit-btn {
             width: fit-content;
@@ -348,7 +343,7 @@
             <div class="title-wrapper" id="wrap-cyan">
                 <h2 class="section-title" data-target="wrap-cyan" style="--theme-color: #00AEEF;">Cosa facciamo</h2>
             </div>
-            
+
             <div class="services-grid">
                 <div class="service-card">
                     <img src="images/stampe_digitale/sdig1.png" alt="Stampa digitale piccolo formato" class="service-card-img">
@@ -442,17 +437,16 @@
             <div class="title-wrapper" id="wrap-dove-siamo">
                 <h2 class="section-title" data-target="wrap-dove-siamo" style="--theme-color: #FFE600;">Dove siamo</h2>
             </div>
+            <p style="margin-top: -20px; margin-bottom: 28px; font-size: 1.05rem; max-width: 760px;">Passa a trovarci in negozio: siamo in Via Padova, pronti ad aiutarti con stampe, progetti grafici e lavorazioni personalizzate.</p>
 
             <div class="where-we-are-layout">
-                <div class="maps-embed-wrap">
-                    <iframe
-                        class="maps-frame"
-                        title="Mappa NOLO Print"
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        src="https://www.google.com/maps?q=NOLO+Print,+Via+Padova+49,+Milano&output=embed">
-                    </iframe>
-                </div>
+                <iframe
+                    class="maps-frame"
+                    title="Mappa NOLO Print"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps?q=NOLO+Print,+Via+Padova+49,+Milano&output=embed">
+                </iframe>
                 <a
                     class="maps-link-preview"
                     href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z/data=!4m6!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
@@ -465,6 +459,7 @@
                 <article class="where-we-are-card">
                     <h3>NOLO Print</h3>
                     <p class="where-we-are-address">Via Padova, 49, 20127 Milano MI</p>
+                    <img src="images/zonaintro_1.jpg" alt="Ingresso NOLO Print in Via Padova" class="where-we-are-photo">
                     <img src="images/mapintro.png" alt="Mappa semplificata della zona di NOLO Print" class="where-we-are-photo">
                     <p class="where-we-are-hours"><strong>Orario:</strong> 08:30–13, 15–19</p>
                     <a class="visit-btn" href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z/data=!4m6!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">
@@ -535,7 +530,7 @@
                 const scrollY = window.scrollY;
                 const progress = Math.min(scrollY / maxScroll, 1);
                 const easedProgress = 1 - Math.pow(1 - progress, 3);
-                
+
                 if (scrollY > 50) {
                     header.classList.add('scrolled');
                     body.classList.remove('is-at-top');
