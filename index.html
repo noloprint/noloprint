@@ -209,16 +209,91 @@
         .card-overline { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #1d1d1f; opacity: 0.45; margin-bottom: 4px; display: block; letter-spacing: 0.5px; }
         .card-title { font-weight: 700; font-size: 1.35rem; color: #1d1d1f; line-height: 1.2; margin: 0; letter-spacing: -0.3px; }
 
+        /* DOVE SIAMO */
+        .where-we-are-section { padding-top: 60px; min-height: auto; }
+        .where-we-are-layout {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 32px;
+            align-items: stretch;
+        }
+        .maps-frame {
+            width: 100%;
+            min-height: 420px;
+            border: 0;
+            border-radius: 24px;
+            box-shadow: var(--apple-card-shadow);
+        }
+        .where-we-are-card {
+            background: #fafafa;
+            border-radius: 24px;
+            box-shadow: var(--apple-card-shadow);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .where-we-are-card h3 { margin: 0; font-size: 1.7rem; }
+        .where-we-are-address,
+        .where-we-are-hours { margin: 0; font-size: 1rem; line-height: 1.5; }
+        .where-we-are-photo {
+            width: 100%;
+            border-radius: 16px;
+            height: 220px;
+            object-fit: cover;
+            box-shadow: var(--apple-card-shadow);
+        }
+        .visit-btn {
+            width: fit-content;
+            margin-top: 8px;
+            text-decoration: none;
+            color: #1d1d1f;
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 999px;
+            padding: 12px 24px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 0;
+            overflow: hidden;
+            transition: transform 0.35s ease, background-color 0.35s ease, padding-right 0.35s ease, box-shadow 0.35s ease;
+        }
+        .visit-btn-icon {
+            width: 0;
+            opacity: 0;
+            transform: translateX(-8px);
+            transition: width 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
+        }
+        .visit-btn:hover {
+            background-color: #FFE600;
+            padding-right: 30px;
+            transform: scale(1.05);
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+        }
+        .visit-btn:hover .visit-btn-icon {
+            width: 20px;
+            opacity: 1;
+            transform: translateX(0);
+            margin-left: 8px;
+        }
+
         /* FOOTER */
         .footer-black { background: #000; color: #f5f5f7; padding: 70px 0; text-align: center; z-index: 3; position: relative; }
         .footer-content { line-height: 1.8; font-size: 0.9rem; opacity: 0.8; }
 
-        @media (max-width: 1200px) { .grid-limiter { width: 90%; } .services-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 1200px) {
+            .grid-limiter { width: 90%; }
+            .services-grid { grid-template-columns: repeat(2, 1fr); }
+            .where-we-are-layout { grid-template-columns: 1fr; }
+        }
         @media (max-width: 768px) {
             .services-grid { grid-template-columns: 1fr; }
             .hero-sottologo { margin-top: 17vh; max-height: 180px; }
             #main-nav { gap: 8px; }
             #main-nav a { font-size: 0.75rem; padding: 8px 12px; }
+            .where-we-are-card { padding: 24px; }
+            .maps-frame { min-height: 320px; }
         }
     </style>
 </head>
@@ -345,7 +420,35 @@
         </div>
     </section>
 
-    <div id="dove-siamo"></div>
+    <section class="cmyk-section where-we-are-section" id="dove-siamo">
+        <div class="grid-limiter">
+            <div class="title-wrapper" id="wrap-dove-siamo">
+                <h2 class="section-title" data-target="wrap-dove-siamo" style="--theme-color: #FFE600;">Dove siamo</h2>
+            </div>
+            <p style="margin-top: -20px; margin-bottom: 28px; font-size: 1.05rem; max-width: 760px;">Passa a trovarci in negozio: siamo in Via Padova, pronti ad aiutarti con stampe, progetti grafici e lavorazioni personalizzate.</p>
+
+            <div class="where-we-are-layout">
+                <iframe
+                    class="maps-frame"
+                    title="Mappa NOLO Print"
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps?q=NOLO+Print,+Via+Padova+49,+Milano&output=embed">
+                </iframe>
+
+                <article class="where-we-are-card">
+                    <h3>NOLO Print</h3>
+                    <p class="where-we-are-address">Via Padova, 49, 20127 Milano MI</p>
+                    <img src="images/zonaintro_1.jpg" alt="Ingresso NOLO Print in Via Padova" class="where-we-are-photo">
+                    <p class="where-we-are-hours"><strong>Orario:</strong> 08:30–13, 15–19</p>
+                    <a class="visit-btn" href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z/data=!4m6!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">
+                        Vieni a trovarci!
+                        <img class="visit-btn-icon" src="https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png" alt="Logo Google Maps">
+                    </a>
+                </article>
+            </div>
+        </div>
+    </section>
 
     <section class="cmyk-section" style="padding-top: 40px; padding-bottom: 20px; min-height: auto;">
         <div class="grid-limiter">
