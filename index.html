@@ -97,44 +97,44 @@
         }
 
         .is-at-top #docked-titles { opacity: 0; }
-        .is-at-top #main-nav { opacity: 0; pointer-events: none; } /* Nasconde il nav all'inizio per non disturbare l'animazione */
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 40px;
-        }
+        .header-left { display: flex; align-items: center; }
 
         #main-logo { width: 80px; height: auto; transform-origin: center left; will-change: transform; }
 
-        /* MENU NAVIGAZIONE AGGIUNTO */
+        /* INDICE SOTTO I LOGHI */
         #main-nav {
             display: flex;
-            gap: 25px;
+            gap: 14px;
             align-items: center;
-            transition: opacity 0.4s ease;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 14px;
         }
 
         #main-nav a {
             text-decoration: none;
             color: #1d1d1f;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.82rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            transition: color 0.3s ease;
+            border-radius: 999px;
+            padding: 9px 14px;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
-        #main-nav a:hover {
-            color: #E2007A; /* Colore accento al passaggio del mouse */
-        }
+        #main-nav a:nth-child(1):hover { background-color: rgba(0, 174, 239, 0.16); }
+        #main-nav a:nth-child(2):hover { background-color: rgba(226, 0, 122, 0.14); }
+        #main-nav a:nth-child(3):hover { background-color: rgba(255, 230, 0, 0.20); }
+        #main-nav a:nth-child(4):hover { background-color: rgba(0, 0, 0, 0.08); }
 
         #docked-titles { display: flex; justify-content: flex-end; align-items: center; flex-grow: 1; transition: opacity 0.4s ease; }
 
         #docked-titles .section-title {
             font-size: 1.4rem !important; font-weight: 700; margin: 0;
             color: var(--theme-color) !important; letter-spacing: -0.5px; cursor: pointer;
-            transition: opacity 0.35s ease, transform 0.35s ease;
+            transition: opacity 0.6s ease, transform 0.6s ease;
         }
         #docked-titles .section-title.title-click-fade { opacity: 0; transform: translateY(-10px); }
 
@@ -170,15 +170,21 @@
             z-index: 1;
         }
 
-        .hero-full-width .grid-limiter { position: relative; z-index: 2; }
+        .hero-full-width .grid-limiter { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
 
         /* IMMAGINE SOTTOLOGO AL POSTO DEL TITOLO */
         .hero-sottologo {
-            margin-top: 25vh; 
+            margin-top: 20vh; 
             max-width: 100%;
             height: auto;
             max-height: 250px; /* Evita che diventi troppo grande */
             z-index: 2;
+        }
+
+        .hero-nav-wrapper {
+            margin-top: 10px;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
         }
 
         /* SEZIONI */
@@ -208,7 +214,12 @@
         .footer-content { line-height: 1.8; font-size: 0.9rem; opacity: 0.8; }
 
         @media (max-width: 1200px) { .grid-limiter { width: 90%; } .services-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 768px) { .services-grid { grid-template-columns: 1fr; } #main-nav { display: none; } /* Nascondi menu su mobile per ora */ }
+        @media (max-width: 768px) {
+            .services-grid { grid-template-columns: 1fr; }
+            .hero-sottologo { margin-top: 17vh; max-height: 180px; }
+            #main-nav { gap: 8px; }
+            #main-nav a { font-size: 0.75rem; padding: 8px 12px; }
+        }
     </style>
 </head>
 <body class="is-at-top"> 
@@ -219,12 +230,6 @@
         <div class="header-content grid-limiter">
             <div class="header-left">
                 <img src="images/logo.png" alt="Logo" id="main-logo">
-                <nav id="main-nav">
-                    <a href="#chi-siamo">chi siamo</a>
-                    <a href="#sec-cyan">cosa facciamo</a>
-                    <a href="#sec-magenta">progetto</a>
-                    <a href="#dove-siamo">dove siamo</a>
-                </nav>
             </div>
             <div id="docked-titles"></div>
         </div>
@@ -233,6 +238,14 @@
     <section class="hero-full-width">
         <div class="grid-limiter">
             <img src="images/sottologo.png" alt="Sottologo NOLO Print" class="hero-sottologo">
+            <div class="hero-nav-wrapper">
+                <nav id="main-nav" aria-label="Indice sezioni">
+                    <a href="#chi-siamo">chi siamo</a>
+                    <a href="#sec-cyan">cosa facciamo</a>
+                    <a href="#sec-magenta">progetto</a>
+                    <a href="#dove-siamo">dove siamo</a>
+                </nav>
+            </div>
         </div>
     </section>
 
@@ -463,7 +476,7 @@
                     scrollToSectionTitle(title);
                     setTimeout(() => {
                         title.classList.remove('title-click-fade');
-                    }, 450);
+                    }, 700);
                 });
             });
 
