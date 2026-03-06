@@ -228,6 +228,18 @@
             height: 100%;
             min-height: 0;
             border: 0;
+        .maps-link-preview {
+            display: block;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--apple-card-shadow);
+            text-decoration: none;
+        }
+        .maps-frame {
+            width: 100%;
+            min-height: 420px;
+            height: 100%;
+            object-fit: cover;
             display: block;
         }
         .where-we-are-card {
@@ -441,6 +453,14 @@
                         src="https://www.google.com/maps?q=NOLO+Print,+Via+Padova+49,+Milano&output=embed">
                     </iframe>
                 </div>
+                <a
+                    class="maps-link-preview"
+                    href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z/data=!4m6!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Apri la mappa di NOLO Print su Google Maps">
+                    <img src="images/mapintro.png" alt="Mappa semplificata della zona di NOLO Print" class="maps-frame">
+                </a>
 
                 <article class="where-we-are-card">
                     <h3>NOLO Print</h3>
