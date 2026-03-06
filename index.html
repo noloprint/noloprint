@@ -245,15 +245,21 @@
             flex-direction: column;
             gap: 14px;
         }
-        .where-we-are-card h3 { margin: 0; font-size: 1.7rem; }
-        .where-we-are-address,
-        .where-we-are-hours { margin: 0; font-size: 1rem; line-height: 1.5; }
+        .where-we-are-gallery {
+            display: grid;
+            gap: 14px;
+        }
         .where-we-are-photo {
             width: 100%;
             border-radius: 16px;
             height: 220px;
             object-fit: cover;
             box-shadow: var(--apple-card-shadow);
+            display: block;
+        }
+        .where-we-are-photo-motion {
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+            will-change: transform;
         }
         .visit-btn {
             width: fit-content;
@@ -437,8 +443,6 @@
             <div class="title-wrapper" id="wrap-dove-siamo">
                 <h2 class="section-title" data-target="wrap-dove-siamo" style="--theme-color: #FFE600;">Dove siamo</h2>
             </div>
-            <p style="margin-top: -20px; margin-bottom: 28px; font-size: 1.05rem; max-width: 760px;">Passa a trovarci in negozio: siamo in Via Padova, pronti ad aiutarti con stampe, progetti grafici e lavorazioni personalizzate.</p>
-
             <div class="where-we-are-layout">
                 <iframe
                     class="maps-frame"
@@ -449,19 +453,18 @@
                 </iframe>
                 <a
                     class="maps-link-preview"
-                    href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z/data=!4m6!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
+                    href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,3a,57.2y,290.38h,90.73t/data=!3m7!1e1!3m5!1s0WQikvG8eTPx5ZmhhjUBhw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-0.7282895215573433%26panoid%3D0WQikvG8eTPx5ZmhhjUBhw%26yaw%3D290.37757068173516!7i16384!8i8192!4m14!1m7!3m6!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!2sNOLO+Print!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?hl=it-IT&entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="Apri la mappa di NOLO Print su Google Maps">
                     <img src="images/mapintro.png" alt="Mappa semplificata della zona di NOLO Print" class="maps-frame">
                 </a>
 
-                <article class="where-we-are-card">
-                    <h3>NOLO Print</h3>
-                    <p class="where-we-are-address">Via Padova, 49, 20127 Milano MI</p>
-                    <img src="images/zonaintro_1.jpg" alt="Ingresso NOLO Print in Via Padova" class="where-we-are-photo">
-                    <img src="images/mapintro.png" alt="Mappa semplificata della zona di NOLO Print" class="where-we-are-photo">
-                    <p class="where-we-are-hours"><strong>Orario:</strong> 08:30–13, 15–19</p>
+                <article class="where-we-are-card" aria-label="Foto del negozio NOLO Print">
+                    <div class="where-we-are-gallery">
+                        <img src="images/mapintro.png" alt="Mappa semplificata della zona di NOLO Print" class="where-we-are-photo">
+                        <img src="images/zonaintro_1.jpg" alt="Ingresso NOLO Print in Via Padova" class="where-we-are-photo where-we-are-photo-motion" data-hover-motion>
+                    </div>
                     <a class="visit-btn" href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z/data=!4m6!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">
                         Vieni a trovarci!
                         <img class="visit-btn-icon" src="https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png" alt="Logo Google Maps">
@@ -609,6 +612,24 @@
                     setTimeout(() => {
                         title.classList.remove('title-click-fade');
                     }, 700);
+                });
+            });
+
+
+            document.querySelectorAll('[data-hover-motion]').forEach(photo => {
+                photo.addEventListener('mousemove', (event) => {
+                    const rect = photo.getBoundingClientRect();
+                    const offsetX = (event.clientX - rect.left) / rect.width - 0.5;
+                    const offsetY = (event.clientY - rect.top) / rect.height - 0.5;
+                    const moveX = offsetX * 12;
+                    const moveY = offsetY * 12;
+                    photo.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.03)`;
+                    photo.style.boxShadow = '0 14px 30px rgba(0, 0, 0, 0.18)';
+                });
+
+                photo.addEventListener('mouseleave', () => {
+                    photo.style.transform = 'translate(0, 0) scale(1)';
+                    photo.style.boxShadow = '';
                 });
             });
 
