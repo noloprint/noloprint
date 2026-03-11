@@ -212,7 +212,19 @@
         }
         .card-header { position: relative; z-index: 2; padding: 25px; }
         .card-overline { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #1d1d1f; opacity: 0.45; margin-bottom: 4px; display: block; letter-spacing: 0.5px; }
-        .card-title { font-weight: 700; font-size: 1.35rem; color: #1d1d1f; line-height: 1.2; margin: 0; letter-spacing: -0.3px; }
+        .card-title {
+            font-weight: 700;
+            font-size: 22px;
+            color: #1d1d1f;
+            line-height: 1.2;
+            margin: 0;
+            letter-spacing: -0.3px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.4em;
+        }
 
         /* DOVE SIAMO */
         .where-we-are-section { padding-top: 60px; min-height: auto; }
