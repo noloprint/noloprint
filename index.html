@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NOLO Print</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+    <link rel="icon" href="images/favicon/favicon.ico">
+    <link rel="manifest" href="images/favicon/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -207,7 +212,16 @@
         }
         .card-header { position: relative; z-index: 2; padding: 25px; }
         .card-overline { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #1d1d1f; opacity: 0.45; margin-bottom: 4px; display: block; letter-spacing: 0.5px; }
-        .card-title { font-weight: 700; font-size: 1.35rem; color: #1d1d1f; line-height: 1.2; margin: 0; letter-spacing: -0.3px; }
+        .card-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #1d1d1f;
+            line-height: 1.25;
+            margin: 0;
+            letter-spacing: -0.2px;
+            min-height: 2.5em;
+            max-height: 2.5em;
+        }
 
         /* DOVE SIAMO */
         .where-we-are-section { padding-top: 60px; min-height: auto; }
@@ -215,8 +229,6 @@
             display: grid;
             grid-template-columns: 1.1fr 1fr;
             gap: 32px;
-            grid-template-columns: 1.45fr 0.85fr;
-            gap: 24px;
             align-items: stretch;
         }
         .maps-link-preview {
@@ -236,34 +248,12 @@
             object-fit: cover;
             display: block;
         }
-        .where-we-are-card {
-            background: #fafafa;
-            border-radius: 24px;
-            box-shadow: var(--apple-card-shadow);
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-        .where-we-are-gallery {
-            display: grid;
-            gap: 14px;
-        }
-        .where-we-are-photo {
-            width: 100%;
-            border-radius: 16px;
-            height: 220px;
-            object-fit: cover;
-            box-shadow: var(--apple-card-shadow);
-            display: block;
-        }
-        .where-we-are-photo-motion {
-            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-            will-change: transform;
+
+        .visit-btn-wrap {
+            margin-top: 18px;
         }
         .visit-btn {
             width: fit-content;
-            margin-top: 8px;
             text-decoration: none;
             color: #1d1d1f;
             background: #ffffff;
@@ -310,7 +300,6 @@
             .hero-sottologo { margin-top: 17vh; max-height: 180px; }
             #main-nav { gap: 8px; }
             #main-nav a { font-size: 0.75rem; padding: 8px 12px; }
-            .where-we-are-card { padding: 24px; }
             .maps-frame { min-height: 320px; }
         }
     </style>
@@ -459,17 +448,12 @@
                     aria-label="Apri la mappa di NOLO Print su Google Maps">
                     <img src="images/mapintro.png" alt="Mappa semplificata della zona di NOLO Print" class="maps-frame">
                 </a>
-
-                <article class="where-we-are-card" aria-label="Foto del negozio NOLO Print">
-                    <div class="where-we-are-gallery">
-                        <img src="images/mapintro.png" alt="Mappa semplificata della zona di NOLO Print" class="where-we-are-photo">
-                        <img src="images/zonaintro_1.jpg" alt="Ingresso NOLO Print in Via Padova" class="where-we-are-photo where-we-are-photo-motion" data-hover-motion>
-                    </div>
-                    <a class="visit-btn" href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z/data=!4m6!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">
-                        Vieni a trovarci!
-                        <img class="visit-btn-icon" src="https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png" alt="Logo Google Maps">
-                    </a>
-                </article>
+            </div>
+            <div class="visit-btn-wrap">
+                <a class="visit-btn" href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z/data=!4m6!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer">
+                    Vieni a trovarci!
+                    <img class="visit-btn-icon" src="https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png" alt="Logo Google Maps">
+                </a>
             </div>
         </div>
     </section>
