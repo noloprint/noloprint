@@ -83,7 +83,6 @@
             pointer-events: auto;
         }
 
-        /* Lato sinistro: logo + back */
         .header-left {
             display: flex;
             align-items: center;
@@ -98,7 +97,6 @@
             cursor: pointer;
         }
 
-        /* Bottone indietro */
         #header-back-btn {
             display: flex; align-items: center; gap: 6px;
             background: none; border: none; cursor: pointer;
@@ -115,7 +113,6 @@
         #header-back-btn.visible:hover { opacity: 1; }
         #header-back-btn svg { width: 15px; height: 15px; }
 
-        /* Lato destro: titolo pannello oppure sezione docked */
         .header-right {
             display: flex;
             align-items: center;
@@ -124,7 +121,6 @@
             overflow: hidden;
         }
 
-        /* Titolo pannello — sempre ciano, allineato a destra */
         #header-panel-title {
             font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;
             margin: 0;
@@ -145,7 +141,6 @@
             opacity: 1; transform: translateY(0);
         }
 
-        /* Sezioni docked (visibile solo quando pannello chiuso) */
         #docked-titles {
             display: flex; justify-content: flex-end; align-items: center;
             transition: opacity .4s ease;
@@ -159,7 +154,6 @@
         #docked-titles .section-title.title-click-fade { opacity: 0; transform: translateY(-10px); }
         .is-at-top #docked-titles { opacity: 0; }
 
-        /* Nav hero */
         #main-nav {
             display: flex; gap: 14px; align-items: center;
             justify-content: center; flex-wrap: wrap; margin-top: 14px;
@@ -210,8 +204,16 @@
             position:relative; background:#fff; border-radius:22px; overflow:hidden;
             aspect-ratio:1.1/1; transition:var(--transition-apple); cursor:pointer;
             box-shadow:var(--apple-card-shadow);
+            /* Stagger entrance hint for tap */
+            transform-origin: center center;
         }
         .service-card:hover{transform:translateY(-5px) scale(1.01);box-shadow:var(--apple-card-hover-shadow);}
+        /* Tap feedback — card squishes slightly before panel opens */
+        .service-card.card-tapping {
+            transform: scale(0.95) !important;
+            transition: transform 0.12s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+        }
         .service-card-media{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;}
         .service-card::after{
             content:'';position:absolute;top:0;left:0;width:100%;height:45%;
@@ -241,8 +243,24 @@
         .footer-content{line-height:1.8;font-size:.9rem;opacity:.8;}
 
         /* ═══════════════════════════════════════════
-           DETAIL PANEL
+           DETAIL PANEL — iOS Expand Animation
            ═══════════════════════════════════════════ */
+
+        /* Backdrop scuro che compare dietro il pannello durante l'apertura */
+        #panel-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 899;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.38s ease;
+        }
+        #panel-backdrop.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
         #detail-panel {
             position: fixed;
             top: var(--header-height);
@@ -251,14 +269,23 @@
             height: calc(100vh - var(--header-height));
             background: #fff;
             z-index: 900;
-            /* SCROLLABILE verticalmente */
+            overflow: hidden; /* hidden during animation, toggled via JS */
+            /* Gestione completamente via JS — nessuna transform di default */
+            visibility: hidden;
+            pointer-events: none;
+            border-radius: 0px;
+            will-change: transform, border-radius, opacity;
+            transform-origin: center center;
+        }
+        #detail-panel.is-open {
+            visibility: visible;
+            pointer-events: auto;
+        }
+        /* Scroll riabilitato dopo animazione */
+        #detail-panel.anim-done {
             overflow-y: auto;
             overflow-x: hidden;
-            transform: translateX(100%);
-            transition: transform .55s cubic-bezier(.77,0,.18,1);
-            will-change: transform;
         }
-        #detail-panel.is-open { transform: translateX(0); }
 
         /* Striscia colore */
         .panel-color-bar {
@@ -276,6 +303,13 @@
             width: 52%;
             margin: 0 auto 56px;
             text-align: center;
+            opacity: 0;
+            transform: translateY(18px);
+            transition: opacity .38s ease .22s, transform .38s ease .22s;
+        }
+        #detail-panel.content-visible .panel-description-wrap {
+            opacity: 1;
+            transform: translateY(0);
         }
         .panel-description {
             font-size: .95rem;
@@ -308,11 +342,6 @@
         }
         .brick-row::-webkit-scrollbar { display: none; }
 
-        /* Sfalsamento: riga pari parte avanzata di metà mattone */
-        .brick-row.row-odd  { }
-        .brick-row.row-even { }
-
-        /* Padding laterale = margini pagina (25vw per lato su desktop 50% width) */
         .brick-row::before,
         .brick-row::after {
             content: '';
@@ -323,7 +352,6 @@
             width: calc(25vw + var(--brick-w) * 0.5 + var(--brick-gap));
         }
 
-        /* Singolo mattone */
         .panel-brick {
             flex-shrink: 0;
             width: var(--brick-w);
@@ -429,7 +457,6 @@
 <header id="main-header">
     <div class="header-content grid-limiter">
 
-        <!-- Sinistra: logo + back -->
         <div class="header-left">
             <img src="images/logo.png" alt="Logo" id="main-logo">
             <button id="header-back-btn" aria-label="Torna indietro">
@@ -441,7 +468,6 @@
             </button>
         </div>
 
-        <!-- Destra: titolo pannello (pannello aperto) oppure sezione docked (normale) -->
         <div class="header-right">
             <h2 id="header-panel-title"></h2>
             <div id="docked-titles"></div>
@@ -450,17 +476,18 @@
     </div>
 </header>
 
+<!-- Backdrop scuro -->
+<div id="panel-backdrop"></div>
+
 <!-- ═══════════════════════════════
      DETAIL PANEL
      ═══════════════════════════════ -->
 <div id="detail-panel" role="dialog" aria-modal="true" aria-label="Dettaglio servizio">
     <div class="panel-color-bar" id="panel-color-bar"></div>
     <div class="panel-inner">
-        <!-- Descrizione centrata -->
         <div class="panel-description-wrap">
             <p class="panel-description" id="panel-description"></p>
         </div>
-        <!-- Righe mattoni -->
         <div id="panel-rows-container" class="panel-rows-wrap"></div>
     </div>
 </div>
@@ -733,7 +760,8 @@
     </footer>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
 document.addEventListener("DOMContentLoaded", () => {
 
     /* ─── HEADER / LOGO / SCROLL ─── */
@@ -831,20 +859,32 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener('load',   initPositions);
     initPositions();
 
-    /* ─── DETAIL PANEL ─── */
+    /* ═══════════════════════════════════════════
+       DETAIL PANEL — iOS App Open Animation
+       ═══════════════════════════════════════════ */
     const panel         = document.getElementById('detail-panel');
+    const panelBackdrop = document.getElementById('panel-backdrop');
     const panelBar      = document.getElementById('panel-color-bar');
     const panelDesc     = document.getElementById('panel-description');
     const rowsContainer = document.getElementById('panel-rows-container');
     const backBtn       = document.getElementById('header-back-btn');
     const headerTitle   = document.getElementById('header-panel-title');
     let brickTimers     = [];
+    let animTimer       = null;
+    let closeAnimTimer  = null;
+
+    /* Durations (ms) */
+    const DUR_OPEN  = 480;
+    const DUR_CLOSE = 380;
+
+    /* Cubic bezier for spring-y open, smooth close */
+    const EASE_OPEN  = 'cubic-bezier(0.32, 0.72, 0, 1)';   /* iOS-style spring */
+    const EASE_CLOSE = 'cubic-bezier(0.4, 0, 0.6, 1)';
 
     function buildRows(rowsData) {
         rowsContainer.innerHTML = '';
         brickTimers.forEach(clearTimeout);
         brickTimers = [];
-
         let globalIdx = 0;
 
         rowsData.forEach((rowBricks, rowIdx) => {
@@ -867,18 +907,15 @@ document.addEventListener("DOMContentLoaded", () => {
             rowBricks.forEach((b) => {
                 const brick = document.createElement('div');
                 brick.className = 'panel-brick' + (b.img ? '' : ' no-img');
-
                 if (b.img) {
                     const img = document.createElement('img');
                     img.src = b.img; img.alt = b.label;
                     brick.appendChild(img);
                 }
-
                 const lbl = document.createElement('div');
                 lbl.className = 'panel-brick-label';
                 lbl.textContent = b.label;
                 brick.appendChild(lbl);
-
                 row.appendChild(brick);
 
                 const delay = 60 + globalIdx * 50;
@@ -886,11 +923,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 brickTimers.push(setTimeout(() => brick.classList.add('brick-visible'), delay));
             });
 
-            // scroll step ≈ 3 mattoni
             const brickW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-w')) || 420;
             const gap    = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-gap')) || 16;
             const step   = (brickW + gap) * 3;
-
             arrL.addEventListener('click', () => row.scrollBy({left: -step, behavior:'smooth'}));
             arrR.addEventListener('click', () => row.scrollBy({left:  step, behavior:'smooth'}));
 
@@ -902,47 +937,133 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function openPanel(card) {
+        /* Cancel any running close animation */
+        if (closeAnimTimer) { clearTimeout(closeAnimTimer); closeAnimTimer = null; }
+
+        /* ── Gather card data ── */
         const title = card.dataset.panelTitle || '';
         const color = card.dataset.panelColor || '#00AEEF';
         const desc  = card.dataset.panelDesc  || '';
         const rows  = JSON.parse(card.dataset.panelBricks || '[]');
 
         panelBar.style.background = color;
+        headerTitle.style.color   = color;
         headerTitle.textContent   = title;
         panelDesc.textContent     = desc;
 
         buildRows(rows);
 
+        /* ── Measure card & panel geometry ── */
+        const headerH = header.offsetHeight;
+        const rect    = card.getBoundingClientRect();
+
+        /* Panel dimensions (full screen below header) */
+        const panelW = window.innerWidth;
+        const panelH = window.innerHeight - headerH;
+
+        /* Scale: how small is the card relative to the panel */
+        const scaleX = rect.width  / panelW;
+        const scaleY = rect.height / panelH;
+
+        /* Card centre vs panel centre — translated in panel's own coordinate system */
+        const cardCX  = rect.left + rect.width  / 2;
+        const cardCY  = rect.top  + rect.height / 2;
+        const panelCX = panelW / 2;
+        const panelCY = headerH + panelH / 2;
+
+        const dx = cardCX - panelCX;
+        const dy = cardCY - panelCY;
+
+        /* Border radius of the card (mirror the card's rounded corners) */
+        const cardRadius = parseFloat(getComputedStyle(card).borderRadius) || 22;
+        /* Compensated radius so the panel corners look like the card corners during scale */
+        const initRadius = cardRadius / Math.min(scaleX, scaleY);
+
+        /* ── 1. Set initial state instantly (no transition) ── */
+        panel.style.transition      = 'none';
+        panel.style.transform       = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
+        panel.style.borderRadius    = `${initRadius}px`;
+        panel.style.opacity         = '1';
+        panel.style.overflow        = 'hidden';
+        panel.classList.remove('anim-done', 'content-visible');
         panel.classList.add('is-open');
-        header.classList.add('panel-visible');
-        body.classList.add('panel-open');
         panel.scrollTop = 0;
 
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-            headerTitle.classList.add('visible');
-            backBtn.classList.add('visible');
-            dockedContainer.style.opacity      = '0';
-            dockedContainer.style.pointerEvents = 'none';
-        }));
+        /* ── 2. Tap squish on card (cosmetic) ── */
+        card.classList.add('card-tapping');
+        setTimeout(() => card.classList.remove('card-tapping'), 160);
+
+        /* ── 3. Show backdrop ── */
+        panelBackdrop.classList.add('visible');
+
+        /* ── 4. Header state ── */
+        header.classList.add('panel-visible', 'scrolled');
+        body.classList.add('panel-open');
+
+        /* ── 5. Trigger expand animation (next two frames to ensure paint) ── */
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                panel.style.transition   = `transform ${DUR_OPEN}ms ${EASE_OPEN}, border-radius ${DUR_OPEN}ms ${EASE_OPEN}`;
+                panel.style.transform    = 'translate(0px, 0px) scale(1, 1)';
+                panel.style.borderRadius = '0px';
+
+                /* Show header UI */
+                headerTitle.classList.add('visible');
+                backBtn.classList.add('visible');
+                dockedContainer.style.opacity      = '0';
+                dockedContainer.style.pointerEvents = 'none';
+
+                /* After animation finishes, allow scrolling and fade in content */
+                animTimer = setTimeout(() => {
+                    panel.classList.add('anim-done');   /* re-enables scroll */
+                    panel.classList.add('content-visible'); /* fades in description */
+                }, DUR_OPEN);
+            });
+        });
     }
 
     function closePanel() {
-        panel.classList.remove('is-open');
-        header.classList.remove('panel-visible');
-        body.classList.remove('panel-open');
+        if (animTimer) { clearTimeout(animTimer); animTimer = null; }
+
+        /* Animate panel: scale down + slight translate up + fade */
+        panel.classList.remove('anim-done', 'content-visible');
+        panel.style.overflow   = 'hidden';
+        panel.style.transition = `transform ${DUR_CLOSE}ms ${EASE_CLOSE}, border-radius ${DUR_CLOSE}ms ${EASE_CLOSE}, opacity ${DUR_CLOSE}ms ease`;
+        panel.style.transform  = 'translate(0, 28px) scale(0.92, 0.92)';
+        panel.style.borderRadius = '28px';
+        panel.style.opacity    = '0';
+
+        /* Hide backdrop */
+        panelBackdrop.classList.remove('visible');
+
+        /* Header UI */
         headerTitle.classList.remove('visible');
         backBtn.classList.remove('visible');
         dockedContainer.style.opacity      = '';
         dockedContainer.style.pointerEvents = '';
-        brickTimers.forEach(clearTimeout);
-        brickTimers = [];
+        header.classList.remove('panel-visible');
+
+        /* After anim: clean up */
+        closeAnimTimer = setTimeout(() => {
+            panel.classList.remove('is-open');
+            body.classList.remove('panel-open');
+            panel.style.transition   = 'none';
+            panel.style.transform    = '';
+            panel.style.borderRadius = '';
+            panel.style.opacity      = '';
+            brickTimers.forEach(clearTimeout);
+            brickTimers = [];
+            closeAnimTimer = null;
+        }, DUR_CLOSE + 20);
     }
 
+    /* ── Event listeners ── */
     document.querySelectorAll('.service-card[data-panel-title]').forEach(card => {
         card.addEventListener('click', () => openPanel(card));
     });
 
     backBtn.addEventListener('click', closePanel);
+    panelBackdrop.addEventListener('click', closePanel);
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && panel.classList.contains('is-open')) closePanel();
