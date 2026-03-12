@@ -15,95 +15,118 @@
         :root {
             --font-main: 'Montserrat', sans-serif;
             --apple-bg: #f5f5f7;
-            --apple-card-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            --apple-card-hover-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            --apple-card-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            --apple-card-hover-shadow: 0 12px 30px rgba(0,0,0,0.15);
             --transition-apple: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             --header-height: 90px;
             --strip-opacity: 0.5;
+            --brick-w: 280px;
+            --brick-h: 170px;
+            --brick-gap: 14px;
         }
+
+        *, *::before, *::after { box-sizing: border-box; }
 
         body, html {
             margin: 0; padding: 0;
             font-family: var(--font-main);
-            background-color: #ffffff;
+            background-color: #fff;
             color: #1d1d1f;
             overflow-x: hidden;
         }
-
         body.panel-open { overflow: hidden; }
 
+        /* BG STRIP */
         .bg-strip {
-            position: fixed;
-            left: calc(50% + 18vw); top: 50vh;
-            transform: translate(-50%, -50%);
-            width: min(42.5vw, 600px); height: 100vh;
+            position: fixed; left: calc(50% + 18vw); top: 50vh;
+            transform: translate(-50%,-50%);
+            width: min(42.5vw,600px); height: 100vh;
             background-image: url('images/sfondo_striscia.png');
-            background-repeat: no-repeat;
-            background-position: center 50%;
-            background-size: cover;
-            opacity: var(--strip-opacity);
-            pointer-events: none; z-index: 0;
+            background-repeat: no-repeat; background-position: center 50%; background-size: cover;
+            opacity: var(--strip-opacity); pointer-events: none; z-index: 0;
             filter: drop-shadow(0 10px 18px rgba(0,0,0,0.06));
             -webkit-backface-visibility: hidden; backface-visibility: hidden;
             will-change: transform, background-position, opacity;
             transition: opacity 260ms linear;
         }
-        @media (max-width: 1200px) { .bg-strip { left: calc(50% + 12vw); width: min(46vw, 520px); } }
-        @media (max-width: 900px)  { .bg-strip { left: calc(50% + 8vw); width: 44vw; } }
-        @media (max-width: 600px)  { .bg-strip { left: calc(50% + 4vw); width: 86vw; } }
+        @media (max-width:1200px){.bg-strip{left:calc(50% + 12vw);width:min(46vw,520px);}}
+        @media (max-width:900px) {.bg-strip{left:calc(50% + 8vw);width:44vw;}}
+        @media (max-width:600px) {.bg-strip{left:calc(50% + 4vw);width:86vw;}}
 
         .grid-limiter { width: 50%; margin: 0 auto; position: relative; z-index: 2; }
 
-        /* HEADER */
+        /* ── HEADER ── */
         #main-header {
             position: fixed; top: 0; left: 0; width: 100%;
             height: var(--header-height); z-index: 1000;
             background: rgba(255,255,255,0);
             backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
             border-bottom: 1px solid rgba(0,0,0,0);
-            transition: background 0.5s ease, backdrop-filter 0.5s ease, border-bottom 0.5s ease;
+            transition: background .5s ease, backdrop-filter .5s ease, border-bottom .5s ease;
             pointer-events: none;
         }
-        #main-header.scrolled {
-            background: rgba(255,255,255,0.85);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
+        #main-header.scrolled,
         #main-header.panel-visible {
             background: rgba(255,255,255,0.92) !important;
             backdrop-filter: blur(20px) !important; -webkit-backdrop-filter: blur(20px) !important;
-            border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+            border-bottom: 1px solid rgba(0,0,0,0.05) !important;
         }
         .header-content {
             display: flex; justify-content: space-between; align-items: center;
-            height: 100%; pointer-events: auto; transition: opacity 0.3s ease;
+            height: 100%; pointer-events: auto;
         }
         .is-at-top #docked-titles { opacity: 0; }
         .header-left { display: flex; align-items: center; }
-        #main-logo { width: 80px; height: auto; transform-origin: center left; will-change: transform; }
+        #main-logo { width: 80px; height: auto; transform-origin: center left; will-change: transform; cursor: pointer; }
 
+        /* Titolo nel header quando pannello è aperto */
+        #header-panel-title {
+            font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;
+            margin: 0; opacity: 0; transform: translateY(6px);
+            transition: opacity .35s ease, transform .35s ease;
+            pointer-events: none;
+        }
+        #header-panel-title.visible {
+            opacity: 1; transform: translateY(0);
+        }
+
+        /* Bottone indietro nell'header */
+        #header-back-btn {
+            display: flex; align-items: center; gap: 6px;
+            background: none; border: none; cursor: pointer;
+            font-family: var(--font-main); font-size: 0.8rem; font-weight: 600;
+            color: #1d1d1f; opacity: 0; padding: 8px 12px 8px 0;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            transition: opacity .3s ease, color .2s ease;
+            pointer-events: none; flex-shrink: 0;
+        }
+        #header-back-btn.visible { opacity: 0.5; pointer-events: auto; }
+        #header-back-btn.visible:hover { opacity: 1; }
+        #header-back-btn svg { width: 15px; height: 15px; }
+
+        #docked-titles { display: flex; justify-content: flex-end; align-items: center; flex-grow: 1; transition: opacity .4s ease; }
+        #docked-titles .section-title {
+            font-size: 1.4rem !important; font-weight: 700; margin: 0;
+            color: var(--theme-color) !important; letter-spacing: -0.5px; cursor: pointer;
+            transition: opacity .6s ease, transform .6s ease;
+        }
+        #docked-titles .section-title.title-click-fade { opacity: 0; transform: translateY(-10px); }
+
+        /* Nav */
         #main-nav {
             display: flex; gap: 14px; align-items: center;
             justify-content: center; flex-wrap: wrap; margin-top: 14px;
         }
         #main-nav a {
             text-decoration: none; color: #1d1d1f; font-weight: 600;
-            font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px;
+            font-size: .82rem; text-transform: uppercase; letter-spacing: .5px;
             border-radius: 999px; padding: 9px 14px;
-            transition: background-color 0.25s ease, color 0.25s ease;
+            transition: background-color .25s ease;
         }
-        #main-nav a:nth-child(1):hover { background-color: rgba(0,174,239,0.16); }
-        #main-nav a:nth-child(2):hover { background-color: rgba(226,0,122,0.14); }
-        #main-nav a:nth-child(3):hover { background-color: rgba(255,230,0,0.20); }
-        #main-nav a:nth-child(4):hover { background-color: rgba(0,0,0,0.08); }
-
-        #docked-titles { display: flex; justify-content: flex-end; align-items: center; flex-grow: 1; transition: opacity 0.4s ease; }
-        #docked-titles .section-title {
-            font-size: 1.4rem !important; font-weight: 700; margin: 0;
-            color: var(--theme-color) !important; letter-spacing: -0.5px; cursor: pointer;
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        #docked-titles .section-title.title-click-fade { opacity: 0; transform: translateY(-10px); }
+        #main-nav a:nth-child(1):hover{background:rgba(0,174,239,.16);}
+        #main-nav a:nth-child(2):hover{background:rgba(226,0,122,.14);}
+        #main-nav a:nth-child(3):hover{background:rgba(255,230,0,.20);}
+        #main-nav a:nth-child(4):hover{background:rgba(0,0,0,.08);}
 
         /* HERO */
         .hero-full-width {
@@ -113,631 +136,627 @@
             text-align: center; padding-top: var(--header-height); overflow: hidden;
         }
         .hero-full-width::before {
-            content: ''; position: absolute; inset: 0;
-            background: url('images/zonaintro_1.jpg') center/cover no-repeat;
-            opacity: 0.6; z-index: 0;
+            content:''; position:absolute; inset:0;
+            background:url('images/zonaintro_1.jpg') center/cover no-repeat;
+            opacity:.6; z-index:0;
         }
         .hero-full-width::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(to bottom, rgba(255,255,255,0) 45%, rgba(255,255,255,0.95) 100%);
-            z-index: 1;
+            content:''; position:absolute; inset:0;
+            background:linear-gradient(to bottom,rgba(255,255,255,0) 45%,rgba(255,255,255,.95) 100%);
+            z-index:1;
         }
-        .hero-full-width .grid-limiter { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
-        .hero-sottologo { margin-top: 20vh; max-width: 100%; height: auto; max-height: 250px; z-index: 2; }
-        .hero-nav-wrapper { margin-top: 10px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+        .hero-full-width .grid-limiter { position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; }
+        .hero-sottologo { margin-top:20vh; max-width:100%; height:auto; max-height:250px; z-index:2; }
+        .hero-nav-wrapper { margin-top:10px; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
 
         /* SEZIONI */
-        .cmyk-section { padding: 100px 0; background-color: #ffffff; min-height: 60vh; }
-        .title-wrapper { height: 60px; display: flex; justify-content: flex-start; align-items: center; margin-bottom: 40px; }
-        .section-title { color: var(--theme-color); font-size: 2.8rem; font-weight: 800; margin: 0; letter-spacing: -1px; }
+        .cmyk-section { padding:100px 0; background:#fff; min-height:60vh; }
+        .title-wrapper { height:60px; display:flex; justify-content:flex-start; align-items:center; margin-bottom:40px; }
+        .section-title { color:var(--theme-color); font-size:2.8rem; font-weight:800; margin:0; letter-spacing:-1px; }
 
         /* GRID SERVIZI */
-        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
+        .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:25px; }
         .service-card {
-            position: relative; background: #ffffff; border-radius: 22px; overflow: hidden;
-            aspect-ratio: 1.1 / 1; transition: var(--transition-apple); cursor: pointer;
-            box-shadow: var(--apple-card-shadow);
+            position:relative; background:#fff; border-radius:22px; overflow:hidden;
+            aspect-ratio:1.1/1; transition:var(--transition-apple); cursor:pointer;
+            box-shadow:var(--apple-card-shadow);
         }
-        .service-card:hover { transform: translateY(-5px) scale(1.01); box-shadow: var(--apple-card-hover-shadow); }
-        .service-card-media { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: var(--transition-apple); z-index: 0; }
-        .service-card::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 45%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0) 100%); z-index: 1;
+        .service-card:hover{transform:translateY(-5px) scale(1.01);box-shadow:var(--apple-card-hover-shadow);}
+        .service-card-media{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:var(--transition-apple);z-index:0;}
+        .service-card::after{
+            content:'';position:absolute;top:0;left:0;width:100%;height:45%;
+            background:linear-gradient(to bottom,rgba(255,255,255,.92) 0%,rgba(255,255,255,0) 100%);z-index:1;
         }
-        .card-header { position: relative; z-index: 2; padding: 25px; }
-        .card-overline { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #1d1d1f; opacity: 0.45; margin-bottom: 4px; display: block; letter-spacing: 0.5px; }
-        .card-title { font-weight: 700; font-size: 14px; color: #1d1d1f; line-height: 1.25; margin: 0; letter-spacing: -0.2px; min-height: 2.5em; max-height: 2.5em; }
+        .card-header{position:relative;z-index:2;padding:25px;}
+        .card-overline{font-size:.75rem;font-weight:600;text-transform:uppercase;color:#1d1d1f;opacity:.45;margin-bottom:4px;display:block;letter-spacing:.5px;}
+        .card-title{font-weight:700;font-size:14px;color:#1d1d1f;line-height:1.25;margin:0;letter-spacing:-.2px;min-height:2.5em;max-height:2.5em;}
 
         /* DOVE SIAMO */
-        .where-we-are-section { padding-top: 60px; min-height: auto; }
-        .where-we-are-layout { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: stretch; }
-        .maps-link-preview { display: block; border-radius: 24px; overflow: hidden; box-shadow: var(--apple-card-shadow); text-decoration: none; }
-        .maps-frame { width: 100%; min-height: 420px; border: 0; border-radius: 24px; box-shadow: var(--apple-card-shadow); height: 100%; object-fit: cover; display: block; }
-        .visit-btn-wrap { margin-top: 18px; }
-        .visit-btn {
-            width: fit-content; text-decoration: none; color: #1d1d1f; background: #ffffff;
-            border: 1px solid rgba(0,0,0,0.1); border-radius: 999px; padding: 12px 24px;
-            font-weight: 700; display: inline-flex; align-items: center; gap: 0; overflow: hidden;
-            transition: transform 0.35s ease, background-color 0.35s ease, padding-right 0.35s ease, box-shadow 0.35s ease;
+        .where-we-are-section{padding-top:60px;min-height:auto;}
+        .where-we-are-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:stretch;}
+        .maps-link-preview{display:block;border-radius:24px;overflow:hidden;box-shadow:var(--apple-card-shadow);text-decoration:none;}
+        .maps-frame{width:100%;min-height:420px;border:0;border-radius:24px;box-shadow:var(--apple-card-shadow);height:100%;object-fit:cover;display:block;}
+        .visit-btn-wrap{margin-top:18px;}
+        .visit-btn{
+            width:fit-content;text-decoration:none;color:#1d1d1f;background:#fff;
+            border:1px solid rgba(0,0,0,.1);border-radius:999px;padding:12px 24px;
+            font-weight:700;display:inline-flex;align-items:center;gap:0;overflow:hidden;
+            transition:transform .35s ease,background-color .35s ease,padding-right .35s ease,box-shadow .35s ease;
         }
-        .visit-btn-icon { width: 0; opacity: 0; transform: translateX(-8px); transition: width 0.35s ease, opacity 0.35s ease, transform 0.35s ease; }
-        .visit-btn:hover { background-color: #FFE600; padding-right: 30px; transform: scale(1.05); box-shadow: 0 10px 24px rgba(0,0,0,0.16); }
-        .visit-btn:hover .visit-btn-icon { width: 20px; opacity: 1; transform: translateX(0); margin-left: 8px; }
+        .visit-btn-icon{width:0;opacity:0;transform:translateX(-8px);transition:width .35s ease,opacity .35s ease,transform .35s ease;}
+        .visit-btn:hover{background-color:#FFE600;padding-right:30px;transform:scale(1.05);box-shadow:0 10px 24px rgba(0,0,0,.16);}
+        .visit-btn:hover .visit-btn-icon{width:20px;opacity:1;transform:translateX(0);margin-left:8px;}
 
         /* FOOTER */
-        .footer-black { background: #000; color: #f5f5f7; padding: 70px 0; text-align: center; z-index: 3; position: relative; }
-        .footer-content { line-height: 1.8; font-size: 0.9rem; opacity: 0.8; }
+        .footer-black{background:#000;color:#f5f5f7;padding:70px 0;text-align:center;z-index:3;position:relative;}
+        .footer-content{line-height:1.8;font-size:.9rem;opacity:.8;}
 
-        /* ═══════════════════════════════════════════
+        /* ═══════════════════════════════════════
            DETAIL PANEL
-           ═══════════════════════════════════════════ */
+           ═══════════════════════════════════════ */
         #detail-panel {
             position: fixed;
-            top: var(--header-height);
-            left: 0;
-            width: 100%;
-            height: calc(100vh - var(--header-height));
-            background: #ffffff;
-            z-index: 900;
-            overflow-y: auto;
+            top: var(--header-height); left: 0;
+            width: 100%; height: calc(100vh - var(--header-height));
+            background: #fff; z-index: 900;
+            overflow-y: auto; overflow-x: hidden;
             transform: translateX(100%);
-            transition: transform 0.55s cubic-bezier(0.77, 0, 0.18, 1);
+            transition: transform .55s cubic-bezier(.77,0,.18,1);
             will-change: transform;
         }
         #detail-panel.is-open { transform: translateX(0); }
 
+        /* Striscia colore cima pannello */
         .panel-color-bar {
-            height: 5px; width: 100%;
-            background: var(--panel-color, #00AEEF);
+            height: 4px; width: 100%;
+            background: var(--panel-color,#00AEEF);
             position: sticky; top: 0; z-index: 10;
-            transition: background 0.3s ease;
         }
 
-        .panel-inner { width: 50%; margin: 0 auto; padding: 50px 0 80px; }
-
-        .panel-top {
-            display: flex; align-items: center; gap: 18px; margin-bottom: 40px;
+        .panel-inner {
+            padding: 44px 0 80px;
         }
 
-        .panel-back-btn {
-            display: flex; align-items: center; gap: 6px;
-            background: none; border: none; cursor: pointer;
-            font-family: var(--font-main); font-size: 0.82rem; font-weight: 600;
-            color: #1d1d1f; opacity: 0.45; padding: 8px 0;
-            text-transform: uppercase; letter-spacing: 0.5px;
-            transition: opacity 0.2s ease; flex-shrink: 0;
-        }
-        .panel-back-btn:hover { opacity: 1; }
-        .panel-back-btn svg { width: 16px; height: 16px; }
-
-        .panel-title {
-            font-size: 2.8rem; font-weight: 800; letter-spacing: -1px;
-            margin: 0; color: var(--panel-color, #00AEEF);
-            transition: color 0.3s ease;
+        /* ── Righe sfalsate stile "mattoni" ── */
+        .panel-rows-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
         }
 
-        .panel-overline {
-            font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
-            letter-spacing: 0.5px; color: #1d1d1f; opacity: 0.4;
-            margin-bottom: 30px; display: block;
+        /* Ogni riga è uno slider orizzontale */
+        .brick-row {
+            display: flex;
+            align-items: flex-start;
+            overflow-x: auto;
+            overflow-y: visible;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;          /* Firefox */
+            padding: calc(var(--brick-gap) / 2) 0;
+            /* sfalsamento alternato: riga pari inizia con mezzo mattone di offset */
+            gap: var(--brick-gap);
+        }
+        .brick-row::-webkit-scrollbar { display: none; }
+
+        /* Offset sfalsato per la riga pari */
+        .brick-row.row-even {
+            padding-left: calc(var(--brick-w) * 0.5 + var(--brick-gap));
+        }
+        .brick-row.row-odd {
+            padding-left: 0;
         }
 
-        /* Mattoni */
-        .panel-bricks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        /* Padding laterale uguale al grid-limiter (50% del viewport → 25% per lato) */
+        .brick-row::before,
+        .brick-row::after {
+            content: '';
+            flex-shrink: 0;
+            width: calc((100vw - 50%) / 2);   /* margine sinistro/destro = come grid-limiter */
+        }
+        .brick-row.row-even::before {
+            width: calc((100vw - 50%) / 2 + var(--brick-w) * 0.5 + var(--brick-gap));
+        }
 
+        /* Singolo mattone */
         .panel-brick {
-            background: var(--apple-bg); border-radius: 18px;
-            aspect-ratio: 16 / 9; overflow: hidden; position: relative;
-            box-shadow: var(--apple-card-shadow); cursor: pointer;
-            opacity: 0; transform: translateY(28px);
-            transition: opacity 0.45s ease, transform 0.45s ease, box-shadow 0.3s ease;
+            flex-shrink: 0;
+            width: var(--brick-w);
+            height: var(--brick-h);
+            background: var(--apple-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: var(--apple-card-shadow);
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(22px) scale(.97);
+            transition: opacity .4s ease, transform .4s ease, box-shadow .3s ease;
         }
-        .panel-brick.brick-visible { opacity: 1; transform: translateY(0); }
-        .panel-brick:hover { box-shadow: var(--apple-card-hover-shadow); transform: translateY(-3px) scale(1.01); }
-        .panel-brick img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .panel-brick.brick-visible {
+            opacity: 1; transform: translateY(0) scale(1);
+        }
+        .panel-brick:hover {
+            box-shadow: var(--apple-card-hover-shadow);
+            transform: translateY(-3px) scale(1.02) !important;
+        }
 
+        .panel-brick img {
+            width: 100%; height: 100%; object-fit: cover; display: block;
+        }
         .panel-brick-label {
             position: absolute; bottom: 0; left: 0; right: 0;
-            padding: 28px 16px 14px;
-            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0) 100%);
-            color: #fff; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.2px;
+            padding: 28px 14px 12px;
+            background: linear-gradient(to top,rgba(0,0,0,.65) 0%,rgba(0,0,0,0) 100%);
+            color: #fff; font-size: .76rem; font-weight: 700; letter-spacing: .15px;
+            line-height: 1.3;
+        }
+        /* Mattone senza immagine: label scura */
+        .panel-brick.no-img .panel-brick-label {
+            background: none;
+            color: #1d1d1f;
+            font-size: .82rem;
+            top: 0; display: flex; align-items: flex-end;
+            padding: 14px;
         }
 
-        /* ═══════════════════════════════════════════
-           RESPONSIVE
-           ═══════════════════════════════════════════ */
-        @media (max-width: 1200px) {
-            .grid-limiter { width: 90%; }
-            .services-grid { grid-template-columns: repeat(2, 1fr); }
-            .where-we-are-layout { grid-template-columns: 1fr; }
-            .panel-inner { width: 90%; }
-            .panel-bricks { grid-template-columns: repeat(2, 1fr); }
+        /* Frecce navigazione riga */
+        .brick-row-wrap {
+            position: relative;
         }
-        @media (max-width: 768px) {
-            .services-grid { grid-template-columns: 1fr; }
-            .hero-sottologo { margin-top: 17vh; max-height: 180px; }
-            #main-nav { gap: 8px; }
-            #main-nav a { font-size: 0.75rem; padding: 8px 12px; }
-            .maps-frame { min-height: 320px; }
-            .panel-title { font-size: 2rem; }
-            .panel-bricks { grid-template-columns: 1fr; }
+        .row-arrow {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 38px; height: 38px; border-radius: 50%;
+            background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+            border: 1px solid rgba(0,0,0,.08);
+            box-shadow: 0 4px 14px rgba(0,0,0,.12);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            z-index: 20;
+            opacity: 0; transition: opacity .25s ease, transform .25s ease;
+            pointer-events: none;
+        }
+        .brick-row-wrap:hover .row-arrow { opacity: 1; pointer-events: auto; }
+        .row-arrow:hover { transform: translateY(-50%) scale(1.08); }
+        .row-arrow svg { width: 16px; height: 16px; }
+        .row-arrow.arr-left  { left:  calc((100vw - 50%) / 2 - 50px); }
+        .row-arrow.arr-right { right: calc((100vw - 50%) / 2 - 50px); }
+
+        /* ═══════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════ */
+        @media (max-width:1200px){
+            .grid-limiter{width:90%;}
+            .services-grid{grid-template-columns:repeat(2,1fr);}
+            .where-we-are-layout{grid-template-columns:1fr;}
+            :root{ --brick-w:240px; --brick-h:148px; }
+            .brick-row::before, .brick-row::after { width: 5vw; }
+            .brick-row.row-even::before { width: calc(5vw + var(--brick-w) * 0.5 + var(--brick-gap)); }
+            .row-arrow.arr-left  { left:  8px; }
+            .row-arrow.arr-right { right: 8px; }
+        }
+        @media (max-width:768px){
+            .services-grid{grid-template-columns:1fr;}
+            .hero-sottologo{margin-top:17vh;max-height:180px;}
+            #main-nav{gap:8px;}
+            #main-nav a{font-size:.75rem;padding:8px 12px;}
+            .maps-frame{min-height:320px;}
+            :root{ --brick-w:200px; --brick-h:124px; }
         }
     </style>
 </head>
 <body class="is-at-top">
 
-    <div class="bg-strip" aria-hidden="true"></div>
+<div class="bg-strip" aria-hidden="true"></div>
 
-    <header id="main-header">
-        <div class="header-content grid-limiter">
-            <div class="header-left">
-                <img src="images/logo.png" alt="Logo" id="main-logo">
-            </div>
-            <div id="docked-titles"></div>
+<!-- ── HEADER ── -->
+<header id="main-header">
+    <div class="header-content grid-limiter">
+        <div class="header-left" style="display:flex;align-items:center;gap:4px;">
+            <img src="images/logo.png" alt="Logo" id="main-logo">
+            <!-- back btn + titolo pannello, visibili solo quando pannello aperto -->
+            <button id="header-back-btn" aria-label="Torna indietro">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                Indietro
+            </button>
+            <h2 id="header-panel-title"></h2>
         </div>
-    </header>
+        <div id="docked-titles"></div>
+    </div>
+</header>
 
-    <!-- ═══════════════════════════════════════════
-         DETAIL PANEL (slide-in)
-         ═══════════════════════════════════════════ -->
-    <div id="detail-panel" role="dialog" aria-modal="true" aria-label="Dettaglio servizio">
-        <div class="panel-color-bar" id="panel-color-bar"></div>
-        <div class="panel-inner">
-            <div class="panel-top">
-                <button class="panel-back-btn" id="panel-back-btn" aria-label="Torna indietro">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                    Indietro
-                </button>
-                <h2 class="panel-title" id="panel-title"></h2>
+<!-- ── DETAIL PANEL ── -->
+<div id="detail-panel" role="dialog" aria-modal="true" aria-label="Dettaglio servizio">
+    <div class="panel-color-bar" id="panel-color-bar"></div>
+    <div class="panel-inner">
+        <div id="panel-rows-container" class="panel-rows-wrap"></div>
+    </div>
+</div>
+
+<!-- ── MAIN CONTENT ── -->
+<div id="main-content">
+
+    <section class="hero-full-width">
+        <div class="grid-limiter">
+            <img src="images/sottologo.png" alt="Sottologo NOLO Print" class="hero-sottologo">
+            <div class="hero-nav-wrapper">
+                <nav id="main-nav" aria-label="Indice sezioni">
+                    <a href="#sec-cyan">cosa facciamo</a>
+                    <a href="#sec-magenta">progetto</a>
+                    <a href="#chi-siamo">chi siamo</a>
+                    <a href="#dove-siamo">dove siamo</a>
+                </nav>
             </div>
-            <span class="panel-overline" id="panel-overline"></span>
-            <div class="panel-bricks" id="panel-bricks"></div>
         </div>
-    </div>
+    </section>
 
-    <!-- MAIN CONTENT -->
-    <div id="main-content">
+    <div id="chi-siamo"></div>
 
-        <section class="hero-full-width">
-            <div class="grid-limiter">
-                <img src="images/sottologo.png" alt="Sottologo NOLO Print" class="hero-sottologo">
-                <div class="hero-nav-wrapper">
-                    <nav id="main-nav" aria-label="Indice sezioni">
-                        <a href="#sec-cyan">cosa facciamo</a>
-                        <a href="#sec-magenta">progetto</a>
-                        <a href="#chi-siamo">chi siamo</a>
-                        <a href="#dove-siamo">dove siamo</a>
-                    </nav>
-                </div>
+    <section class="cmyk-section" id="sec-cyan">
+        <div class="grid-limiter">
+            <div class="title-wrapper" id="wrap-cyan">
+                <h2 class="section-title" data-target="wrap-cyan" style="--theme-color:#00AEEF;">Cosa facciamo</h2>
             </div>
-        </section>
+            <div class="services-grid">
 
-        <div id="chi-siamo"></div>
-
-        <section class="cmyk-section" id="sec-cyan">
-            <div class="grid-limiter">
-                <div class="title-wrapper" id="wrap-cyan">
-                    <h2 class="section-title" data-target="wrap-cyan" style="--theme-color: #00AEEF;">Cosa facciamo</h2>
+                <div class="service-card"
+                    data-panel-title="Stampa digitale piccolo formato"
+                    data-panel-color="#00AEEF"
+                    data-panel-bricks='[
+                        [{"label":"Biglietti da visita","img":"images/stampe_digitale/sdig1.png"},{"label":"Volantini A4 / A5","img":""},{"label":"Brochure","img":""},{"label":"Locandine","img":""},{"label":"Manifesti 50×70","img":""}],
+                        [{"label":"Cartoline","img":""},{"label":"Flyer fronte/retro","img":""},{"label":"Menù","img":""},{"label":"Listini prezzi","img":""},{"label":"Inviti","img":""}]
+                    ]'>
+                    <img src="images/stampe_digitale/sdig1.png" alt="Stampa digitale piccolo formato" class="service-card-media">
+                    <div class="card-header">
+                        <span class="card-overline">PRECISIONE DA VICINO</span>
+                        <h3 class="card-title">Stampa digitale piccolo formato</h3>
+                    </div>
                 </div>
-                <div class="services-grid">
 
-                    <div class="service-card"
-                        data-panel-title="Stampa digitale piccolo formato"
-                        data-panel-overline="Scopri tutti i prodotti · Precisione da vicino"
-                        data-panel-color="#00AEEF"
-                        data-panel-bricks='[
-                            {"label":"Biglietti da visita","img":"images/stampe_digitale/sdig1.png"},
-                            {"label":"Volantini A4 / A5","img":""},
-                            {"label":"Brochure","img":""},
-                            {"label":"Locandine","img":""},
-                            {"label":"Manifesti 50×70","img":""},
-                            {"label":"Cartoline","img":""}
-                        ]'>
-                        <img src="images/stampe_digitale/sdig1.png" alt="Stampa digitale piccolo formato" class="service-card-media">
-                        <div class="card-header">
-                            <span class="card-overline">PRECISIONE DA VICINO</span>
-                            <h3 class="card-title">Stampa digitale piccolo formato</h3>
-                        </div>
+                <div class="service-card"
+                    data-panel-title="Stampa digitale grande formato"
+                    data-panel-color="#00AEEF"
+                    data-panel-bricks='[
+                        [{"label":"Striscioni","img":"images/stampe_digitale/bdig1.png"},{"label":"Poster giganti","img":""},{"label":"Roll-up","img":""},{"label":"Tele canvas","img":""},{"label":"Forex e pannelli","img":""}],
+                        [{"label":"Adesivi da pavimento","img":""},{"label":"Stampa su tessuto","img":""},{"label":"Backlight","img":""},{"label":"Vetrofanie","img":""},{"label":"Segnaletica","img":""}]
+                    ]'>
+                    <img src="images/stampe_digitale/bdig1.png" alt="Stampa digitale grande formato" class="service-card-media">
+                    <div class="card-header">
+                        <span class="card-overline">GRANDE IMPATTO</span>
+                        <h3 class="card-title">Stampa digitale GRANDE formato</h3>
                     </div>
-
-                    <div class="service-card"
-                        data-panel-title="Stampa digitale grande formato"
-                        data-panel-overline="Scopri tutti i prodotti · Grande impatto"
-                        data-panel-color="#00AEEF"
-                        data-panel-bricks='[
-                            {"label":"Striscioni","img":"images/stampe_digitale/bdig1.png"},
-                            {"label":"Poster giganti","img":""},
-                            {"label":"Roll-up","img":""},
-                            {"label":"Tele canvas","img":""},
-                            {"label":"Forex e pannelli","img":""},
-                            {"label":"Adesivi da pavimento","img":""}
-                        ]'>
-                        <img src="images/stampe_digitale/bdig1.png" alt="Stampa digitale grande formato" class="service-card-media">
-                        <div class="card-header">
-                            <span class="card-overline">GRANDE IMPATTO</span>
-                            <h3 class="card-title">Stampa digitale GRANDE formato</h3>
-                        </div>
-                    </div>
-
-                    <div class="service-card"
-                        data-panel-title="Stampe termiche – Gadget"
-                        data-panel-overline="Scopri tutti i prodotti · Personalizzazione"
-                        data-panel-color="#E2007A"
-                        data-panel-bricks='[
-                            {"label":"T-shirt","img":"images/stampe_digitale/termi.png"},
-                            {"label":"Felpe","img":""},
-                            {"label":"Tazze","img":""},
-                            {"label":"Borse in cotone","img":""},
-                            {"label":"Cuscini","img":""},
-                            {"label":"Portachiavi","img":""}
-                        ]'>
-                        <img src="images/stampe_digitale/termi.png" alt="Stampe a trasferimento termico per gadget" class="service-card-media">
-                        <div class="card-header">
-                            <span class="card-overline">PERSONALIZZAZIONE</span>
-                            <h3 class="card-title">Stampe a trasferimento termico - Gadget</h3>
-                        </div>
-                    </div>
-
-                    <div class="service-card"
-                        data-panel-title="Grafica"
-                        data-panel-overline="Scopri tutti i servizi · Progettazione visiva"
-                        data-panel-color="#E2007A"
-                        data-panel-bricks='[
-                            {"label":"Logo & brand identity","img":"images/stampe_digitale/grafica.png"},
-                            {"label":"Impaginazione flyer","img":""},
-                            {"label":"Social media kit","img":""},
-                            {"label":"Menù e listini","img":""},
-                            {"label":"Presentazioni","img":""},
-                            {"label":"Cartellonistica","img":""}
-                        ]'>
-                        <img src="images/stampe_digitale/grafica.png" alt="Servizi di grafica" class="service-card-media">
-                        <div class="card-header">
-                            <span class="card-overline">PROGETTAZIONE VISIVA</span>
-                            <h3 class="card-title">Grafica</h3>
-                        </div>
-                    </div>
-
-                    <div class="service-card"
-                        data-panel-title="Stickers ed etichette"
-                        data-panel-overline="Scopri tutti i prodotti · Adesivi e packaging"
-                        data-panel-color="#FFE600"
-                        data-panel-bricks='[
-                            {"label":"Sticker su misura","img":"images/stampe_digitale/sticker.png"},
-                            {"label":"Etichette prodotto","img":""},
-                            {"label":"QR code adesivi","img":""},
-                            {"label":"Etichette trasparenti","img":""},
-                            {"label":"Packaging personalizzato","img":""},
-                            {"label":"Roll di etichette","img":""}
-                        ]'>
-                        <video class="service-card-media" muted playsinline preload="metadata"
-                            poster="images/stampe_digitale/sticker.png" data-play-on-hover>
-                            <source src="images/stampe_digitale/sticker.mp4" type="video/mp4">
-                        </video>
-                        <div class="card-header">
-                            <span class="card-overline">ADESIVI E PACKAGING</span>
-                            <h3 class="card-title">Stikers etichette</h3>
-                        </div>
-                    </div>
-
-                    <div class="service-card"
-                        data-panel-title="Soluzioni espositive"
-                        data-panel-overline="Scopri tutti i prodotti · Comunicazione visiva"
-                        data-panel-color="#00AEEF"
-                        data-panel-bricks='[
-                            {"label":"Banner e roll-up","img":"images/stampe_digitale/banner.png"},
-                            {"label":"Totem","img":""},
-                            {"label":"Espositori da banco","img":""},
-                            {"label":"Pannelli bifacciali","img":""},
-                            {"label":"Gazebo stampati","img":""},
-                            {"label":"Cornici a clic","img":""}
-                        ]'>
-                        <img src="images/stampe_digitale/banner.png" alt="Soluzioni espositive come banner" class="service-card-media">
-                        <div class="card-header">
-                            <span class="card-overline">COMUNICAZIONE VISIVA</span>
-                            <h3 class="card-title">Soluzioni espositive (es. banner)</h3>
-                        </div>
-                    </div>
-
-                    <div class="service-card" style="background: var(--apple-bg);"
-                        data-panel-title="Stampa foto"
-                        data-panel-overline="Scopri tutti i formati · Ricordi in alta qualità"
-                        data-panel-color="#E2007A"
-                        data-panel-bricks='[
-                            {"label":"Foto 10×15","img":""},
-                            {"label":"Foto 20×30","img":""},
-                            {"label":"Album fotografici","img":""},
-                            {"label":"Canvas","img":""},
-                            {"label":"Fotolibri","img":""},
-                            {"label":"Fototessere","img":""}
-                        ]'>
-                        <div class="card-header">
-                            <span class="card-overline">RICORDI IN ALTA QUALITÀ</span>
-                            <h3 class="card-title">Stampa foto</h3>
-                        </div>
-                    </div>
-
-                    <div class="service-card" style="background: var(--apple-bg);"
-                        data-panel-title="Archiviazione digitale e scansioni"
-                        data-panel-overline="Scopri tutti i servizi · Archivio smart"
-                        data-panel-color="#00AEEF"
-                        data-panel-bricks='[
-                            {"label":"Scansione documenti A4","img":""},
-                            {"label":"Scansione A3","img":""},
-                            {"label":"Digitalizzazione archivi","img":""},
-                            {"label":"OCR e PDF ricercabile","img":""},
-                            {"label":"Scansione foto antiche","img":""},
-                            {"label":"Salvataggio su USB/cloud","img":""}
-                        ]'>
-                        <div class="card-header">
-                            <span class="card-overline">ARCHIVIO SMART</span>
-                            <h3 class="card-title">Archiviazione digitale e scansioni</h3>
-                        </div>
-                    </div>
-
-                    <div class="service-card" style="background: var(--apple-bg);"
-                        data-panel-title="Timbri"
-                        data-panel-overline="Scopri tutti i modelli · Uffici e aziende"
-                        data-panel-color="#1d1d1f"
-                        data-panel-bricks='[
-                            {"label":"Timbro tondo","img":""},
-                            {"label":"Timbro rettangolare","img":""},
-                            {"label":"Autoinchiostrante","img":""},
-                            {"label":"Timbro data","img":""},
-                            {"label":"Timbro numeratore","img":""},
-                            {"label":"Custodie e inchiostri","img":""}
-                        ]'>
-                        <div class="card-header">
-                            <span class="card-overline">UFFICI E AZIENDE</span>
-                            <h3 class="card-title">Timbri</h3>
-                        </div>
-                    </div>
-
-                    <div class="service-card" style="background: var(--apple-bg);"
-                        data-panel-title="Rilegatura"
-                        data-panel-overline="Scopri tutte le opzioni · Finiture professionali"
-                        data-panel-color="#E2007A"
-                        data-panel-bricks='[
-                            {"label":"Spirale plastica","img":""},
-                            {"label":"Spirale metallica","img":""},
-                            {"label":"Brossura termica","img":""},
-                            {"label":"Copertine rigide","img":""},
-                            {"label":"Punto metallico","img":""},
-                            {"label":"Dorso telato","img":""}
-                        ]'>
-                        <div class="card-header">
-                            <span class="card-overline">FINITURE PROFESSIONALI</span>
-                            <h3 class="card-title">Rilegatura</h3>
-                        </div>
-                    </div>
-
-                    <div class="service-card" style="background: var(--apple-bg);"
-                        data-panel-title="Centro copie"
-                        data-panel-overline="Scopri tutti i servizi · Servizio rapido"
-                        data-panel-color="#00AEEF"
-                        data-panel-bricks='[
-                            {"label":"Fotocopie B/N","img":""},
-                            {"label":"Fotocopie colore","img":""},
-                            {"label":"Fronte/retro","img":""},
-                            {"label":"Stampa da USB / email","img":""},
-                            {"label":"Formato A3","img":""},
-                            {"label":"Ordini urgenti","img":""}
-                        ]'>
-                        <div class="card-header">
-                            <span class="card-overline">SERVIZIO RAPIDO</span>
-                            <h3 class="card-title">Centro copie</h3>
-                        </div>
-                    </div>
-
-                    <div class="service-card" style="background: var(--apple-bg);"
-                        data-panel-title="Plastificazione"
-                        data-panel-overline="Scopri tutti i formati · Protezione documenti"
-                        data-panel-color="#00AEEF"
-                        data-panel-bricks='[
-                            {"label":"Plastificazione A4","img":""},
-                            {"label":"Plastificazione A3","img":""},
-                            {"label":"Finitura lucida","img":""},
-                            {"label":"Finitura opaca","img":""},
-                            {"label":"Formato tessera","img":""},
-                            {"label":"Plastificazione a freddo","img":""}
-                        ]'>
-                        <div class="card-header">
-                            <span class="card-overline">PROTEZIONE DOCUMENTI</span>
-                            <h3 class="card-title">Plastificazione</h3>
-                        </div>
-                    </div>
-
                 </div>
+
+                <div class="service-card"
+                    data-panel-title="Stampe termiche – Gadget"
+                    data-panel-color="#E2007A"
+                    data-panel-bricks='[
+                        [{"label":"T-shirt","img":"images/stampe_digitale/termi.png"},{"label":"Felpe","img":""},{"label":"Tazze","img":""},{"label":"Borse in cotone","img":""},{"label":"Cuscini","img":""}],
+                        [{"label":"Portachiavi","img":""},{"label":"Magneti","img":""},{"label":"Puzzle","img":""},{"label":"Copertine phone","img":""},{"label":"Mouse pad","img":""}]
+                    ]'>
+                    <img src="images/stampe_digitale/termi.png" alt="Gadget" class="service-card-media">
+                    <div class="card-header">
+                        <span class="card-overline">PERSONALIZZAZIONE</span>
+                        <h3 class="card-title">Stampe a trasferimento termico - Gadget</h3>
+                    </div>
+                </div>
+
+                <div class="service-card"
+                    data-panel-title="Grafica"
+                    data-panel-color="#E2007A"
+                    data-panel-bricks='[
+                        [{"label":"Logo & brand identity","img":"images/stampe_digitale/grafica.png"},{"label":"Impaginazione flyer","img":""},{"label":"Social media kit","img":""},{"label":"Menù e listini","img":""},{"label":"Presentazioni","img":""}],
+                        [{"label":"Cartellonistica","img":""},{"label":"Firma email","img":""},{"label":"Packaging","img":""},{"label":"Biglietti da visita","img":""},{"label":"Brochure aziendali","img":""}]
+                    ]'>
+                    <img src="images/stampe_digitale/grafica.png" alt="Grafica" class="service-card-media">
+                    <div class="card-header">
+                        <span class="card-overline">PROGETTAZIONE VISIVA</span>
+                        <h3 class="card-title">Grafica</h3>
+                    </div>
+                </div>
+
+                <div class="service-card"
+                    data-panel-title="Stickers ed etichette"
+                    data-panel-color="#FFE600"
+                    data-panel-bricks='[
+                        [{"label":"Sticker su misura","img":"images/stampe_digitale/sticker.png"},{"label":"Etichette prodotto","img":""},{"label":"QR code adesivi","img":""},{"label":"Etichette trasparenti","img":""},{"label":"Packaging personalizzato","img":""}],
+                        [{"label":"Roll di etichette","img":""},{"label":"Sticker in resina","img":""},{"label":"Adesivi antimanomissione","img":""},{"label":"Etichette termiche","img":""},{"label":"Bollini colorati","img":""}]
+                    ]'>
+                    <video class="service-card-media" muted playsinline preload="metadata"
+                        poster="images/stampe_digitale/sticker.png" data-play-on-hover>
+                        <source src="images/stampe_digitale/sticker.mp4" type="video/mp4">
+                    </video>
+                    <div class="card-header">
+                        <span class="card-overline">ADESIVI E PACKAGING</span>
+                        <h3 class="card-title">Stikers etichette</h3>
+                    </div>
+                </div>
+
+                <div class="service-card"
+                    data-panel-title="Soluzioni espositive"
+                    data-panel-color="#00AEEF"
+                    data-panel-bricks='[
+                        [{"label":"Banner e roll-up","img":"images/stampe_digitale/banner.png"},{"label":"Totem","img":""},{"label":"Espositori da banco","img":""},{"label":"Pannelli bifacciali","img":""},{"label":"Gazebo stampati","img":""}],
+                        [{"label":"Cornici a clic","img":""},{"label":"Display portadepliant","img":""},{"label":"Cavalletti","img":""},{"label":"Pannelli LED","img":""},{"label":"Porta poster","img":""}]
+                    ]'>
+                    <img src="images/stampe_digitale/banner.png" alt="Banner" class="service-card-media">
+                    <div class="card-header">
+                        <span class="card-overline">COMUNICAZIONE VISIVA</span>
+                        <h3 class="card-title">Soluzioni espositive (es. banner)</h3>
+                    </div>
+                </div>
+
+                <div class="service-card" style="background:var(--apple-bg);"
+                    data-panel-title="Stampa foto"
+                    data-panel-color="#E2007A"
+                    data-panel-bricks='[
+                        [{"label":"Foto 10×15","img":""},{"label":"Foto 20×30","img":""},{"label":"Album fotografici","img":""},{"label":"Canvas","img":""},{"label":"Fotolibri","img":""}],
+                        [{"label":"Fototessere","img":""},{"label":"Foto su tela","img":""},{"label":"Stampa panoramica","img":""},{"label":"Stampa passaporto","img":""},{"label":"Foto su forex","img":""}]
+                    ]'>
+                    <div class="card-header">
+                        <span class="card-overline">RICORDI IN ALTA QUALITÀ</span>
+                        <h3 class="card-title">Stampa foto</h3>
+                    </div>
+                </div>
+
+                <div class="service-card" style="background:var(--apple-bg);"
+                    data-panel-title="Archiviazione digitale e scansioni"
+                    data-panel-color="#00AEEF"
+                    data-panel-bricks='[
+                        [{"label":"Scansione A4","img":""},{"label":"Scansione A3","img":""},{"label":"Digitalizzazione archivi","img":""},{"label":"OCR e PDF ricercabile","img":""},{"label":"Scansione foto antiche","img":""}],
+                        [{"label":"Salvataggio USB/cloud","img":""},{"label":"Scansione libri","img":""},{"label":"Scansione documenti legali","img":""},{"label":"Restauro digitale foto","img":""},{"label":"Scansione diapositive","img":""}]
+                    ]'>
+                    <div class="card-header">
+                        <span class="card-overline">ARCHIVIO SMART</span>
+                        <h3 class="card-title">Archiviazione digitale e scansioni</h3>
+                    </div>
+                </div>
+
+                <div class="service-card" style="background:var(--apple-bg);"
+                    data-panel-title="Timbri"
+                    data-panel-color="#1d1d1f"
+                    data-panel-bricks='[
+                        [{"label":"Timbro tondo","img":""},{"label":"Timbro rettangolare","img":""},{"label":"Autoinchiostrante","img":""},{"label":"Timbro data","img":""},{"label":"Numeratore","img":""}],
+                        [{"label":"Custodie","img":""},{"label":"Inchiostri ricambio","img":""},{"label":"Timbro firma","img":""},{"label":"Timbro grande formato","img":""},{"label":"Timbro personalizzato","img":""}]
+                    ]'>
+                    <div class="card-header">
+                        <span class="card-overline">UFFICI E AZIENDE</span>
+                        <h3 class="card-title">Timbri</h3>
+                    </div>
+                </div>
+
+                <div class="service-card" style="background:var(--apple-bg);"
+                    data-panel-title="Rilegatura"
+                    data-panel-color="#E2007A"
+                    data-panel-bricks='[
+                        [{"label":"Spirale plastica","img":""},{"label":"Spirale metallica","img":""},{"label":"Brossura termica","img":""},{"label":"Copertine rigide","img":""},{"label":"Punto metallico","img":""}],
+                        [{"label":"Dorso telato","img":""},{"label":"Rilegatura giapponese","img":""},{"label":"Copertina soft touch","img":""},{"label":"Rilegatura a nastro","img":""},{"label":"Blocchi notes","img":""}]
+                    ]'>
+                    <div class="card-header">
+                        <span class="card-overline">FINITURE PROFESSIONALI</span>
+                        <h3 class="card-title">Rilegatura</h3>
+                    </div>
+                </div>
+
+                <div class="service-card" style="background:var(--apple-bg);"
+                    data-panel-title="Centro copie"
+                    data-panel-color="#00AEEF"
+                    data-panel-bricks='[
+                        [{"label":"Fotocopie B/N","img":""},{"label":"Fotocopie colore","img":""},{"label":"Fronte/retro","img":""},{"label":"Stampa da USB","img":""},{"label":"Stampa da email","img":""}],
+                        [{"label":"Formato A3","img":""},{"label":"Ordini urgenti","img":""},{"label":"Stampa multipla","img":""},{"label":"Riduzione/ingrandimento","img":""},{"label":"Stampa su carta speciale","img":""}]
+                    ]'>
+                    <div class="card-header">
+                        <span class="card-overline">SERVIZIO RAPIDO</span>
+                        <h3 class="card-title">Centro copie</h3>
+                    </div>
+                </div>
+
+                <div class="service-card" style="background:var(--apple-bg);"
+                    data-panel-title="Plastificazione"
+                    data-panel-color="#00AEEF"
+                    data-panel-bricks='[
+                        [{"label":"Plastificazione A4","img":""},{"label":"Plastificazione A3","img":""},{"label":"Finitura lucida","img":""},{"label":"Finitura opaca","img":""},{"label":"Formato tessera","img":""}],
+                        [{"label":"Plastificazione a freddo","img":""},{"label":"Formato A5","img":""},{"label":"Plastificazione banner","img":""},{"label":"Plastificazione menù","img":""},{"label":"Anti-UV","img":""}]
+                    ]'>
+                    <div class="card-header">
+                        <span class="card-overline">PROTEZIONE DOCUMENTI</span>
+                        <h3 class="card-title">Plastificazione</h3>
+                    </div>
+                </div>
+
             </div>
-        </section>
+        </div>
+    </section>
 
-        <section class="cmyk-section" id="sec-magenta">
-            <div class="grid-limiter">
-                <div class="title-wrapper" id="wrap-magenta">
-                    <h2 class="section-title" data-target="wrap-magenta" style="--theme-color: #E2007A;">Progetto</h2>
-                </div>
-                <div style="height: 200px; background: #fafafa; border-radius: 22px; box-shadow: var(--apple-card-shadow);"></div>
+    <section class="cmyk-section" id="sec-magenta">
+        <div class="grid-limiter">
+            <div class="title-wrapper" id="wrap-magenta">
+                <h2 class="section-title" data-target="wrap-magenta" style="--theme-color:#E2007A;">Progetto</h2>
             </div>
-        </section>
+            <div style="height:200px;background:#fafafa;border-radius:22px;box-shadow:var(--apple-card-shadow);"></div>
+        </div>
+    </section>
 
-        <section class="cmyk-section where-we-are-section" id="dove-siamo">
-            <div class="grid-limiter">
-                <div class="title-wrapper" id="wrap-dove-siamo">
-                    <h2 class="section-title" data-target="wrap-dove-siamo" style="--theme-color: #FFE600;">Dove siamo</h2>
-                </div>
-                <div class="where-we-are-layout">
-                    <iframe class="maps-frame" title="Mappa NOLO Print" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        src="https://www.google.com/maps?q=NOLO+Print,+Via+Padova+49,+Milano&output=embed">
-                    </iframe>
-                    <a class="maps-link-preview"
-                        href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,3a,57.2y,290.38h,90.73t/data=!3m7!1e1!3m5!1s0WQikvG8eTPx5ZmhhjUBhw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-0.7282895215573433%26panoid%3D0WQikvG8eTPx5ZmhhjUBhw%26yaw%3D290.37757068173516!7i16384!8i8192!4m14!1m7!3m6!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!2sNOLO+Print!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?hl=it-IT&entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
-                        target="_blank" rel="noopener noreferrer" aria-label="Apri la mappa di NOLO Print su Google Maps">
-                        <img src="images/mapintro.png" alt="Mappa semplificata della zona di NOLO Print" class="maps-frame">
-                    </a>
-                </div>
-                <div class="visit-btn-wrap">
-                    <a class="visit-btn"
-                        href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z/data=!4m6!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
-                        target="_blank" rel="noopener noreferrer">
-                        Vieni a trovarci!
-                        <img class="visit-btn-icon" src="https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png" alt="Logo Google Maps">
-                    </a>
-                </div>
+    <section class="cmyk-section where-we-are-section" id="dove-siamo">
+        <div class="grid-limiter">
+            <div class="title-wrapper" id="wrap-dove-siamo">
+                <h2 class="section-title" data-target="wrap-dove-siamo" style="--theme-color:#FFE600;">Dove siamo</h2>
             </div>
-        </section>
-
-        <section class="cmyk-section" style="padding-top: 40px; padding-bottom: 20px; min-height: auto;">
-            <div class="grid-limiter">
-                <div class="title-wrapper" id="wrap-dove-siamo2" style="margin-bottom: 10px;">
-                    <h2 class="section-title" data-target="wrap-dove-siamo2" style="--theme-color: #FFE600;">Dove siamo</h2>
-                </div>
+            <div class="where-we-are-layout">
+                <iframe class="maps-frame" title="Mappa NOLO Print" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps?q=NOLO+Print,+Via+Padova+49,+Milano&output=embed">
+                </iframe>
+                <a class="maps-link-preview"
+                    href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,3a,57.2y,290.38h,90.73t/data=!3m7!1e1!3m5!1s0WQikvG8eTPx5ZmhhjUBhw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-0.7282895215573433%26panoid%3D0WQikvG8eTPx5ZmhhjUBhw%26yaw%3D290.37757068173516!7i16384!8i8192!4m14!1m7!3m6!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!2sNOLO+Print!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?hl=it-IT&entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank" rel="noopener noreferrer" aria-label="Apri la mappa di NOLO Print su Google Maps">
+                    <img src="images/mapintro.png" alt="Mappa semplificata della zona di NOLO Print" class="maps-frame">
+                </a>
             </div>
-        </section>
-
-        <footer class="footer-black">
-            <div class="grid-limiter">
-                <div class="footer-content">
-                    <p style="font-weight: 700; font-size: 1.2rem; margin-bottom: 10px;">NOLO Print Srl</p>
-                    <p>Via Padova, 49 - 20127 Milano</p>
-                    <p>Tel. 02 2828316 · Fax 02 2894562</p>
-                    <p>noloprint@gmail.com · P.IVA 11258900965</p>
-                    <p style="margin-top: 30px; font-size: 0.8rem; color: #666;">© 2024 NOLO Print Srl. Tutti i diritti riservati.</p>
-                </div>
+            <div class="visit-btn-wrap">
+                <a class="visit-btn"
+                    href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z/data=!4m6!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank" rel="noopener noreferrer">
+                    Vieni a trovarci!
+                    <img class="visit-btn-icon" src="https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png" alt="Logo Google Maps">
+                </a>
             </div>
-        </footer>
-    </div>
+        </div>
+    </section>
 
-    <script>
-    document.addEventListener("DOMContentLoaded", () => {
+    <section class="cmyk-section" style="padding-top:40px;padding-bottom:20px;min-height:auto;">
+        <div class="grid-limiter">
+            <div class="title-wrapper" id="wrap-dove-siamo2" style="margin-bottom:10px;">
+                <h2 class="section-title" data-target="wrap-dove-siamo2" style="--theme-color:#FFE600;">Dove siamo</h2>
+            </div>
+        </div>
+    </section>
 
-        /* ── HEADER / LOGO / SCROLL ── */
-        const header          = document.getElementById('main-header');
-        const logo            = document.getElementById('main-logo');
-        const titles          = document.querySelectorAll('.section-title');
-        const dockedContainer = document.getElementById('docked-titles');
-        const body            = document.body;
-        const bg              = document.querySelector('.bg-strip');
-        const footer          = document.querySelector('footer');
+    <footer class="footer-black">
+        <div class="grid-limiter">
+            <div class="footer-content">
+                <p style="font-weight:700;font-size:1.2rem;margin-bottom:10px;">NOLO Print Srl</p>
+                <p>Via Padova, 49 - 20127 Milano</p>
+                <p>Tel. 02 2828316 · Fax 02 2894562</p>
+                <p>noloprint@gmail.com · P.IVA 11258900965</p>
+                <p style="margin-top:30px;font-size:.8rem;color:#666;">© 2024 NOLO Print Srl. Tutti i diritti riservati.</p>
+            </div>
+        </div>
+    </footer>
+</div>
 
-        const startScale = 3.5, maxScroll = 300;
-        let startX = 0, startY = 0;
-        let targetYPercent = 50, currentYPercent = 50;
-        let targetOpacity  = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || 0.5;
-        let currentOpacity = targetOpacity;
-        const parallaxSpeed = 0.03, smoothing = 0.12;
-        let rafId = null;
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
-        function initPositions() {
-            logo.style.transform = 'none';
-            const rect = logo.getBoundingClientRect();
-            startX = window.innerWidth / 2 - rect.left - (rect.width * startScale / 2);
-            startY = window.innerHeight * 0.11 - rect.top;
-            update();
-            if (!rafId) rafLoop();
-        }
+    /* ─── HEADER / LOGO / SCROLL ─── */
+    const header          = document.getElementById('main-header');
+    const logo            = document.getElementById('main-logo');
+    const titles          = document.querySelectorAll('.section-title');
+    const dockedContainer = document.getElementById('docked-titles');
+    const body            = document.body;
+    const bg              = document.querySelector('.bg-strip');
+    const footerEl        = document.querySelector('footer');
 
-        function update() {
-            const scrollY = window.scrollY;
-            const ep = 1 - Math.pow(1 - Math.min(scrollY / maxScroll, 1), 3);
-            header.classList.toggle('scrolled', scrollY > 50);
-            body.classList.toggle('is-at-top', scrollY <= 50);
-            logo.style.transform = `translate(${startX*(1-ep)}px, ${startY*(1-ep)}px) scale(${startScale - (startScale-1)*ep})`;
+    const startScale = 3.5, maxScroll = 300;
+    let startX = 0, startY = 0;
+    let targetYPercent = 50, currentYPercent = 50;
+    let targetOpacity  = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || .5;
+    let currentOpacity = targetOpacity;
+    const parallaxSpeed = .03, smoothing = .12;
+    let rafId = null;
 
-            titles.forEach(t => {
-                const w = document.getElementById(t.getAttribute('data-target'));
-                if (!w) return;
-                if (w.getBoundingClientRect().top <= 90) {
-                    if (t.parentNode !== dockedContainer) dockedContainer.appendChild(t);
-                } else {
-                    if (t.parentNode !== w) w.appendChild(t);
-                }
-            });
-            Array.from(dockedContainer.children).forEach((el, i, arr) => {
-                el.style.display = i === arr.length - 1 ? 'block' : 'none';
-            });
+    function initPositions() {
+        logo.style.transform = 'none';
+        const r = logo.getBoundingClientRect();
+        startX = window.innerWidth/2 - r.left - r.width*startScale/2;
+        startY = window.innerHeight*.11 - r.top;
+        update();
+        if (!rafId) rafLoop();
+    }
 
-            targetYPercent = 50 + scrollY * parallaxSpeed;
-
-            if (bg && footer) {
-                const bR = bg.getBoundingClientRect(), fR = footer.getBoundingClientRect();
-                const base = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || 0.5;
-                targetOpacity = bR.bottom > fR.top
-                    ? base * (1 - Math.max(0, Math.min(1, (bR.bottom - fR.top) / bR.height)))
-                    : base;
-            }
-        }
-
-        function rafLoop() {
-            currentYPercent += (targetYPercent - currentYPercent) * smoothing;
-            currentOpacity  += (targetOpacity  - currentOpacity)  * smoothing;
-            if (bg) {
-                bg.style.backgroundPosition = `center ${Math.max(0, Math.min(100, currentYPercent))}%`;
-                bg.style.opacity = currentOpacity.toFixed(3);
-            }
-            rafId = requestAnimationFrame(rafLoop);
-        }
-
-        logo.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    function update() {
+        const sy = window.scrollY;
+        const ep = 1 - Math.pow(1 - Math.min(sy/maxScroll,1), 3);
+        header.classList.toggle('scrolled', sy > 50);
+        body.classList.toggle('is-at-top', sy <= 50);
+        logo.style.transform = `translate(${startX*(1-ep)}px,${startY*(1-ep)}px) scale(${startScale-(startScale-1)*ep})`;
 
         titles.forEach(t => {
-            t.addEventListener('click', () => {
-                if (t.parentNode !== dockedContainer) return;
-                t.classList.add('title-click-fade');
-                const w = document.getElementById(t.getAttribute('data-target'));
-                if (w) window.scrollTo({ top: Math.max(0, window.scrollY + w.getBoundingClientRect().top - 100), behavior: 'smooth' });
-                setTimeout(() => t.classList.remove('title-click-fade'), 700);
-            });
+            const w = document.getElementById(t.getAttribute('data-target'));
+            if (!w) return;
+            w.getBoundingClientRect().top <= 90
+                ? (t.parentNode !== dockedContainer && dockedContainer.appendChild(t))
+                : (t.parentNode !== w && w.appendChild(t));
         });
+        Array.from(dockedContainer.children).forEach((el,i,a) => el.style.display = i===a.length-1?'block':'none');
 
-        /* ✅ VIDEO HOVER FIX */
-        document.querySelectorAll('[data-play-on-hover]').forEach(v => {
-            v.addEventListener('mouseenter', () => { v.currentTime = 0; v.play().catch(() => {}); });
-            v.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
+        targetYPercent = 50 + sy*parallaxSpeed;
+        if (bg && footerEl) {
+            const bR=bg.getBoundingClientRect(), fR=footerEl.getBoundingClientRect();
+            const base = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity'))||.5;
+            targetOpacity = bR.bottom>fR.top ? base*(1-Math.max(0,Math.min(1,(bR.bottom-fR.top)/bR.height))) : base;
+        }
+    }
+
+    function rafLoop() {
+        currentYPercent += (targetYPercent-currentYPercent)*smoothing;
+        currentOpacity  += (targetOpacity -currentOpacity )*smoothing;
+        if (bg) {
+            bg.style.backgroundPosition = `center ${Math.max(0,Math.min(100,currentYPercent))}%`;
+            bg.style.opacity = currentOpacity.toFixed(3);
+        }
+        rafId = requestAnimationFrame(rafLoop);
+    }
+
+    logo.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
+    titles.forEach(t => {
+        t.addEventListener('click', () => {
+            if (t.parentNode!==dockedContainer) return;
+            t.classList.add('title-click-fade');
+            const w=document.getElementById(t.getAttribute('data-target'));
+            if (w) window.scrollTo({top:Math.max(0,window.scrollY+w.getBoundingClientRect().top-100),behavior:'smooth'});
+            setTimeout(()=>t.classList.remove('title-click-fade'),700);
         });
+    });
 
-        document.querySelectorAll('#main-nav a[href^="#"]').forEach(a => {
-            a.addEventListener('click', function(e) {
-                e.preventDefault();
-                const el = document.querySelector(this.getAttribute('href'));
-                if (el) window.scrollTo({ top: Math.max(0, window.scrollY + el.getBoundingClientRect().top - 100), behavior: 'smooth' });
-            });
+    /* ✅ VIDEO HOVER FIX */
+    document.querySelectorAll('[data-play-on-hover]').forEach(v => {
+        v.addEventListener('mouseenter', ()=>{ v.currentTime=0; v.play().catch(()=>{}); });
+        v.addEventListener('mouseleave', ()=>{ v.pause(); v.currentTime=0; });
+    });
+
+    document.querySelectorAll('#main-nav a[href^="#"]').forEach(a => {
+        a.addEventListener('click', function(e){
+            e.preventDefault();
+            const el=document.querySelector(this.getAttribute('href'));
+            if (el) window.scrollTo({top:Math.max(0,window.scrollY+el.getBoundingClientRect().top-100),behavior:'smooth'});
         });
+    });
 
-        window.addEventListener('scroll', update, { passive: true });
-        window.addEventListener('resize', initPositions);
-        window.addEventListener('load',   initPositions);
-        initPositions();
+    window.addEventListener('scroll', update, {passive:true});
+    window.addEventListener('resize', initPositions);
+    window.addEventListener('load',   initPositions);
+    initPositions();
 
-        /* ── DETAIL PANEL ── */
-        const panel       = document.getElementById('detail-panel');
-        const panelTitle  = document.getElementById('panel-title');
-        const panelOver   = document.getElementById('panel-overline');
-        const panelBricks = document.getElementById('panel-bricks');
-        const panelBar    = document.getElementById('panel-color-bar');
-        const backBtn     = document.getElementById('panel-back-btn');
-        let brickTimers   = [];
+    /* ─── DETAIL PANEL ─── */
+    const panel          = document.getElementById('detail-panel');
+    const panelBar       = document.getElementById('panel-color-bar');
+    const rowsContainer  = document.getElementById('panel-rows-container');
+    const backBtn        = document.getElementById('header-back-btn');
+    const headerPTitle   = document.getElementById('header-panel-title');
+    let brickTimers      = [];
 
-        function openPanel(card) {
-            const title  = card.dataset.panelTitle    || '';
-            const over   = card.dataset.panelOverline || '';
-            const color  = card.dataset.panelColor    || '#00AEEF';
-            const bricks = JSON.parse(card.dataset.panelBricks || '[]');
+    function buildRows(rowsData, color) {
+        rowsContainer.innerHTML = '';
+        brickTimers.forEach(clearTimeout);
+        brickTimers = [];
 
-            panelTitle.textContent    = title;
-            panelOver.textContent     = over;
-            panelBar.style.background = color;
-            panelTitle.style.color    = color;
+        let globalIdx = 0;
 
-            // Reset mattoni
-            brickTimers.forEach(clearTimeout);
-            brickTimers = [];
-            panelBricks.innerHTML = '';
+        rowsData.forEach((rowBricks, rowIdx) => {
+            const wrap = document.createElement('div');
+            wrap.className = 'brick-row-wrap';
 
-            bricks.forEach((b, i) => {
+            // Freccia sinistra
+            const arrL = document.createElement('button');
+            arrL.className = 'row-arrow arr-left';
+            arrL.setAttribute('aria-label','Scorri a sinistra');
+            arrL.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
+
+            // Freccia destra
+            const arrR = document.createElement('button');
+            arrR.className = 'row-arrow arr-right';
+            arrR.setAttribute('aria-label','Scorri a destra');
+            arrR.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
+
+            // Riga
+            const row = document.createElement('div');
+            row.className = `brick-row ${rowIdx % 2 === 0 ? 'row-odd' : 'row-even'}`;
+
+            rowBricks.forEach((b, i) => {
                 const brick = document.createElement('div');
-                brick.className = 'panel-brick';
+                brick.className = 'panel-brick' + (b.img ? '' : ' no-img');
 
                 if (b.img) {
                     const img = document.createElement('img');
@@ -750,33 +769,74 @@
                 lbl.textContent = b.label;
                 brick.appendChild(lbl);
 
-                panelBricks.appendChild(brick);
+                row.appendChild(brick);
 
-                // Stagger ingresso
-                brickTimers.push(setTimeout(() => brick.classList.add('brick-visible'), 60 + i * 65));
+                const delay = 80 + globalIdx * 55;
+                globalIdx++;
+                brickTimers.push(setTimeout(() => brick.classList.add('brick-visible'), delay));
             });
 
-            panel.classList.add('is-open');
-            header.classList.add('panel-visible');
-            body.classList.add('panel-open');
-            panel.scrollTop = 0;
-        }
+            // Scroll step = larghezza brick + gap
+            const brickW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-w')) || 280;
+            const gap    = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-gap')) || 14;
+            const step   = (brickW + gap) * 3;
 
-        function closePanel() {
-            panel.classList.remove('is-open');
-            header.classList.remove('panel-visible');
-            body.classList.remove('panel-open');
-            brickTimers.forEach(clearTimeout);
-            brickTimers = [];
-        }
+            arrL.addEventListener('click', () => row.scrollBy({left:-step, behavior:'smooth'}));
+            arrR.addEventListener('click', () => row.scrollBy({left: step, behavior:'smooth'}));
 
-        document.querySelectorAll('.service-card[data-panel-title]').forEach(card => {
-            card.addEventListener('click', () => openPanel(card));
+            wrap.appendChild(arrL);
+            wrap.appendChild(row);
+            wrap.appendChild(arrR);
+            rowsContainer.appendChild(wrap);
         });
+    }
 
-        backBtn.addEventListener('click', closePanel);
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+    function openPanel(card) {
+        const title  = card.dataset.panelTitle || '';
+        const color  = card.dataset.panelColor || '#00AEEF';
+        const rows   = JSON.parse(card.dataset.panelBricks || '[]');
+
+        panelBar.style.background   = color;
+        headerPTitle.textContent    = title;
+        headerPTitle.style.color    = color;
+
+        buildRows(rows, color);
+
+        panel.classList.add('is-open');
+        header.classList.add('panel-visible');
+        body.classList.add('panel-open');
+        panel.scrollTop = 0;
+
+        // Mostra titolo + back nel header con piccolo delay (dopo slide)
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                headerPTitle.classList.add('visible');
+                backBtn.classList.add('visible');
+                dockedContainer.style.opacity = '0';
+                dockedContainer.style.pointerEvents = 'none';
+            });
+        });
+    }
+
+    function closePanel() {
+        panel.classList.remove('is-open');
+        header.classList.remove('panel-visible');
+        body.classList.remove('panel-open');
+        headerPTitle.classList.remove('visible');
+        backBtn.classList.remove('visible');
+        dockedContainer.style.opacity = '';
+        dockedContainer.style.pointerEvents = '';
+        brickTimers.forEach(clearTimeout);
+        brickTimers = [];
+    }
+
+    document.querySelectorAll('.service-card[data-panel-title]').forEach(card => {
+        card.addEventListener('click', () => openPanel(card));
     });
-    </script>
+
+    backBtn.addEventListener('click', closePanel);
+    document.addEventListener('keydown', e => { if (e.key==='Escape') closePanel(); });
+});
+</script>
 </body>
 </html>
