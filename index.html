@@ -20,9 +20,9 @@
             --transition-apple: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             --header-height: 90px;
             --strip-opacity: 0.5;
-            --brick-w: 420px;
-            --brick-h: 240px;
-            --brick-gap: 16px;
+            --brick-w: 280px;
+            --brick-h: 170px;
+            --brick-gap: 14px;
         }
 
         *, *::before, *::after { box-sizing: border-box; }
@@ -55,9 +55,7 @@
 
         .grid-limiter { width: 50%; margin: 0 auto; position: relative; z-index: 2; }
 
-        /* ═══════════════════════════════
-           HEADER
-           ═══════════════════════════════ */
+        /* ── HEADER ── */
         #main-header {
             position: fixed; top: 0; left: 0; width: 100%;
             height: var(--header-height); z-index: 1000;
@@ -70,96 +68,51 @@
         #main-header.scrolled,
         #main-header.panel-visible {
             background: rgba(255,255,255,0.92) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
+            backdrop-filter: blur(20px) !important; -webkit-backdrop-filter: blur(20px) !important;
             border-bottom: 1px solid rgba(0,0,0,0.05) !important;
         }
-
         .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 100%;
-            pointer-events: auto;
+            display: flex; justify-content: space-between; align-items: center;
+            height: 100%; pointer-events: auto;
         }
+        .is-at-top #docked-titles { opacity: 0; }
+        .header-left { display: flex; align-items: center; }
+        #main-logo { width: 80px; height: auto; transform-origin: center left; will-change: transform; cursor: pointer; }
 
-        /* Lato sinistro: logo + back */
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            flex-shrink: 0;
-        }
-
-        #main-logo {
-            width: 80px; height: auto;
-            transform-origin: center left;
-            will-change: transform;
-            cursor: pointer;
-        }
-
-        /* Bottone indietro */
-        #header-back-btn {
-            display: flex; align-items: center; gap: 6px;
-            background: none; border: none; cursor: pointer;
-            font-family: var(--font-main); font-size: 0.8rem; font-weight: 600;
-            color: #1d1d1f;
-            opacity: 0;
-            padding: 8px 12px 8px 0;
-            text-transform: uppercase; letter-spacing: 0.5px;
-            transition: opacity .3s ease;
-            pointer-events: none;
-            flex-shrink: 0;
-        }
-        #header-back-btn.visible { opacity: 0.5; pointer-events: auto; }
-        #header-back-btn.visible:hover { opacity: 1; }
-        #header-back-btn svg { width: 15px; height: 15px; }
-
-        /* Lato destro: titolo pannello oppure sezione docked */
-        .header-right {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            flex-grow: 1;
-            overflow: hidden;
-        }
-
-        /* Titolo pannello — sempre ciano, allineato a destra */
+        /* Titolo nel header quando pannello è aperto */
         #header-panel-title {
             font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;
-            margin: 0;
-            color: #00AEEF !important;
-            opacity: 0;
-            transform: translateY(6px);
+            margin: 0; opacity: 0; transform: translateY(6px);
             transition: opacity .35s ease, transform .35s ease;
             pointer-events: none;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
-            text-align: right;
-            display: block;
-            width: 100%;
         }
         #header-panel-title.visible {
             opacity: 1; transform: translateY(0);
         }
 
-        /* Sezioni docked (visibile solo quando pannello chiuso) */
-        #docked-titles {
-            display: flex; justify-content: flex-end; align-items: center;
-            transition: opacity .4s ease;
-            flex-shrink: 0;
+        /* Bottone indietro nell'header */
+        #header-back-btn {
+            display: flex; align-items: center; gap: 6px;
+            background: none; border: none; cursor: pointer;
+            font-family: var(--font-main); font-size: 0.8rem; font-weight: 600;
+            color: #1d1d1f; opacity: 0; padding: 8px 12px 8px 0;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            transition: opacity .3s ease, color .2s ease;
+            pointer-events: none; flex-shrink: 0;
         }
+        #header-back-btn.visible { opacity: 0.5; pointer-events: auto; }
+        #header-back-btn.visible:hover { opacity: 1; }
+        #header-back-btn svg { width: 15px; height: 15px; }
+
+        #docked-titles { display: flex; justify-content: flex-end; align-items: center; flex-grow: 1; transition: opacity .4s ease; }
         #docked-titles .section-title {
             font-size: 1.4rem !important; font-weight: 700; margin: 0;
             color: var(--theme-color) !important; letter-spacing: -0.5px; cursor: pointer;
             transition: opacity .6s ease, transform .6s ease;
         }
         #docked-titles .section-title.title-click-fade { opacity: 0; transform: translateY(-10px); }
-        .is-at-top #docked-titles { opacity: 0; }
 
-        /* Nav hero */
+        /* Nav */
         #main-nav {
             display: flex; gap: 14px; align-items: center;
             justify-content: center; flex-wrap: wrap; margin-top: 14px;
@@ -192,10 +145,7 @@
             background:linear-gradient(to bottom,rgba(255,255,255,0) 45%,rgba(255,255,255,.95) 100%);
             z-index:1;
         }
-        .hero-full-width .grid-limiter {
-            position:relative; z-index:2;
-            display:flex; flex-direction:column; align-items:center;
-        }
+        .hero-full-width .grid-limiter { position:relative; z-index:2; display:flex; flex-direction:column; align-items:center; }
         .hero-sottologo { margin-top:20vh; max-width:100%; height:auto; max-height:250px; z-index:2; }
         .hero-nav-wrapper { margin-top:10px; backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px); }
 
@@ -212,7 +162,7 @@
             box-shadow:var(--apple-card-shadow);
         }
         .service-card:hover{transform:translateY(-5px) scale(1.01);box-shadow:var(--apple-card-hover-shadow);}
-        .service-card-media{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+        .service-card-media{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;transition:var(--transition-apple);z-index:0;}
         .service-card::after{
             content:'';position:absolute;top:0;left:0;width:100%;height:45%;
             background:linear-gradient(to bottom,rgba(255,255,255,.92) 0%,rgba(255,255,255,0) 100%);z-index:1;
@@ -237,64 +187,44 @@
         .visit-btn:hover{background-color:#FFE600;padding-right:30px;transform:scale(1.05);box-shadow:0 10px 24px rgba(0,0,0,.16);}
         .visit-btn:hover .visit-btn-icon{width:20px;opacity:1;transform:translateX(0);margin-left:8px;}
 
+        /* FOOTER */
         .footer-black{background:#000;color:#f5f5f7;padding:70px 0;text-align:center;z-index:3;position:relative;}
         .footer-content{line-height:1.8;font-size:.9rem;opacity:.8;}
 
-        /* ═══════════════════════════════════════════
+        /* ═══════════════════════════════════════
            DETAIL PANEL
-           ═══════════════════════════════════════════ */
+           ═══════════════════════════════════════ */
         #detail-panel {
             position: fixed;
-            top: var(--header-height);
-            left: 0;
-            width: 100%;
-            height: calc(100vh - var(--header-height));
-            background: #fff;
-            z-index: 900;
-            /* SCROLLABILE verticalmente */
-            overflow-y: auto;
-            overflow-x: hidden;
+            top: var(--header-height); left: 0;
+            width: 100%; height: calc(100vh - var(--header-height));
+            background: #fff; z-index: 900;
+            overflow-y: auto; overflow-x: hidden;
             transform: translateX(100%);
             transition: transform .55s cubic-bezier(.77,0,.18,1);
             will-change: transform;
         }
         #detail-panel.is-open { transform: translateX(0); }
 
-        /* Striscia colore */
+        /* Striscia colore cima pannello */
         .panel-color-bar {
             height: 4px; width: 100%;
-            background: var(--panel-color, #00AEEF);
+            background: var(--panel-color,#00AEEF);
             position: sticky; top: 0; z-index: 10;
         }
 
         .panel-inner {
-            padding: 56px 0 100px;
+            padding: 44px 0 80px;
         }
 
-        /* ── Descrizione centrata ── */
-        .panel-description-wrap {
-            width: 52%;
-            margin: 0 auto 56px;
-            text-align: center;
-        }
-        .panel-description {
-            font-size: .95rem;
-            line-height: 1.8;
-            color: #3a3a3c;
-            font-weight: 400;
-        }
-
-        /* ── Righe sfalsate "mattoni" ── */
+        /* ── Righe sfalsate stile "mattoni" ── */
         .panel-rows-wrap {
             display: flex;
             flex-direction: column;
             gap: 0;
         }
 
-        .brick-row-wrap {
-            position: relative;
-        }
-
+        /* Ogni riga è uno slider orizzontale */
         .brick-row {
             display: flex;
             align-items: flex-start;
@@ -302,25 +232,30 @@
             overflow-y: visible;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            padding: calc(var(--brick-gap) * .6) 0;
+            scrollbar-width: none;          /* Firefox */
+            padding: calc(var(--brick-gap) / 2) 0;
+            /* sfalsamento alternato: riga pari inizia con mezzo mattone di offset */
             gap: var(--brick-gap);
         }
         .brick-row::-webkit-scrollbar { display: none; }
 
-        /* Sfalsamento: riga pari parte avanzata di metà mattone */
-        .brick-row.row-odd  { }
-        .brick-row.row-even { }
+        /* Offset sfalsato per la riga pari */
+        .brick-row.row-even {
+            padding-left: calc(var(--brick-w) * 0.5 + var(--brick-gap));
+        }
+        .brick-row.row-odd {
+            padding-left: 0;
+        }
 
-        /* Padding laterale = margini pagina (25vw per lato su desktop 50% width) */
+        /* Padding laterale uguale al grid-limiter (50% del viewport → 25% per lato) */
         .brick-row::before,
         .brick-row::after {
             content: '';
             flex-shrink: 0;
-            width: 25vw;
+            width: calc((100vw - 50%) / 2);   /* margine sinistro/destro = come grid-limiter */
         }
         .brick-row.row-even::before {
-            width: calc(25vw + var(--brick-w) * 0.5 + var(--brick-gap));
+            width: calc((100vw - 50%) / 2 + var(--brick-w) * 0.5 + var(--brick-gap));
         }
 
         /* Singolo mattone */
@@ -329,93 +264,83 @@
             width: var(--brick-w);
             height: var(--brick-h);
             background: var(--apple-bg);
-            border-radius: 18px;
+            border-radius: 16px;
             overflow: hidden;
             position: relative;
             box-shadow: var(--apple-card-shadow);
             cursor: pointer;
             opacity: 0;
-            transform: translateY(20px) scale(.98);
-            transition: opacity .42s ease, transform .42s ease, box-shadow .28s ease;
+            transform: translateY(22px) scale(.97);
+            transition: opacity .4s ease, transform .4s ease, box-shadow .3s ease;
         }
         .panel-brick.brick-visible {
             opacity: 1; transform: translateY(0) scale(1);
         }
         .panel-brick:hover {
             box-shadow: var(--apple-card-hover-shadow);
-            transform: translateY(-4px) scale(1.02) !important;
+            transform: translateY(-3px) scale(1.02) !important;
         }
+
         .panel-brick img {
             width: 100%; height: 100%; object-fit: cover; display: block;
         }
         .panel-brick-label {
             position: absolute; bottom: 0; left: 0; right: 0;
-            padding: 40px 18px 16px;
-            background: linear-gradient(to top, rgba(0,0,0,.68) 0%, rgba(0,0,0,0) 100%);
-            color: #fff;
-            font-size: .84rem;
-            font-weight: 700;
-            letter-spacing: .1px;
+            padding: 28px 14px 12px;
+            background: linear-gradient(to top,rgba(0,0,0,.65) 0%,rgba(0,0,0,0) 100%);
+            color: #fff; font-size: .76rem; font-weight: 700; letter-spacing: .15px;
             line-height: 1.3;
-            text-align: right;
         }
+        /* Mattone senza immagine: label scura */
         .panel-brick.no-img .panel-brick-label {
             background: none;
             color: #1d1d1f;
-            font-size: .84rem;
-            font-weight: 700;
-            inset: 0;
-            display: flex; align-items: flex-end; justify-content: flex-end;
-            padding: 18px;
-            text-align: right;
+            font-size: .82rem;
+            top: 0; display: flex; align-items: flex-end;
+            padding: 14px;
         }
 
         /* Frecce navigazione riga */
+        .brick-row-wrap {
+            position: relative;
+        }
         .row-arrow {
             position: absolute; top: 50%; transform: translateY(-50%);
-            width: 42px; height: 42px; border-radius: 50%;
-            background: rgba(255,255,255,.94);
-            backdrop-filter: blur(8px);
+            width: 38px; height: 38px; border-radius: 50%;
+            background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
             border: 1px solid rgba(0,0,0,.08);
-            box-shadow: 0 4px 16px rgba(0,0,0,.14);
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 14px rgba(0,0,0,.12);
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
             z-index: 20;
-            opacity: 0;
-            transition: opacity .22s ease, transform .22s ease;
+            opacity: 0; transition: opacity .25s ease, transform .25s ease;
             pointer-events: none;
         }
         .brick-row-wrap:hover .row-arrow { opacity: 1; pointer-events: auto; }
-        .row-arrow:hover { transform: translateY(-50%) scale(1.1); }
-        .row-arrow svg { width: 17px; height: 17px; }
-        .row-arrow.arr-left  { left:  18px; }
-        .row-arrow.arr-right { right: 18px; }
+        .row-arrow:hover { transform: translateY(-50%) scale(1.08); }
+        .row-arrow svg { width: 16px; height: 16px; }
+        .row-arrow.arr-left  { left:  calc((100vw - 50%) / 2 - 50px); }
+        .row-arrow.arr-right { right: calc((100vw - 50%) / 2 - 50px); }
 
-        /* ═══════════════════════════════
+        /* ═══════════════════════════════════════
            RESPONSIVE
-           ═══════════════════════════════ */
-        @media (max-width:1400px) {
-            :root { --brick-w: 360px; --brick-h: 210px; }
-        }
-        @media (max-width:1200px) {
+           ═══════════════════════════════════════ */
+        @media (max-width:1200px){
             .grid-limiter{width:90%;}
             .services-grid{grid-template-columns:repeat(2,1fr);}
             .where-we-are-layout{grid-template-columns:1fr;}
-            :root { --brick-w: 300px; --brick-h: 175px; }
-            .brick-row::before,.brick-row::after { width: 5vw; }
-            .brick-row.row-even::before { width: calc(5vw + var(--brick-w)*.5 + var(--brick-gap)); }
-            .row-arrow.arr-left  { left: 8px; }
+            :root{ --brick-w:240px; --brick-h:148px; }
+            .brick-row::before, .brick-row::after { width: 5vw; }
+            .brick-row.row-even::before { width: calc(5vw + var(--brick-w) * 0.5 + var(--brick-gap)); }
+            .row-arrow.arr-left  { left:  8px; }
             .row-arrow.arr-right { right: 8px; }
-            .panel-description-wrap { width: 90%; }
         }
-        @media (max-width:768px) {
+        @media (max-width:768px){
             .services-grid{grid-template-columns:1fr;}
             .hero-sottologo{margin-top:17vh;max-height:180px;}
             #main-nav{gap:8px;}
             #main-nav a{font-size:.75rem;padding:8px 12px;}
             .maps-frame{min-height:320px;}
-            :root { --brick-w: 240px; --brick-h: 145px; }
-            #header-panel-title { font-size: 1.1rem; }
+            :root{ --brick-w:200px; --brick-h:124px; }
         }
     </style>
 </head>
@@ -423,51 +348,33 @@
 
 <div class="bg-strip" aria-hidden="true"></div>
 
-<!-- ═══════════════════════════════
-     HEADER
-     ═══════════════════════════════ -->
+<!-- ── HEADER ── -->
 <header id="main-header">
     <div class="header-content grid-limiter">
-
-        <!-- Sinistra: logo + back -->
-        <div class="header-left">
+        <div class="header-left" style="display:flex;align-items:center;gap:4px;">
             <img src="images/logo.png" alt="Logo" id="main-logo">
+            <!-- back btn + titolo pannello, visibili solo quando pannello aperto -->
             <button id="header-back-btn" aria-label="Torna indietro">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                     stroke-linecap="round" stroke-linejoin="round">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
                 Indietro
             </button>
-        </div>
-
-        <!-- Destra: titolo pannello (pannello aperto) oppure sezione docked (normale) -->
-        <div class="header-right">
             <h2 id="header-panel-title"></h2>
-            <div id="docked-titles"></div>
         </div>
-
+        <div id="docked-titles"></div>
     </div>
 </header>
 
-<!-- ═══════════════════════════════
-     DETAIL PANEL
-     ═══════════════════════════════ -->
+<!-- ── DETAIL PANEL ── -->
 <div id="detail-panel" role="dialog" aria-modal="true" aria-label="Dettaglio servizio">
     <div class="panel-color-bar" id="panel-color-bar"></div>
     <div class="panel-inner">
-        <!-- Descrizione centrata -->
-        <div class="panel-description-wrap">
-            <p class="panel-description" id="panel-description"></p>
-        </div>
-        <!-- Righe mattoni -->
         <div id="panel-rows-container" class="panel-rows-wrap"></div>
     </div>
 </div>
 
-<!-- ═══════════════════════════════
-     MAIN CONTENT
-     ═══════════════════════════════ -->
+<!-- ── MAIN CONTENT ── -->
 <div id="main-content">
 
     <section class="hero-full-width">
@@ -496,7 +403,6 @@
                 <div class="service-card"
                     data-panel-title="Stampa digitale piccolo formato"
                     data-panel-color="#00AEEF"
-                    data-panel-desc="Con la stampa digitale a piccolo formato puoi trasformare le tue idee in prodotti concreti come biglietti da visita, volantini o menu, scegliendo tra la praticità dell'A4 per i tuoi documenti ufficiali o l'impatto visivo dell'A3 per locandine e pieghevoli. Se hai bisogno di pochi pezzi o di personalizzare ogni singola copia con nomi e grafiche differenti, questa tecnologia ti garantisce una precisione cromatica impeccabile su ogni supporto, dai cartoncini pregiati alle etichette adesive, eliminando i costi fissi delle lastre tradizionali. È un'opportunità versatile per la tua comunicazione e un modo efficiente per ottenere risultati professionali in tempi record, valorizzando ogni dettaglio del tuo brand o del tuo progetto creativo."
                     data-panel-bricks='[
                         [{"label":"Biglietti da visita","img":"images/stampe_digitale/sdig1.png"},{"label":"Volantini A4 / A5","img":""},{"label":"Brochure","img":""},{"label":"Locandine","img":""},{"label":"Manifesti 50×70","img":""}],
                         [{"label":"Cartoline","img":""},{"label":"Flyer fronte/retro","img":""},{"label":"Menù","img":""},{"label":"Listini prezzi","img":""},{"label":"Inviti","img":""}]
@@ -511,7 +417,6 @@
                 <div class="service-card"
                     data-panel-title="Stampa digitale grande formato"
                     data-panel-color="#00AEEF"
-                    data-panel-desc="La stampa digitale a grande formato ti permette di dare visibilità al tuo brand con striscioni, poster e pannelli di grande impatto. Ideale per eventi, fiere, vetrine e comunicazioni outdoor."
                     data-panel-bricks='[
                         [{"label":"Striscioni","img":"images/stampe_digitale/bdig1.png"},{"label":"Poster giganti","img":""},{"label":"Roll-up","img":""},{"label":"Tele canvas","img":""},{"label":"Forex e pannelli","img":""}],
                         [{"label":"Adesivi da pavimento","img":""},{"label":"Stampa su tessuto","img":""},{"label":"Backlight","img":""},{"label":"Vetrofanie","img":""},{"label":"Segnaletica","img":""}]
@@ -526,7 +431,6 @@
                 <div class="service-card"
                     data-panel-title="Stampe termiche – Gadget"
                     data-panel-color="#E2007A"
-                    data-panel-desc="Personalizza t-shirt, felpe, tazze e gadget con il tuo logo o design. La stampa a trasferimento termico garantisce colori vividi e duraturi su ogni tipo di supporto tessile e rigido."
                     data-panel-bricks='[
                         [{"label":"T-shirt","img":"images/stampe_digitale/termi.png"},{"label":"Felpe","img":""},{"label":"Tazze","img":""},{"label":"Borse in cotone","img":""},{"label":"Cuscini","img":""}],
                         [{"label":"Portachiavi","img":""},{"label":"Magneti","img":""},{"label":"Puzzle","img":""},{"label":"Copertine phone","img":""},{"label":"Mouse pad","img":""}]
@@ -541,7 +445,6 @@
                 <div class="service-card"
                     data-panel-title="Grafica"
                     data-panel-color="#E2007A"
-                    data-panel-desc="Il nostro team grafico trasforma le tue idee in identità visive coerenti e professionali. Dal logo alla brochure, dal menù ai social kit, ogni progetto viene curato nei minimi dettagli."
                     data-panel-bricks='[
                         [{"label":"Logo & brand identity","img":"images/stampe_digitale/grafica.png"},{"label":"Impaginazione flyer","img":""},{"label":"Social media kit","img":""},{"label":"Menù e listini","img":""},{"label":"Presentazioni","img":""}],
                         [{"label":"Cartellonistica","img":""},{"label":"Firma email","img":""},{"label":"Packaging","img":""},{"label":"Biglietti da visita","img":""},{"label":"Brochure aziendali","img":""}]
@@ -556,7 +459,6 @@
                 <div class="service-card"
                     data-panel-title="Stickers ed etichette"
                     data-panel-color="#FFE600"
-                    data-panel-desc="Sticker e etichette su misura per ogni esigenza: dal packaging aziendale alle etichette prodotto, dai QR code agli adesivi decorativi. Alta qualità su materiali opachi, lucidi e trasparenti."
                     data-panel-bricks='[
                         [{"label":"Sticker su misura","img":"images/stampe_digitale/sticker.png"},{"label":"Etichette prodotto","img":""},{"label":"QR code adesivi","img":""},{"label":"Etichette trasparenti","img":""},{"label":"Packaging personalizzato","img":""}],
                         [{"label":"Roll di etichette","img":""},{"label":"Sticker in resina","img":""},{"label":"Adesivi antimanomissione","img":""},{"label":"Etichette termiche","img":""},{"label":"Bollini colorati","img":""}]
@@ -574,7 +476,6 @@
                 <div class="service-card"
                     data-panel-title="Soluzioni espositive"
                     data-panel-color="#00AEEF"
-                    data-panel-desc="Banner, totem, roll-up e sistemi espositivi per fiere, eventi e punti vendita. Soluzioni professionali che rendono il tuo brand visibile e riconoscibile ovunque."
                     data-panel-bricks='[
                         [{"label":"Banner e roll-up","img":"images/stampe_digitale/banner.png"},{"label":"Totem","img":""},{"label":"Espositori da banco","img":""},{"label":"Pannelli bifacciali","img":""},{"label":"Gazebo stampati","img":""}],
                         [{"label":"Cornici a clic","img":""},{"label":"Display portadepliant","img":""},{"label":"Cavalletti","img":""},{"label":"Pannelli LED","img":""},{"label":"Porta poster","img":""}]
@@ -589,7 +490,6 @@
                 <div class="service-card" style="background:var(--apple-bg);"
                     data-panel-title="Stampa foto"
                     data-panel-color="#E2007A"
-                    data-panel-desc="Stampa i tuoi ricordi su carta fotografica di alta qualità, canvas, tela o fotolibri. Ogni immagine viene riprodotta con colori fedeli e nitidezza impeccabile."
                     data-panel-bricks='[
                         [{"label":"Foto 10×15","img":""},{"label":"Foto 20×30","img":""},{"label":"Album fotografici","img":""},{"label":"Canvas","img":""},{"label":"Fotolibri","img":""}],
                         [{"label":"Fototessere","img":""},{"label":"Foto su tela","img":""},{"label":"Stampa panoramica","img":""},{"label":"Stampa passaporto","img":""},{"label":"Foto su forex","img":""}]
@@ -603,7 +503,6 @@
                 <div class="service-card" style="background:var(--apple-bg);"
                     data-panel-title="Archiviazione digitale e scansioni"
                     data-panel-color="#00AEEF"
-                    data-panel-desc="Trasforma i tuoi documenti cartacei in archivi digitali sicuri e ricercabili. Scansioni in alta risoluzione, OCR e salvataggio su USB o cloud per privati e aziende."
                     data-panel-bricks='[
                         [{"label":"Scansione A4","img":""},{"label":"Scansione A3","img":""},{"label":"Digitalizzazione archivi","img":""},{"label":"OCR e PDF ricercabile","img":""},{"label":"Scansione foto antiche","img":""}],
                         [{"label":"Salvataggio USB/cloud","img":""},{"label":"Scansione libri","img":""},{"label":"Scansione documenti legali","img":""},{"label":"Restauro digitale foto","img":""},{"label":"Scansione diapositive","img":""}]
@@ -617,7 +516,6 @@
                 <div class="service-card" style="background:var(--apple-bg);"
                     data-panel-title="Timbri"
                     data-panel-color="#1d1d1f"
-                    data-panel-desc="Timbri personalizzati per uffici, studi professionali e aziende. Realizziamo timbri tondi, rettangolari e autoinchiostranti con il tuo logo o testo in tempi rapidi."
                     data-panel-bricks='[
                         [{"label":"Timbro tondo","img":""},{"label":"Timbro rettangolare","img":""},{"label":"Autoinchiostrante","img":""},{"label":"Timbro data","img":""},{"label":"Numeratore","img":""}],
                         [{"label":"Custodie","img":""},{"label":"Inchiostri ricambio","img":""},{"label":"Timbro firma","img":""},{"label":"Timbro grande formato","img":""},{"label":"Timbro personalizzato","img":""}]
@@ -631,7 +529,6 @@
                 <div class="service-card" style="background:var(--apple-bg);"
                     data-panel-title="Rilegatura"
                     data-panel-color="#E2007A"
-                    data-panel-desc="Rilegatura professionale per tesi, presentazioni, libri e documenti aziendali. Disponibile in spirale, brossura termica, punto metallico e con copertine rigide o flessibili."
                     data-panel-bricks='[
                         [{"label":"Spirale plastica","img":""},{"label":"Spirale metallica","img":""},{"label":"Brossura termica","img":""},{"label":"Copertine rigide","img":""},{"label":"Punto metallico","img":""}],
                         [{"label":"Dorso telato","img":""},{"label":"Rilegatura giapponese","img":""},{"label":"Copertina soft touch","img":""},{"label":"Rilegatura a nastro","img":""},{"label":"Blocchi notes","img":""}]
@@ -645,7 +542,6 @@
                 <div class="service-card" style="background:var(--apple-bg);"
                     data-panel-title="Centro copie"
                     data-panel-color="#00AEEF"
-                    data-panel-desc="Servizio di fotocopie e stampe rapido ed economico. Bianco e nero o colore, A4 o A3, fronte/retro, stampa da USB o email: tutto quello di cui hai bisogno in pochi minuti."
                     data-panel-bricks='[
                         [{"label":"Fotocopie B/N","img":""},{"label":"Fotocopie colore","img":""},{"label":"Fronte/retro","img":""},{"label":"Stampa da USB","img":""},{"label":"Stampa da email","img":""}],
                         [{"label":"Formato A3","img":""},{"label":"Ordini urgenti","img":""},{"label":"Stampa multipla","img":""},{"label":"Riduzione/ingrandimento","img":""},{"label":"Stampa su carta speciale","img":""}]
@@ -659,7 +555,6 @@
                 <div class="service-card" style="background:var(--apple-bg);"
                     data-panel-title="Plastificazione"
                     data-panel-color="#00AEEF"
-                    data-panel-desc="Plastificazione professionale per proteggere e valorizzare i tuoi documenti, menù, cartelli e materiali promozionali. Disponibile in finitura lucida o opaca, dal formato tessera all'A3."
                     data-panel-bricks='[
                         [{"label":"Plastificazione A4","img":""},{"label":"Plastificazione A3","img":""},{"label":"Finitura lucida","img":""},{"label":"Finitura opaca","img":""},{"label":"Formato tessera","img":""}],
                         [{"label":"Plastificazione a freddo","img":""},{"label":"Formato A5","img":""},{"label":"Plastificazione banner","img":""},{"label":"Plastificazione menù","img":""},{"label":"Anti-UV","img":""}]
@@ -694,19 +589,17 @@
                     src="https://www.google.com/maps?q=NOLO+Print,+Via+Padova+49,+Milano&output=embed">
                 </iframe>
                 <a class="maps-link-preview"
-                    href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,3a,57.2y,290.38h,90.73t"
-                    target="_blank" rel="noopener noreferrer">
-                    <img src="images/mapintro.png" alt="Mappa NOLO Print" class="maps-frame">
+                    href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,3a,57.2y,290.38h,90.73t/data=!3m7!1e1!3m5!1s0WQikvG8eTPx5ZmhhjUBhw!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D-0.7282895215573433%26panoid%3D0WQikvG8eTPx5ZmhhjUBhw%26yaw%3D290.37757068173516!7i16384!8i8192!4m14!1m7!3m6!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!2sNOLO+Print!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?hl=it-IT&entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank" rel="noopener noreferrer" aria-label="Apri la mappa di NOLO Print su Google Maps">
+                    <img src="images/mapintro.png" alt="Mappa semplificata della zona di NOLO Print" class="maps-frame">
                 </a>
             </div>
             <div class="visit-btn-wrap">
                 <a class="visit-btn"
-                    href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z"
+                    href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z/data=!4m6!3m5!1s0x4786c741ce20ad8f:0xaa9aae65b0e3cd59!8m2!3d45.491518!4d9.2235539!16s%2Fg%2F11j_pvx1gc?entry=ttu&g_ep=EgoyMDI2MDMwMi4wIKXMDSoASAFQAw%3D%3D"
                     target="_blank" rel="noopener noreferrer">
                     Vieni a trovarci!
-                    <img class="visit-btn-icon"
-                        src="https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png"
-                        alt="Google Maps">
+                    <img class="visit-btn-icon" src="https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png" alt="Logo Google Maps">
                 </a>
             </div>
         </div>
@@ -726,14 +619,14 @@
                 <p style="font-weight:700;font-size:1.2rem;margin-bottom:10px;">NOLO Print Srl</p>
                 <p>Via Padova, 49 - 20127 Milano</p>
                 <p>Tel. 02 2828316 · Fax 02 2894562</p>
-                <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5f313033302f2d36312b1f38323e3633713c3032">[email&#160;protected]</a> · P.IVA 11258900965</p>
+                <p>noloprint@gmail.com · P.IVA 11258900965</p>
                 <p style="margin-top:30px;font-size:.8rem;color:#666;">© 2024 NOLO Print Srl. Tutti i diritti riservati.</p>
             </div>
         </div>
     </footer>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 document.addEventListener("DOMContentLoaded", () => {
 
     /* ─── HEADER / LOGO / SCROLL ─── */
@@ -764,7 +657,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function update() {
         const sy = window.scrollY;
-        const ep = 1 - Math.pow(1 - Math.min(sy/maxScroll, 1), 3);
+        const ep = 1 - Math.pow(1 - Math.min(sy/maxScroll,1), 3);
         header.classList.toggle('scrolled', sy > 50);
         body.classList.toggle('is-at-top', sy <= 50);
         logo.style.transform = `translate(${startX*(1-ep)}px,${startY*(1-ep)}px) scale(${startScale-(startScale-1)*ep})`;
@@ -776,23 +669,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 ? (t.parentNode !== dockedContainer && dockedContainer.appendChild(t))
                 : (t.parentNode !== w && w.appendChild(t));
         });
-        Array.from(dockedContainer.children).forEach((el,i,a) => {
-            el.style.display = i === a.length-1 ? 'block' : 'none';
-        });
+        Array.from(dockedContainer.children).forEach((el,i,a) => el.style.display = i===a.length-1?'block':'none');
 
-        targetYPercent = 50 + sy * parallaxSpeed;
+        targetYPercent = 50 + sy*parallaxSpeed;
         if (bg && footerEl) {
-            const bR = bg.getBoundingClientRect(), fR = footerEl.getBoundingClientRect();
-            const base = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || .5;
-            targetOpacity = bR.bottom > fR.top
-                ? base * (1 - Math.max(0, Math.min(1, (bR.bottom-fR.top)/bR.height)))
-                : base;
+            const bR=bg.getBoundingClientRect(), fR=footerEl.getBoundingClientRect();
+            const base = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity'))||.5;
+            targetOpacity = bR.bottom>fR.top ? base*(1-Math.max(0,Math.min(1,(bR.bottom-fR.top)/bR.height))) : base;
         }
     }
 
     function rafLoop() {
-        currentYPercent += (targetYPercent - currentYPercent) * smoothing;
-        currentOpacity  += (targetOpacity  - currentOpacity)  * smoothing;
+        currentYPercent += (targetYPercent-currentYPercent)*smoothing;
+        currentOpacity  += (targetOpacity -currentOpacity )*smoothing;
         if (bg) {
             bg.style.backgroundPosition = `center ${Math.max(0,Math.min(100,currentYPercent))}%`;
             bg.style.opacity = currentOpacity.toFixed(3);
@@ -800,29 +689,28 @@ document.addEventListener("DOMContentLoaded", () => {
         rafId = requestAnimationFrame(rafLoop);
     }
 
-    logo.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
-
+    logo.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
     titles.forEach(t => {
         t.addEventListener('click', () => {
-            if (t.parentNode !== dockedContainer) return;
+            if (t.parentNode!==dockedContainer) return;
             t.classList.add('title-click-fade');
-            const w = document.getElementById(t.getAttribute('data-target'));
-            if (w) window.scrollTo({top: Math.max(0, window.scrollY + w.getBoundingClientRect().top - 100), behavior:'smooth'});
-            setTimeout(() => t.classList.remove('title-click-fade'), 700);
+            const w=document.getElementById(t.getAttribute('data-target'));
+            if (w) window.scrollTo({top:Math.max(0,window.scrollY+w.getBoundingClientRect().top-100),behavior:'smooth'});
+            setTimeout(()=>t.classList.remove('title-click-fade'),700);
         });
     });
 
     /* ✅ VIDEO HOVER FIX */
     document.querySelectorAll('[data-play-on-hover]').forEach(v => {
-        v.addEventListener('mouseenter', () => { v.currentTime = 0; v.play().catch(()=>{}); });
-        v.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
+        v.addEventListener('mouseenter', ()=>{ v.currentTime=0; v.play().catch(()=>{}); });
+        v.addEventListener('mouseleave', ()=>{ v.pause(); v.currentTime=0; });
     });
 
     document.querySelectorAll('#main-nav a[href^="#"]').forEach(a => {
-        a.addEventListener('click', function(e) {
+        a.addEventListener('click', function(e){
             e.preventDefault();
-            const el = document.querySelector(this.getAttribute('href'));
-            if (el) window.scrollTo({top: Math.max(0, window.scrollY + el.getBoundingClientRect().top - 100), behavior:'smooth'});
+            const el=document.querySelector(this.getAttribute('href'));
+            if (el) window.scrollTo({top:Math.max(0,window.scrollY+el.getBoundingClientRect().top-100),behavior:'smooth'});
         });
     });
 
@@ -832,15 +720,14 @@ document.addEventListener("DOMContentLoaded", () => {
     initPositions();
 
     /* ─── DETAIL PANEL ─── */
-    const panel         = document.getElementById('detail-panel');
-    const panelBar      = document.getElementById('panel-color-bar');
-    const panelDesc     = document.getElementById('panel-description');
-    const rowsContainer = document.getElementById('panel-rows-container');
-    const backBtn       = document.getElementById('header-back-btn');
-    const headerTitle   = document.getElementById('header-panel-title');
-    let brickTimers     = [];
+    const panel          = document.getElementById('detail-panel');
+    const panelBar       = document.getElementById('panel-color-bar');
+    const rowsContainer  = document.getElementById('panel-rows-container');
+    const backBtn        = document.getElementById('header-back-btn');
+    const headerPTitle   = document.getElementById('header-panel-title');
+    let brickTimers      = [];
 
-    function buildRows(rowsData) {
+    function buildRows(rowsData, color) {
         rowsContainer.innerHTML = '';
         brickTimers.forEach(clearTimeout);
         brickTimers = [];
@@ -851,20 +738,23 @@ document.addEventListener("DOMContentLoaded", () => {
             const wrap = document.createElement('div');
             wrap.className = 'brick-row-wrap';
 
+            // Freccia sinistra
             const arrL = document.createElement('button');
             arrL.className = 'row-arrow arr-left';
             arrL.setAttribute('aria-label','Scorri a sinistra');
             arrL.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
 
+            // Freccia destra
             const arrR = document.createElement('button');
             arrR.className = 'row-arrow arr-right';
             arrR.setAttribute('aria-label','Scorri a destra');
             arrR.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
 
+            // Riga
             const row = document.createElement('div');
             row.className = `brick-row ${rowIdx % 2 === 0 ? 'row-odd' : 'row-even'}`;
 
-            rowBricks.forEach((b) => {
+            rowBricks.forEach((b, i) => {
                 const brick = document.createElement('div');
                 brick.className = 'panel-brick' + (b.img ? '' : ' no-img');
 
@@ -881,18 +771,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 row.appendChild(brick);
 
-                const delay = 60 + globalIdx * 50;
+                const delay = 80 + globalIdx * 55;
                 globalIdx++;
                 brickTimers.push(setTimeout(() => brick.classList.add('brick-visible'), delay));
             });
 
-            // scroll step ≈ 3 mattoni
-            const brickW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-w')) || 420;
-            const gap    = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-gap')) || 16;
+            // Scroll step = larghezza brick + gap
+            const brickW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-w')) || 280;
+            const gap    = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-gap')) || 14;
             const step   = (brickW + gap) * 3;
 
-            arrL.addEventListener('click', () => row.scrollBy({left: -step, behavior:'smooth'}));
-            arrR.addEventListener('click', () => row.scrollBy({left:  step, behavior:'smooth'}));
+            arrL.addEventListener('click', () => row.scrollBy({left:-step, behavior:'smooth'}));
+            arrR.addEventListener('click', () => row.scrollBy({left: step, behavior:'smooth'}));
 
             wrap.appendChild(arrL);
             wrap.appendChild(row);
@@ -902,41 +792,51 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function openPanel(card) {
-        const title = card.dataset.panelTitle || '';
-        const color = card.dataset.panelColor || '#00AEEF';
-        const desc  = card.dataset.panelDesc  || '';
-        const rows  = JSON.parse(card.dataset.panelBricks || '[]');
+        const title  = card.dataset.panelTitle || '';
+        const color  = card.dataset.panelColor || '#00AEEF';
+        const rows   = JSON.parse(card.dataset.panelBricks || '[]');
 
-        panelBar.style.background = color;
-        headerTitle.textContent   = title;
-        panelDesc.textContent     = desc;
+        panelBar.style.background   = color;
+        headerPTitle.textContent    = title;
+        headerPTitle.style.color    = color;
 
-        buildRows(rows);
+        buildRows(rows, color);
 
         panel.classList.add('is-open');
         header.classList.add('panel-visible');
         body.classList.add('panel-open');
         panel.scrollTop = 0;
 
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-            headerTitle.classList.add('visible');
-            backBtn.classList.add('visible');
-            dockedContainer.style.opacity      = '0';
-            dockedContainer.style.pointerEvents = 'none';
-        }));
+        // Mostra titolo + back nel header con piccolo delay (dopo slide)
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                headerPTitle.classList.add('visible');
+                backBtn.classList.add('visible');
+                dockedContainer.style.opacity = '0';
+                dockedContainer.style.pointerEvents = 'none';
+            });
+        });
     }
 
     function closePanel() {
         panel.classList.remove('is-open');
         header.classList.remove('panel-visible');
         body.classList.remove('panel-open');
-        headerTitle.classList.remove('visible');
+        headerPTitle.classList.remove('visible');
         backBtn.classList.remove('visible');
-        dockedContainer.style.opacity      = '';
+        dockedContainer.style.opacity = '';
         dockedContainer.style.pointerEvents = '';
         brickTimers.forEach(clearTimeout);
         brickTimers = [];
     }
 
     document.querySelectorAll('.service-card[data-panel-title]').forEach(card => {
-        card.
+        card.addEventListener('click', () => openPanel(card));
+    });
+
+    backBtn.addEventListener('click', closePanel);
+    document.addEventListener('keydown', e => { if (e.key==='Escape') closePanel(); });
+});
+</script>
+</body>
+</html>
