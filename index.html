@@ -127,6 +127,12 @@
         }
         #header-back-btn.visible { opacity: 0.5; pointer-events: auto; }
         #header-back-btn.visible:hover { opacity: 1; }
+        #header-back-btn:not(.visible) {
+            width: 0;
+            padding: 0;
+            gap: 0;
+            overflow: hidden;
+        }
         #header-back-btn svg { width: 15px; height: 15px; }
 
         .header-right {
