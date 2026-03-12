@@ -20,9 +20,9 @@
             --transition-apple: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             --header-height: 90px;
             --strip-opacity: 0.5;
-            --brick-w: 420px;
-            --brick-h: 240px;
-            --brick-gap: 16px;
+            --brick-w: 560px;
+            --brick-h: 320px;
+            --brick-gap: 20px;
         }
 
         *, *::before, *::after { box-sizing: border-box; }
@@ -63,8 +63,8 @@
             height: var(--header-height); z-index: 1000;
             background: rgba(255,255,255,0);
             backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
-            border-bottom: 1px solid rgba(0,0,0,0);
-            transition: background .5s ease, backdrop-filter .5s ease, border-bottom .5s ease;
+            border-bottom: none;
+            transition: background .5s ease, backdrop-filter .5s ease;
             pointer-events: none;
         }
         #main-header.scrolled,
@@ -72,7 +72,23 @@
             background: rgba(255,255,255,0.92) !important;
             backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
-            border-bottom: 1px solid rgba(0,0,0,0.05) !important;
+        }
+
+        /* Linea colorata fissa in fondo all'header — sostituisce la barra interna del pannello */
+        #header-color-line {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: rgba(0,0,0,0.05);
+            opacity: 0;
+            transition: opacity .4s ease, background-color .3s ease;
+        }
+        #main-header.scrolled #header-color-line {
+            opacity: 1;
+            background: rgba(0,0,0,0.05);
+        }
+        #main-header.panel-visible #header-color-line {
+            opacity: 1;
         }
 
         .header-content {
@@ -117,28 +133,62 @@
             display: flex;
             align-items: center;
             justify-content: flex-end;
-            flex-grow: 1;
+            flex: 1 1 0%;
+            min-width: 0;
             overflow: hidden;
+            margin-left: 12px;
         }
 
         #header-panel-title {
-            font-size: 1.4rem; font-weight: 800; letter-spacing: -0.5px;
+            position: absolute;
+            top: 0; bottom: 3px;          /* lascia 3px per la linea in fondo */
+            right: 25vw;
+            display: flex;
+            align-items: center;           /* centrato verticalmente nell'altezza header */
+            font-size: 1.45rem; font-weight: 800; letter-spacing: -0.5px;
             margin: 0;
             color: #00AEEF !important;
             opacity: 0;
             transform: translateY(6px);
-            transition: opacity .35s ease, transform .35s ease;
+            transition: opacity .38s ease, transform .38s ease;
             pointer-events: none;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 100%;
+            max-width: 52%;
             text-align: right;
-            display: block;
-            width: 100%;
+            line-height: 1.15;
+            z-index: 1001;
         }
         #header-panel-title.visible {
             opacity: 1; transform: translateY(0);
+        }
+        @media (max-width:1200px) {
+            #header-panel-title { right: 5vw; max-width: 62%; font-size: 1.25rem; }
+        }
+        @media (max-width:1200px) and (min-width:769px) {
+            #header-panel-title { right: 5vw; max-width: 62%; font-size: 1.25rem; }
+        }
+        @media (max-width:768px) {
+            #header-panel-title {
+                position: static;
+                display: block;
+                flex: 1 1 0%;
+                min-width: 0;
+                font-size: 0.85rem;
+                letter-spacing: -0.2px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                text-align: right;
+                line-height: 1.2;
+                transform: translateY(6px);
+                /* Spinge il titolo all'estrema destra */
+                margin-left: auto;
+            }
+            #header-panel-title.visible {
+                transform: translateY(0);
+            }
         }
 
         #docked-titles {
@@ -281,17 +331,11 @@
             visibility: visible;
             pointer-events: auto;
         }
-        /* Scroll riabilitato dopo animazione */
+        /* Scroll riabilitato dopo animazione + isolation */
         #detail-panel.anim-done {
             overflow-y: auto;
             overflow-x: hidden;
-        }
-
-        /* Striscia colore */
-        .panel-color-bar {
-            height: 4px; width: 100%;
-            background: var(--panel-color, #00AEEF);
-            position: sticky; top: 0; z-index: 10;
+            overscroll-behavior: contain;
         }
 
         .panel-inner {
@@ -360,7 +404,6 @@
             border-radius: 18px;
             overflow: hidden;
             position: relative;
-            box-shadow: var(--apple-card-shadow);
             cursor: pointer;
             opacity: 0;
             transform: translateY(20px) scale(.98);
@@ -370,7 +413,6 @@
             opacity: 1; transform: translateY(0) scale(1);
         }
         .panel-brick:hover {
-            box-shadow: var(--apple-card-hover-shadow);
             transform: translateY(-4px) scale(1.02) !important;
         }
         .panel-brick img {
@@ -423,13 +465,13 @@
            RESPONSIVE
            ═══════════════════════════════ */
         @media (max-width:1400px) {
-            :root { --brick-w: 360px; --brick-h: 210px; }
+            :root { --brick-w: 480px; --brick-h: 275px; }
         }
         @media (max-width:1200px) {
             .grid-limiter{width:90%;}
             .services-grid{grid-template-columns:repeat(2,1fr);}
             .where-we-are-layout{grid-template-columns:1fr;}
-            :root { --brick-w: 300px; --brick-h: 175px; }
+            :root { --brick-w: 380px; --brick-h: 220px; }
             .brick-row::before,.brick-row::after { width: 5vw; }
             .brick-row.row-even::before { width: calc(5vw + var(--brick-w)*.5 + var(--brick-gap)); }
             .row-arrow.arr-left  { left: 8px; }
@@ -442,7 +484,7 @@
             #main-nav{gap:8px;}
             #main-nav a{font-size:.75rem;padding:8px 12px;}
             .maps-frame{min-height:320px;}
-            :root { --brick-w: 240px; --brick-h: 145px; }
+            :root { --brick-w: 280px; --brick-h: 168px; }
             #header-panel-title { font-size: 1.1rem; }
         }
     </style>
@@ -469,11 +511,14 @@
         </div>
 
         <div class="header-right">
+            <!-- Su mobile il titolo resta nel flusso qui dentro -->
             <h2 id="header-panel-title"></h2>
             <div id="docked-titles"></div>
         </div>
 
     </div>
+    <!-- Linea colorata in fondo all'header, visibile solo quando il pannello è aperto -->
+    <div id="header-color-line"></div>
 </header>
 
 <!-- Backdrop scuro -->
@@ -483,7 +528,6 @@
      DETAIL PANEL
      ═══════════════════════════════ -->
 <div id="detail-panel" role="dialog" aria-modal="true" aria-label="Dettaglio servizio">
-    <div class="panel-color-bar" id="panel-color-bar"></div>
     <div class="panel-inner">
         <div class="panel-description-wrap">
             <p class="panel-description" id="panel-description"></p>
@@ -862,16 +906,29 @@ document.addEventListener("DOMContentLoaded", () => {
     /* ═══════════════════════════════════════════
        DETAIL PANEL — iOS App Open Animation
        ═══════════════════════════════════════════ */
-    const panel         = document.getElementById('detail-panel');
-    const panelBackdrop = document.getElementById('panel-backdrop');
-    const panelBar      = document.getElementById('panel-color-bar');
-    const panelDesc     = document.getElementById('panel-description');
-    const rowsContainer = document.getElementById('panel-rows-container');
-    const backBtn       = document.getElementById('header-back-btn');
-    const headerTitle   = document.getElementById('header-panel-title');
-    let brickTimers     = [];
-    let animTimer       = null;
-    let closeAnimTimer  = null;
+    const panel          = document.getElementById('detail-panel');
+    const panelBackdrop  = document.getElementById('panel-backdrop');
+    const headerColorLine= document.getElementById('header-color-line');
+    const panelDesc      = document.getElementById('panel-description');
+    const rowsContainer  = document.getElementById('panel-rows-container');
+    const backBtn        = document.getElementById('header-back-btn');
+    const headerTitle    = document.getElementById('header-panel-title');
+    let brickTimers      = [];
+    let animTimer        = null;
+    let closeAnimTimer   = null;
+
+    /* ── Scroll isolation: blocca la propagazione dello scroll dal pannello alla pagina ── */
+    panel.addEventListener('wheel', (e) => {
+        if (!panel.classList.contains('is-open')) return;
+        const atTop    = panel.scrollTop === 0;
+        const atBottom = panel.scrollTop + panel.clientHeight >= panel.scrollHeight - 1;
+        if ((e.deltaY < 0 && atTop) || (e.deltaY > 0 && atBottom)) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+    panel.addEventListener('touchmove', (e) => {
+        if (panel.classList.contains('is-open')) e.stopPropagation();
+    }, { passive: true });
 
     /* Durations (ms) */
     const DUR_OPEN  = 480;
@@ -880,6 +937,97 @@ document.addEventListener("DOMContentLoaded", () => {
     /* Cubic bezier for spring-y open, smooth close */
     const EASE_OPEN  = 'cubic-bezier(0.32, 0.72, 0, 1)';   /* iOS-style spring */
     const EASE_CLOSE = 'cubic-bezier(0.4, 0, 0.6, 1)';
+
+    /* ── Helper: crea un singolo elemento mattone ── */
+    function makeBrickEl(b, extraClass) {
+        const brick = document.createElement('div');
+        brick.className = 'panel-brick' + (b.img ? '' : ' no-img') + (extraClass ? ' '+extraClass : '');
+        if (b.img) {
+            const img = document.createElement('img');
+            img.src = b.img; img.alt = b.label;
+            brick.appendChild(img);
+        }
+        const lbl = document.createElement('div');
+        lbl.className = 'panel-brick-label';
+        lbl.textContent = b.label;
+        brick.appendChild(lbl);
+        return brick;
+    }
+
+    /* ── Infinite-loop scroll per una riga ── */
+    function setupInfiniteRow(row, bricks, rowIdx) {
+        const brickW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-w')) || 560;
+        const gap    = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-gap')) || 20;
+        const unit   = brickW + gap;
+
+        /* Struttura: [clone-tail] [originali] [clone-head]
+           clone-tail = copia degli ultimi N mattoni messa PRIMA
+           clone-head = copia dei primi N mattoni messa DOPO
+           N = numero totale dei mattoni originali (loop completo)                */
+        const N = bricks.length;
+
+        /* 1. Svuota la riga (i mattoni originali sono già dentro) */
+        row.innerHTML = '';
+
+        /* 2. Costruisci i set */
+        const makeCopies = (arr, cls) => arr.map(b => {
+            const el = makeBrickEl(b, cls + ' brick-visible');
+            return el;
+        });
+
+        const tailClones = makeCopies(bricks, 'brick-clone');
+        const originals  = bricks.map(b => makeBrickEl(b, ''));
+        const headClones = makeCopies(bricks, 'brick-clone');
+
+        /* 3. Inserisci in ordine: tail → originali → head */
+        tailClones.forEach(el => row.appendChild(el));
+        originals.forEach(el  => row.appendChild(el));
+        headClones.forEach(el => row.appendChild(el));
+
+        /* 4. Posizione iniziale = inizio degli originali (dopo i clone-tail) */
+        const loopWidth = N * unit;
+        const initialLeft = loopWidth + (rowIdx % 2 !== 0 ? unit : 0); /* righe pari sfalsate */
+
+        /* Imposta senza animazione */
+        row.style.scrollBehavior = 'auto';
+        requestAnimationFrame(() => {
+            row.scrollLeft = initialLeft;
+            row.style.scrollBehavior = '';
+        });
+
+        /* 5. Listener per il salto invisibile */
+        let jumping = false;
+        row.addEventListener('scroll', () => {
+            if (jumping) return;
+            const sl = row.scrollLeft;
+            const max = row.scrollWidth - row.clientWidth;
+
+            /* Quando arriviamo nella zona dei clone-head: salta agli originali */
+            if (sl >= loopWidth * 2) {
+                jumping = true;
+                row.style.scrollBehavior = 'auto';
+                row.scrollLeft = sl - loopWidth;
+                requestAnimationFrame(() => {
+                    row.style.scrollBehavior = '';
+                    jumping = false;
+                });
+            }
+            /* Quando arriviamo nella zona dei clone-tail: salta agli originali */
+            else if (sl <= 0) {
+                jumping = true;
+                row.style.scrollBehavior = 'auto';
+                row.scrollLeft = sl + loopWidth;
+                requestAnimationFrame(() => {
+                    row.style.scrollBehavior = '';
+                    jumping = false;
+                });
+            }
+        }, { passive: true });
+
+        /* 6. Scroll step per le frecce */
+        const step = unit * 2;
+        return step;
+    }
 
     function buildRows(rowsData) {
         rowsContainer.innerHTML = '';
@@ -904,35 +1052,26 @@ document.addEventListener("DOMContentLoaded", () => {
             const row = document.createElement('div');
             row.className = `brick-row ${rowIdx % 2 === 0 ? 'row-odd' : 'row-even'}`;
 
-            rowBricks.forEach((b) => {
-                const brick = document.createElement('div');
-                brick.className = 'panel-brick' + (b.img ? '' : ' no-img');
-                if (b.img) {
-                    const img = document.createElement('img');
-                    img.src = b.img; img.alt = b.label;
-                    brick.appendChild(img);
-                }
-                const lbl = document.createElement('div');
-                lbl.className = 'panel-brick-label';
-                lbl.textContent = b.label;
-                brick.appendChild(lbl);
-                row.appendChild(brick);
-
+            /* Entrata animata solo per i mattoni originali — aggiunti da setupInfiniteRow */
+            rowBricks.forEach((_, i) => {
                 const delay = 60 + globalIdx * 50;
                 globalIdx++;
-                brickTimers.push(setTimeout(() => brick.classList.add('brick-visible'), delay));
+                /* Segna i brick originali come visibili con delay staggered */
+                brickTimers.push(setTimeout(() => {
+                    const originals = row.querySelectorAll('.panel-brick:not(.brick-clone)');
+                    if (originals[i]) originals[i].classList.add('brick-visible');
+                }, delay));
             });
-
-            const brickW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-w')) || 420;
-            const gap    = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-gap')) || 16;
-            const step   = (brickW + gap) * 3;
-            arrL.addEventListener('click', () => row.scrollBy({left: -step, behavior:'smooth'}));
-            arrR.addEventListener('click', () => row.scrollBy({left:  step, behavior:'smooth'}));
 
             wrap.appendChild(arrL);
             wrap.appendChild(row);
             wrap.appendChild(arrR);
             rowsContainer.appendChild(wrap);
+
+            /* Setup infinite loop e ottieni lo step per le frecce */
+            const step = setupInfiniteRow(row, rowBricks, rowIdx);
+            arrL.addEventListener('click', () => row.scrollBy({left: -step, behavior:'smooth'}));
+            arrR.addEventListener('click', () => row.scrollBy({left:  step, behavior:'smooth'}));
         });
     }
 
@@ -946,7 +1085,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const desc  = card.dataset.panelDesc  || '';
         const rows  = JSON.parse(card.dataset.panelBricks || '[]');
 
-        panelBar.style.background = color;
+        /* La linea dell'header è sempre ciano */
+        headerColorLine.style.backgroundColor = '#00AEEF';
         headerTitle.style.color   = color;
         headerTitle.textContent   = title;
         panelDesc.textContent     = desc;
@@ -1015,8 +1155,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 /* After animation finishes, allow scrolling and fade in content */
                 animTimer = setTimeout(() => {
-                    panel.classList.add('anim-done');   /* re-enables scroll */
-                    panel.classList.add('content-visible'); /* fades in description */
+                    panel.style.overflow = '';          /* rimuove l'inline, lascia al CSS */
+                    panel.classList.add('anim-done');   /* aggiunge overscroll-behavior: contain */
+                    panel.classList.add('content-visible');
                 }, DUR_OPEN);
             });
         });
@@ -1042,6 +1183,9 @@ document.addEventListener("DOMContentLoaded", () => {
         dockedContainer.style.opacity      = '';
         dockedContainer.style.pointerEvents = '';
         header.classList.remove('panel-visible');
+
+        /* Ripristina il colore della linea header dopo la chiusura */
+        headerColorLine.style.backgroundColor = '';
 
         /* After anim: clean up */
         closeAnimTimer = setTimeout(() => {
