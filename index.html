@@ -545,6 +545,11 @@
             -webkit-backdrop-filter: blur(32px) saturate(1.4) brightness(1.08);
             border-left: 1px solid rgba(255, 255, 255, 0.55);
             box-shadow: inset 0 0 0 1px rgba(255,255,255,0.22);
+            transition: opacity 0.28s ease;
+        }
+        .progetto-text.text-exit {
+            opacity: 0;
+            pointer-events: none;
         }
 
         .progetto-text::before {
@@ -556,25 +561,29 @@
             pointer-events: none;
         }
 
-        /* Bottone "Vedi altro" — stesso stile del visit-btn */
+        /* Bottone "Vedi altro" — centrato sotto il box */
+        .progetti-vedi-wrap {
+            display: flex;
+            justify-content: center;
+            margin-top: 28px;
+        }
         .progetto-vedi-btn {
             display: inline-flex;
             align-items: center;
             gap: 0;
-            margin-top: 24px;
-            padding: 12px 24px;
+            padding: 12px 28px;
             border-radius: 999px;
             border: 1px solid rgba(0,0,0,.1);
             background: #fff;
             color: #1d1d1f;
             font-family: var(--font-main);
-            font-size: 0.82rem;
+            font-size: 0.84rem;
             font-weight: 700;
             letter-spacing: 0.3px;
             text-decoration: none;
             cursor: pointer;
-            width: fit-content;
             overflow: hidden;
+            box-shadow: var(--apple-card-shadow);
             transition:
                 transform .5s cubic-bezier(0.34, 1.56, 0.64, 1),
                 background-color .3s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -585,7 +594,7 @@
         .progetto-vedi-btn .btn-arrow {
             width: 0;
             opacity: 0;
-            transform: translateX(-14px) rotate(-30deg) scale(0.5);
+            transform: translateY(-10px) scale(0.5);
             display: flex;
             align-items: center;
             transition:
@@ -603,8 +612,150 @@
         .progetto-vedi-btn:hover .btn-arrow {
             width: 20px;
             opacity: 1;
-            transform: translateX(0) rotate(0deg) scale(1);
+            transform: translateY(0) scale(1);
             margin-left: 8px;
+        }
+
+        /* ── Pannello expand progetti — identico a #detail-panel ── */
+        #progetti-expand-panel {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: 100%;
+            height: calc(100vh - var(--header-height));
+            background: #fff;
+            z-index: 900;
+            overflow: hidden;
+            visibility: hidden;
+            pointer-events: none;
+            border-radius: 0px;
+            will-change: transform, border-radius, opacity;
+            transform-origin: center center;
+        }
+        #progetti-expand-panel.is-open {
+            visibility: visible;
+            pointer-events: auto;
+        }
+        #progetti-expand-panel.anim-done {
+            overflow-y: auto;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+        }
+
+        .expand-panel-inner {
+            padding: 40px 0 80px;
+            width: 72%;
+            margin: 0 auto;
+            opacity: 0;
+            transform: translateY(14px);
+            transition: opacity .42s ease, transform .42s ease;
+        }
+        #progetti-expand-panel.content-visible .expand-panel-inner {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Titolo sezione dentro il pannello */
+        .expand-panel-heading {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -0.6px;
+            color: #E2007A;
+            margin: 0 0 36px;
+            text-align: center;
+        }
+
+        /* Card progetto espanso */
+        .expand-project-card {
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: var(--apple-card-shadow);
+            margin-bottom: 32px;
+            background: #fafafa;
+            opacity: 0;
+            transform: translateY(28px) scale(0.98);
+            transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.34,1.2,0.64,1);
+        }
+        .expand-project-card.revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Hero image */
+        .expand-card-hero {
+            width: 100%;
+            height: 320px;
+            overflow: hidden;
+        }
+        .expand-card-hero img {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+            transition: transform 6s ease;
+        }
+        .expand-project-card.revealed .expand-card-hero img {
+            transform: scale(1.03);
+        }
+
+        /* Header testo */
+        .expand-card-header {
+            padding: 22px 28px 14px;
+        }
+        .expand-card-overline {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #E2007A;
+            margin-bottom: 6px;
+        }
+        .expand-card-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            color: #1d1d1f;
+            margin: 0;
+        }
+
+        /* Gallery 3 colonne */
+        .expand-card-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 0 8px 12px;
+        }
+        .expand-gallery-item {
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            opacity: 0;
+            transform: translateY(14px) scale(0.97);
+            transition: opacity .4s ease, transform .45s cubic-bezier(0.34,1.2,0.64,1);
+        }
+        .expand-gallery-item.revealed {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .expand-gallery-item img {
+            width: 100%; height: 100%;
+            object-fit: cover; display: block;
+        }
+
+        .progetto-vedi-btn.btn-escape {
+            transform: translateY(40px) scale(0.85) !important;
+            opacity: 0 !important;
+            transition:
+                transform 0.32s cubic-bezier(0.4, 0, 1, 1),
+                opacity 0.22s ease !important;
+        }
+        .progetti-vedi-wrap.is-hidden { display: none; }
+
+        @media (max-width: 1200px) {
+            .expand-panel-inner { width: 90%; }
+        }
+        @media (max-width: 768px) {
+            .expand-card-hero { height: 220px; }
+            .expand-card-gallery { grid-template-columns: repeat(2,1fr); }
         }
 
         .progetto-text-inner {
@@ -712,6 +863,16 @@
 
 <!-- Backdrop scuro -->
 <div id="panel-backdrop"></div>
+
+<!-- ═══════════════════════════════
+     PROGETTI EXPAND PANEL
+     ═══════════════════════════════ -->
+<div id="progetti-expand-panel" aria-label="Tutti i progetti">
+    <div class="expand-panel-inner" id="expand-panel-inner">
+        <h2 class="expand-panel-heading">Tutti i progetti</h2>
+        <!-- Le card vengono generate via JS -->
+    </div>
+</div>
 
 <!-- ═══════════════════════════════
      DETAIL PANEL
@@ -951,7 +1112,11 @@
             <div class="progetti-slider" id="progetti-slider">
 
                 <!-- Slide 1 -->
-                <div class="progetto-slide active">
+                <div class="progetto-slide active"
+                     data-overline="Identità visiva"
+                     data-name="Restyling per un ristorante milanese"
+                     data-hero="images/stampe_digitale/sdig1.png"
+                     data-gallery='["images/stampe_digitale/sdig1.png","images/stampe_digitale/grafica.png","images/stampe_digitale/sticker.png","images/stampe_digitale/banner.png","images/stampe_digitale/termi.png","images/stampe_digitale/rilegatura.png"]'>
                     <div class="progetto-img">
                         <img src="images/stampe_digitale/sdig1.png" alt="Progetto 1">
                     </div>
@@ -960,18 +1125,16 @@
                             <span class="progetto-overline">Identità visiva</span>
                             <h3 class="progetto-title">Restyling completo per un ristorante milanese</h3>
                             <p class="progetto-desc">Abbiamo affiancato un ristorante del quartiere Isola nella creazione di una nuova identità visiva: dal logo al menù stampato, dalle tovagliette ai cartelli interni. Un progetto integrato che ha trasformato l'esperienza del cliente fin dal primo sguardo, unendo stampa di qualità e coerenza grafica in ogni dettaglio.</p>
-                            <a class="progetto-vedi-btn" href="#">
-                                Vedi altro
-                                <span class="btn-arrow">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                                </span>
-                            </a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Slide 2 -->
-                <div class="progetto-slide">
+                <div class="progetto-slide"
+                     data-overline="Evento &amp; comunicazione"
+                     data-name="Campagna stampa per fiera di settore"
+                     data-hero="images/stampe_digitale/grafica.png"
+                     data-gallery='["images/stampe_digitale/grafica.png","images/stampe_digitale/banner.png","images/stampe_digitale/bdig1.png","images/stampe_digitale/sdig1.png","images/stampe_digitale/plastificazione.png","images/stampe_digitale/centrostampa.png"]'>
                     <div class="progetto-img">
                         <img src="images/stampe_digitale/grafica.png" alt="Progetto 2">
                     </div>
@@ -980,18 +1143,16 @@
                             <span class="progetto-overline">Evento &amp; comunicazione</span>
                             <h3 class="progetto-title">Campagna stampa per fiera di settore</h3>
                             <p class="progetto-desc">Per una PMI del settore tecnologico abbiamo realizzato l'intera campagna espositiva per una fiera internazionale: roll-up, banner, brochure, gadget personalizzati e materiali promozionali. Tutto prodotto internamente in tempi rapidi, con un'attenzione meticolosa alla resa cromatica e alla qualità dei supporti.</p>
-                            <a class="progetto-vedi-btn" href="#">
-                                Vedi altro
-                                <span class="btn-arrow">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                                </span>
-                            </a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Slide 3 -->
-                <div class="progetto-slide">
+                <div class="progetto-slide"
+                     data-overline="Packaging &amp; brand"
+                     data-name="Linea etichette per prodotti artigianali"
+                     data-hero="images/stampe_digitale/sticker.png"
+                     data-gallery='["images/stampe_digitale/sticker.png","images/stampe_digitale/termi.png","images/stampe_digitale/stampafoto.png","images/stampe_digitale/timbro.png","images/stampe_digitale/scansione.png","images/stampe_digitale/sdig1.png"]'>
                     <div class="progetto-img">
                         <img src="images/stampe_digitale/sticker.png" alt="Progetto 3">
                     </div>
@@ -1000,12 +1161,6 @@
                             <span class="progetto-overline">Packaging &amp; brand</span>
                             <h3 class="progetto-title">Linea etichette per prodotti artigianali</h3>
                             <p class="progetto-desc">Una piccola azienda artigianale ci ha affidato la progettazione e la stampa di un'intera linea di etichette per i suoi prodotti. Abbiamo curato il design, scelto i materiali più adatti — carta naturale, finitura opaca e stampa a caldo — e consegnato un packaging che racconta autenticità e cura in ogni bottiglia.</p>
-                            <a class="progetto-vedi-btn" href="#">
-                                Vedi altro
-                                <span class="btn-arrow">
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                                </span>
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -1019,6 +1174,19 @@
 
                 <!-- Progress bar -->
                 <div class="progetti-progress" id="progetti-progress"></div>
+            </div>
+
+            <!-- Bottone Vedi altro centrato sotto -->
+            <div class="progetti-vedi-wrap" id="progetti-vedi-wrap">
+                <button class="progetto-vedi-btn" id="progetto-vedi-btn">
+                    Vedi altro
+                    <span class="btn-arrow">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <polyline points="19 12 12 19 5 12"/>
+                        </svg>
+                    </span>
+                </button>
             </div>
 
         </div>
@@ -1037,7 +1205,7 @@
                 <div class="where-info-box">
                     <p class="where-address-title">Via Padova 49</p>
                     <a class="visit-btn"
-                        href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z"
+                        href="https://maps.app.goo.gl/ahr6WqpPYYAFB7xU9"
                         target="_blank" rel="noopener noreferrer">
                         Vieni a trovarci!
                         <img class="visit-btn-icon"
@@ -1447,17 +1615,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     /* ═══════════════════════════════════════════
-       PROGETTI SLIDESHOW — auto-rotate ogni 10s
+       PROGETTI SLIDESHOW + iOS EXPAND FROM BOX
        ═══════════════════════════════════════════ */
     (function() {
-        const slides    = document.querySelectorAll('.progetto-slide');
-        const dots      = document.querySelectorAll('.progetti-dot');
-        const progress  = document.getElementById('progetti-progress');
-        const INTERVAL  = 10000;
-        let current     = 0;
-        let timer       = null;
-        let progTimer   = null;
+        const slider        = document.getElementById('progetti-slider');
+        const slides        = slider.querySelectorAll('.progetto-slide');
+        const dots          = slider.querySelectorAll('.progetti-dot');
+        const progress      = document.getElementById('progetti-progress');
+        const vediWrap      = document.getElementById('progetti-vedi-wrap');
+        const vediBtn       = document.getElementById('progetto-vedi-btn');
+        const expandPanel   = document.getElementById('progetti-expand-panel');
+        const expandInner   = document.getElementById('expand-panel-inner');
+        const INTERVAL      = 10000;
+        const DUR_OPEN      = 480;
+        const DUR_CLOSE     = 560;
+        const EASE_OPEN     = 'cubic-bezier(0.32, 0.72, 0, 1)';
+        const EASE_CLOSE    = 'cubic-bezier(0.2, 0, 0, 1)';
+        let current         = 0;
+        let autoTimer       = null;
+        let isExpanded      = false;
+        let pAnimTimer      = null;
+        let pCloseTimer     = null;
 
+        /* ── Slideshow ── */
         function goTo(idx) {
             slides[current].classList.remove('active');
             dots[current].classList.remove('active');
@@ -1468,32 +1648,196 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         function resetProgress() {
-            if (progress) {
-                progress.style.transition = 'none';
-                progress.style.width = '0%';
-                requestAnimationFrame(() => {
-                    requestAnimationFrame(() => {
-                        progress.style.transition = `width ${INTERVAL}ms linear`;
-                        progress.style.width = '100%';
-                    });
-                });
-            }
+            if (!progress) return;
+            progress.style.transition = 'none';
+            progress.style.width = '0%';
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                progress.style.transition = `width ${INTERVAL}ms linear`;
+                progress.style.width = '100%';
+            }));
         }
 
         function startAuto() {
-            clearInterval(timer);
-            timer = setInterval(() => goTo(current + 1), INTERVAL);
+            clearInterval(autoTimer);
+            autoTimer = setInterval(() => goTo(current + 1), INTERVAL);
+        }
+
+        function stopAuto() {
+            clearInterval(autoTimer);
+            if (progress) { progress.style.transition = 'none'; progress.style.width = '0%'; }
         }
 
         dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                goTo(parseInt(dot.dataset.idx));
-                startAuto();
-            });
+            dot.addEventListener('click', () => { goTo(parseInt(dot.dataset.idx)); startAuto(); });
         });
+
+        /* Pausa al hover sullo slider */
+        slider.addEventListener('mouseenter', () => stopAuto());
+        slider.addEventListener('mouseleave', () => { if (!isExpanded) startAuto(); });
 
         resetProgress();
         startAuto();
+
+        /* ── Build panel content ── */
+        function buildExpandPanel() {
+            expandInner.querySelectorAll('.expand-project-card').forEach(el => el.remove());
+            slides.forEach(slide => {
+                const overline = slide.dataset.overline || '';
+                const name     = slide.dataset.name || '';
+                const hero     = slide.dataset.hero || '';
+                const gallery  = JSON.parse(slide.dataset.gallery || '[]');
+                const card = document.createElement('div');
+                card.className = 'expand-project-card';
+                card.innerHTML = `
+                    <div class="expand-card-hero"><img src="${hero}" alt="${name}"></div>
+                    <div class="expand-card-header">
+                        <span class="expand-card-overline">${overline}</span>
+                        <h3 class="expand-card-title">${name}</h3>
+                    </div>
+                    <div class="expand-card-gallery">
+                        ${gallery.map(src => `<div class="expand-gallery-item"><img src="${src}" alt=""></div>`).join('')}
+                    </div>`;
+                expandInner.appendChild(card);
+            });
+        }
+
+        function staggerCards() {
+            expandInner.querySelectorAll('.expand-project-card').forEach((card, i) => {
+                setTimeout(() => {
+                    card.classList.add('revealed');
+                    card.querySelectorAll('.expand-gallery-item').forEach((item, j) => {
+                        setTimeout(() => item.classList.add('revealed'), j * 70);
+                    });
+                }, i * 140);
+            });
+        }
+
+        /* ── iOS open: geometry from slider box ── */
+        function expandProjects() {
+            if (pCloseTimer) { clearTimeout(pCloseTimer); pCloseTimer = null; }
+
+            isExpanded = true;
+            stopAuto();
+            buildExpandPanel();
+
+            /* Capture rect IMMEDIATELY — before any DOM change */
+            const headerH    = header.offsetHeight;
+            const rect       = slider.getBoundingClientRect();
+            const panelW     = window.innerWidth;
+            const panelH     = window.innerHeight - headerH;
+            const scaleX     = rect.width  / panelW;
+            const scaleY     = rect.height / panelH;
+            const dx         = (rect.left + rect.width  / 2) - panelW / 2;
+            const dy         = (rect.top  + rect.height / 2) - (headerH + panelH / 2);
+            const boxRadius  = parseFloat(getComputedStyle(slider).borderRadius) || 26;
+            const initRadius = boxRadius / Math.min(scaleX, scaleY);
+
+            /* Fade text out */
+            slides.forEach(s => {
+                const txt = s.querySelector('.progetto-text');
+                if (txt) txt.classList.add('text-exit');
+            });
+
+            /* Silently place panel at exact slider position (invisible, no transition) */
+            expandPanel.style.transition   = 'none';
+            expandPanel.style.transform    = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
+            expandPanel.style.borderRadius = `${initRadius}px`;
+            expandPanel.style.opacity      = '1';
+            expandPanel.style.overflow     = 'hidden';
+            expandPanel.classList.remove('anim-done', 'content-visible');
+            expandPanel.classList.add('is-open');
+            expandPanel.scrollTop = 0;
+
+            vediWrap.classList.add('is-hidden');
+            header.classList.add('panel-visible', 'scrolled');
+            body.classList.add('panel-open');
+            backBtn.classList.add('visible');
+            dockedContainer.style.opacity       = '0';
+            dockedContainer.style.pointerEvents = 'none';
+
+            /* Expand fires immediately after panel is placed */
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+                    expandPanel.style.transition   = `transform ${DUR_OPEN}ms ${EASE_OPEN}, border-radius ${DUR_OPEN}ms ${EASE_OPEN}`;
+                    expandPanel.style.transform    = 'translate(0,0) scale(1,1)';
+                    expandPanel.style.borderRadius = '0px';
+                    expandPanel.classList.add('content-visible');
+
+                    pAnimTimer = setTimeout(() => {
+                        expandPanel.style.overflow = '';
+                        expandPanel.classList.add('anim-done');
+                        staggerCards();
+                    }, DUR_OPEN);
+                }));
+        }
+
+        /* ── iOS close: shrink back to box ── */
+        function collapseProjects() {
+            if (pAnimTimer) { clearTimeout(pAnimTimer); pAnimTimer = null; }
+
+            isExpanded = false;
+
+            expandPanel.classList.remove('anim-done', 'content-visible');
+            expandPanel.style.overflow = 'hidden';
+            expandPanel.scrollTop = 0;
+
+            const headerH = header.offsetHeight;
+            const rect    = slider.getBoundingClientRect();
+            const panelW  = window.innerWidth;
+            const panelH  = window.innerHeight - headerH;
+
+            const scaleX = rect.width  / panelW;
+            const scaleY = rect.height / panelH;
+
+            const boxCX  = rect.left + rect.width  / 2;
+            const boxCY  = rect.top  + rect.height / 2;
+            const panCX  = panelW / 2;
+            const panCY  = headerH + panelH / 2;
+
+            const dx = boxCX - panCX;
+            const dy = boxCY - panCY;
+
+            const boxRadius  = parseFloat(getComputedStyle(slider).borderRadius) || 26;
+            const endRadius  = boxRadius / Math.min(scaleX, scaleY);
+
+            expandPanel.style.transition   = `transform ${DUR_CLOSE}ms ${EASE_CLOSE}, border-radius ${DUR_CLOSE}ms ${EASE_CLOSE}, opacity ${DUR_CLOSE*0.45}ms ${EASE_CLOSE} ${DUR_CLOSE*0.45}ms`;
+            expandPanel.style.transform    = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
+            expandPanel.style.borderRadius = `${endRadius}px`;
+            expandPanel.style.opacity      = '0';
+
+            header.classList.remove('panel-visible');
+            backBtn.classList.remove('visible');
+            dockedContainer.style.opacity       = '';
+            dockedContainer.style.pointerEvents = '';
+            vediWrap.classList.remove('is-hidden');
+
+            pCloseTimer = setTimeout(() => {
+                expandPanel.classList.remove('is-open');
+                body.classList.remove('panel-open');
+                expandPanel.style.transition   = 'none';
+                expandPanel.style.transform    = '';
+                expandPanel.style.borderRadius = '';
+                expandPanel.style.opacity      = '';
+
+                /* Testo frosted glass rientra */
+                slides.forEach(s => {
+                    const txt = s.querySelector('.progetto-text');
+                    if (txt) txt.classList.remove('text-exit');
+                });
+                vediBtn.classList.remove('btn-escape');
+
+                resetProgress();
+                startAuto();
+                pCloseTimer = null;
+            }, DUR_CLOSE + 20);
+        }
+
+        vediBtn.addEventListener('click', () => {
+            if (isExpanded) return;
+            vediBtn.classList.add('btn-escape');
+            expandProjects();
+        });
+        backBtn.addEventListener('click',  () => { if (isExpanded)  collapseProjects(); });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape' && isExpanded) collapseProjects(); });
     })();
 });
 </script>
