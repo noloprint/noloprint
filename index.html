@@ -258,11 +258,22 @@
             width:fit-content;text-decoration:none;color:#1d1d1f;background:#fff;
             border:1px solid rgba(0,0,0,.1);border-radius:999px;padding:12px 24px;
             font-weight:700;display:inline-flex;align-items:center;gap:0;overflow:hidden;
-            transition:transform .35s ease,background-color .35s ease,padding-right .35s ease,box-shadow .35s ease;
+            transition:
+                transform .5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                background-color .3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                padding-right .5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow .4s ease;
         }
-        .visit-btn-icon{width:0;opacity:0;transform:translateX(-8px);transition:width .35s ease,opacity .35s ease,transform .35s ease;}
-        .visit-btn:hover{background-color:#FFE600;padding-right:30px;transform:scale(1.05);box-shadow:0 10px 24px rgba(0,0,0,.16);}
-        .visit-btn:hover .visit-btn-icon{width:20px;opacity:1;transform:translateX(0);margin-left:8px;}
+        .visit-btn-icon{
+            width:0; opacity:0;
+            transform: translateX(-14px) rotate(-30deg) scale(0.5);
+            transition:
+                width .45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity .25s ease,
+                transform .5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .visit-btn:hover{background-color:#FFE600;padding-right:30px;transform:scale(1.07);box-shadow:0 10px 28px rgba(0,0,0,.18);}
+        .visit-btn:hover .visit-btn-icon{width:20px;opacity:1;transform:translateX(0) rotate(0deg) scale(1);margin-left:8px;}
 
         .footer-black{background:#000;color:#f5f5f7;padding:70px 0;text-align:center;z-index:3;position:relative;}
         .footer-content{line-height:1.8;font-size:.9rem;opacity:.8;}
@@ -481,6 +492,191 @@
             :root { --brick-w: 280px; --brick-h: 168px; }
             .where-address-title { font-size: 1.8rem; }
         }
+
+        /* ═══════════════════════════════
+           PROGETTI SLIDESHOW
+           ═══════════════════════════════ */
+        .progetti-slider {
+            position: relative;
+            border-radius: 26px;
+            overflow: hidden;
+            height: 420px;
+            box-shadow: var(--apple-card-shadow);
+            background: #111;
+        }
+
+        .progetto-slide {
+            position: absolute;
+            inset: 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            opacity: 0;
+            transition: opacity 0.9s cubic-bezier(0.4,0,0.2,1);
+            pointer-events: none;
+        }
+        .progetto-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .progetto-img {
+            position: relative;
+            overflow: hidden;
+        }
+        .progetto-img img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 8s ease;
+        }
+        .progetto-slide.active .progetto-img img {
+            transform: scale(1.04);
+        }
+
+        .progetto-text {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 44px 40px 44px 48px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.42);
+            backdrop-filter: blur(32px) saturate(1.4) brightness(1.08);
+            -webkit-backdrop-filter: blur(32px) saturate(1.4) brightness(1.08);
+            border-left: 1px solid rgba(255, 255, 255, 0.55);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.22);
+        }
+
+        .progetto-text::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.12);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Bottone "Vedi altro" — stesso stile del visit-btn */
+        .progetto-vedi-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0;
+            margin-top: 24px;
+            padding: 12px 24px;
+            border-radius: 999px;
+            border: 1px solid rgba(0,0,0,.1);
+            background: #fff;
+            color: #1d1d1f;
+            font-family: var(--font-main);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-decoration: none;
+            cursor: pointer;
+            width: fit-content;
+            overflow: hidden;
+            transition:
+                transform .5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                background-color .3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                padding-right .5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow .4s ease,
+                color .25s ease;
+        }
+        .progetto-vedi-btn .btn-arrow {
+            width: 0;
+            opacity: 0;
+            transform: translateX(-14px) rotate(-30deg) scale(0.5);
+            display: flex;
+            align-items: center;
+            transition:
+                width .45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity .25s ease,
+                transform .5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .progetto-vedi-btn:hover {
+            background-color: #E2007A;
+            color: #fff;
+            padding-right: 30px;
+            transform: scale(1.07);
+            box-shadow: 0 10px 28px rgba(226,0,122,.35);
+        }
+        .progetto-vedi-btn:hover .btn-arrow {
+            width: 20px;
+            opacity: 1;
+            transform: translateX(0) rotate(0deg) scale(1);
+            margin-left: 8px;
+        }
+
+        .progetto-text-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .progetto-overline {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: #E2007A;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .progetto-title {
+            font-size: 1.55rem;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            color: #1d1d1f;
+            margin: 0 0 16px;
+        }
+
+        .progetto-desc {
+            font-size: 0.88rem;
+            line-height: 1.75;
+            color: #3a3a3c;
+            font-weight: 400;
+            margin: 0;
+        }
+
+        .progetti-dots {
+            position: absolute;
+            bottom: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            z-index: 10;
+        }
+        .progetti-dot {
+            width: 7px; height: 7px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.45);
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            border: none;
+            padding: 0;
+        }
+        .progetti-dot.active {
+            background: #fff;
+            transform: scale(1.3);
+        }
+
+        .progetti-progress {
+            position: absolute;
+            bottom: 0; left: 0;
+            height: 3px;
+            background: #E2007A;
+            width: 0%;
+            z-index: 10;
+        }
+
+        @media (max-width: 900px) {
+            .progetti-slider { height: auto; }
+            .progetto-slide { position: relative; grid-template-columns: 1fr; opacity: 1; }
+            .progetto-slide:not(.active) { display: none; }
+            .progetto-img { height: 240px; }
+        }
     </style>
 </head>
 <body class="is-at-top">
@@ -543,7 +739,7 @@
             <div class="hero-nav-wrapper">
                 <nav id="main-nav" aria-label="Indice sezioni">
                     <a href="#sec-cyan">cosa facciamo</a>
-                    <a href="#sec-magenta">progetto</a>
+                    <a href="#sec-magenta">progetti</a>
                     <a href="#chi-siamo">chi siamo</a>
                     <a href="#dove-siamo">dove siamo</a>
                 </nav>
@@ -749,9 +945,82 @@
     <section class="cmyk-section" id="sec-magenta">
         <div class="grid-limiter">
             <div class="title-wrapper" id="wrap-magenta">
-                <h2 class="section-title" data-target="wrap-magenta" style="--theme-color:#E2007A;">Progetto</h2>
+                <h2 class="section-title" data-target="wrap-magenta" style="--theme-color:#E2007A;">Progetti</h2>
             </div>
-            <div style="height:200px;background:#fafafa;border-radius:22px;box-shadow:var(--apple-card-shadow);"></div>
+
+            <div class="progetti-slider" id="progetti-slider">
+
+                <!-- Slide 1 -->
+                <div class="progetto-slide active">
+                    <div class="progetto-img">
+                        <img src="images/stampe_digitale/sdig1.png" alt="Progetto 1">
+                    </div>
+                    <div class="progetto-text">
+                        <div class="progetto-text-inner">
+                            <span class="progetto-overline">Identità visiva</span>
+                            <h3 class="progetto-title">Restyling completo per un ristorante milanese</h3>
+                            <p class="progetto-desc">Abbiamo affiancato un ristorante del quartiere Isola nella creazione di una nuova identità visiva: dal logo al menù stampato, dalle tovagliette ai cartelli interni. Un progetto integrato che ha trasformato l'esperienza del cliente fin dal primo sguardo, unendo stampa di qualità e coerenza grafica in ogni dettaglio.</p>
+                            <a class="progetto-vedi-btn" href="#">
+                                Vedi altro
+                                <span class="btn-arrow">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="progetto-slide">
+                    <div class="progetto-img">
+                        <img src="images/stampe_digitale/grafica.png" alt="Progetto 2">
+                    </div>
+                    <div class="progetto-text">
+                        <div class="progetto-text-inner">
+                            <span class="progetto-overline">Evento &amp; comunicazione</span>
+                            <h3 class="progetto-title">Campagna stampa per fiera di settore</h3>
+                            <p class="progetto-desc">Per una PMI del settore tecnologico abbiamo realizzato l'intera campagna espositiva per una fiera internazionale: roll-up, banner, brochure, gadget personalizzati e materiali promozionali. Tutto prodotto internamente in tempi rapidi, con un'attenzione meticolosa alla resa cromatica e alla qualità dei supporti.</p>
+                            <a class="progetto-vedi-btn" href="#">
+                                Vedi altro
+                                <span class="btn-arrow">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="progetto-slide">
+                    <div class="progetto-img">
+                        <img src="images/stampe_digitale/sticker.png" alt="Progetto 3">
+                    </div>
+                    <div class="progetto-text">
+                        <div class="progetto-text-inner">
+                            <span class="progetto-overline">Packaging &amp; brand</span>
+                            <h3 class="progetto-title">Linea etichette per prodotti artigianali</h3>
+                            <p class="progetto-desc">Una piccola azienda artigianale ci ha affidato la progettazione e la stampa di un'intera linea di etichette per i suoi prodotti. Abbiamo curato il design, scelto i materiali più adatti — carta naturale, finitura opaca e stampa a caldo — e consegnato un packaging che racconta autenticità e cura in ogni bottiglia.</p>
+                            <a class="progetto-vedi-btn" href="#">
+                                Vedi altro
+                                <span class="btn-arrow">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dots -->
+                <div class="progetti-dots" id="progetti-dots">
+                    <button class="progetti-dot active" data-idx="0" aria-label="Progetto 1"></button>
+                    <button class="progetti-dot" data-idx="1" aria-label="Progetto 2"></button>
+                    <button class="progetti-dot" data-idx="2" aria-label="Progetto 3"></button>
+                </div>
+
+                <!-- Progress bar -->
+                <div class="progetti-progress" id="progetti-progress"></div>
+            </div>
+
         </div>
     </section>
 
@@ -1176,6 +1445,56 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && panel.classList.contains('is-open')) closePanel();
     });
+
+    /* ═══════════════════════════════════════════
+       PROGETTI SLIDESHOW — auto-rotate ogni 10s
+       ═══════════════════════════════════════════ */
+    (function() {
+        const slides    = document.querySelectorAll('.progetto-slide');
+        const dots      = document.querySelectorAll('.progetti-dot');
+        const progress  = document.getElementById('progetti-progress');
+        const INTERVAL  = 10000;
+        let current     = 0;
+        let timer       = null;
+        let progTimer   = null;
+
+        function goTo(idx) {
+            slides[current].classList.remove('active');
+            dots[current].classList.remove('active');
+            current = (idx + slides.length) % slides.length;
+            slides[current].classList.add('active');
+            dots[current].classList.add('active');
+            resetProgress();
+        }
+
+        function resetProgress() {
+            if (progress) {
+                progress.style.transition = 'none';
+                progress.style.width = '0%';
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        progress.style.transition = `width ${INTERVAL}ms linear`;
+                        progress.style.width = '100%';
+                    });
+                });
+            }
+        }
+
+        function startAuto() {
+            clearInterval(timer);
+            timer = setInterval(() => goTo(current + 1), INTERVAL);
+        }
+
+        dots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                goTo(parseInt(dot.dataset.idx));
+                startAuto();
+            });
+        });
+
+        resetProgress();
+        startAuto();
+    })();
 });
 </script>
 
