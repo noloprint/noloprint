@@ -236,9 +236,24 @@
         /* DOVE SIAMO */
         .where-we-are-section{padding-top:60px;min-height:auto;}
         .where-we-are-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:stretch;}
-        .maps-link-preview{display:block;border-radius:24px;overflow:hidden;box-shadow:var(--apple-card-shadow);text-decoration:none;}
         .maps-frame{width:100%;min-height:420px;border:0;border-radius:24px;box-shadow:var(--apple-card-shadow);height:100%;object-fit:cover;display:block;}
-        .visit-btn-wrap{margin-top:18px;}
+
+        /* Info indirizzo */
+        .where-info-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 28px;
+        }
+        .where-address-title {
+            font-size: 2.4rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #1d1d1f;
+            line-height: 1.1;
+            margin: 0;
+        }
+
         .visit-btn{
             width:fit-content;text-decoration:none;color:#1d1d1f;background:#fff;
             border:1px solid rgba(0,0,0,.1);border-radius:999px;padding:12px 24px;
@@ -464,6 +479,7 @@
             #main-nav a{font-size:.75rem;padding:8px 12px;}
             .maps-frame{min-height:320px;}
             :root { --brick-w: 280px; --brick-h: 168px; }
+            .where-address-title { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -549,8 +565,8 @@
                     data-panel-color="#00AEEF"
                     data-panel-desc="Con la stampa digitale a piccolo formato puoi trasformare le tue idee in prodotti concreti come biglietti da visita, volantini o menu, scegliendo tra la praticità dell'A4 per i tuoi documenti ufficiali o l'impatto visivo dell'A3 per locandine e pieghevoli. Se hai bisogno di pochi pezzi o di personalizzare ogni singola copia con nomi e grafiche differenti, questa tecnologia ti garantisce una precisione cromatica impeccabile su ogni supporto, dai cartoncini pregiati alle etichette adesive, eliminando i costi fissi delle lastre tradizionali. È un'opportunità versatile per la tua comunicazione e un modo efficiente per ottenere risultati professionali in tempi record, valorizzando ogni dettaglio del tuo brand o del tuo progetto creativo."
                     data-panel-bricks='[
-                        [{"label":"Biglietti da visita","img":"images/stampe_digitale/sdig1.png"},{"label":"Volantini A4 / A5","img":""},{"label":"Brochure","img":""},{"label":"Locandine","img":""},{"label":"Manifesti 50×70","img":""}],
-                        [{"label":"Cartoline","img":""},{"label":"Flyer fronte/retro","img":""},{"label":"Menù","img":""},{"label":"Listini prezzi","img":""},{"label":"Inviti","img":""}]
+                        [{"label":"Biglietti da visita","img":"images/stampe_digitale/sdig1.png"},{"label":"Volantini A4 / A5","img":""},{"label":"Brochure","img":""},{"label":"Locandine","img":""}],
+                        [{"label":"Cartoline","img":""},{"label":"Menù","img":""},{"label":"Listini prezzi","img":""},{"label":"Inviti","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/sdig1.png" alt="Stampa digitale piccolo formato" class="service-card-media">
                     <div class="card-header">
@@ -565,7 +581,7 @@
                     data-panel-desc="La stampa digitale a grande formato ti permette di dare visibilità al tuo brand con striscioni, poster e pannelli di grande impatto. Ideale per eventi, fiere, vetrine e comunicazioni outdoor."
                     data-panel-bricks='[
                         [{"label":"Striscioni","img":"images/stampe_digitale/bdig1.png"},{"label":"Poster giganti","img":""},{"label":"Roll-up","img":""},{"label":"Tele canvas","img":""},{"label":"Forex e pannelli","img":""}],
-                        [{"label":"Adesivi da pavimento","img":""},{"label":"Stampa su tessuto","img":""},{"label":"Backlight","img":""},{"label":"Vetrofanie","img":""},{"label":"Segnaletica","img":""}]
+                        [{"label":"Adesivi da pavimento","img":""},{"label":"Stampa su tessuto","img":""},{"label":"Backlight","img":""},{"label":"Vetrofanie","img":""},{"label":"Segnaletica","img":""},{"label":"Manifesti","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/bdig1.png" alt="Stampa digitale grande formato" class="service-card-media">
                     <div class="card-header">
@@ -580,7 +596,7 @@
                     data-panel-desc="Personalizza t-shirt, felpe, tazze e gadget con il tuo logo o design. La stampa a trasferimento termico garantisce colori vividi e duraturi su ogni tipo di supporto tessile e rigido."
                     data-panel-bricks='[
                         [{"label":"T-shirt","img":"images/stampe_digitale/termi.png"},{"label":"Felpe","img":""},{"label":"Tazze","img":""},{"label":"Borse in cotone","img":""},{"label":"Cuscini","img":""}],
-                        [{"label":"Portachiavi","img":""},{"label":"Magneti","img":""},{"label":"Puzzle","img":""},{"label":"Copertine phone","img":""},{"label":"Mouse pad","img":""}]
+                        [{"label":"Magneti","img":""},{"label":"Mouse pad","img":""},{"label":"Pochette","img":""},{"label":"Capellini","img":""},{"label":"Spille","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/termi.png" alt="Gadget" class="service-card-media">
                     <div class="card-header">
@@ -595,7 +611,7 @@
                     data-panel-desc="Il nostro team grafico trasforma le tue idee in identità visive coerenti e professionali. Dal logo alla brochure, dal menù ai social kit, ogni progetto viene curato nei minimi dettagli."
                     data-panel-bricks='[
                         [{"label":"Logo & brand identity","img":"images/stampe_digitale/grafica.png"},{"label":"Impaginazione flyer","img":""},{"label":"Social media kit","img":""},{"label":"Menù e listini","img":""},{"label":"Presentazioni","img":""}],
-                        [{"label":"Cartellonistica","img":""},{"label":"Firma email","img":""},{"label":"Packaging","img":""},{"label":"Biglietti da visita","img":""},{"label":"Brochure aziendali","img":""}]
+                        [{"label":"Cartellonistica","img":""},{"label":"Packaging","img":""},{"label":"Biglietti da visita","img":""},{"label":"Brochure aziendali","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/grafica.png" alt="Grafica" class="service-card-media">
                     <div class="card-header">
@@ -610,7 +626,7 @@
                     data-panel-desc="Sticker e etichette su misura per ogni esigenza: dal packaging aziendale alle etichette prodotto, dai QR code agli adesivi decorativi. Alta qualità su materiali opachi, lucidi e trasparenti."
                     data-panel-bricks='[
                         [{"label":"Sticker su misura","img":"images/stampe_digitale/sticker.png"},{"label":"Etichette prodotto","img":""},{"label":"QR code adesivi","img":""},{"label":"Etichette trasparenti","img":""},{"label":"Packaging personalizzato","img":""}],
-                        [{"label":"Roll di etichette","img":""},{"label":"Sticker in resina","img":""},{"label":"Adesivi antimanomissione","img":""},{"label":"Etichette termiche","img":""},{"label":"Bollini colorati","img":""}]
+                        [{"label":"Adesivi antimanomissione","img":""},{"label":"Bollini colorati","img":""},{"label":"Etichette per bottiglie","img":""},{"label":"Etichette per documenti","img":""}]
                     ]'>
                     <video class="service-card-media" muted playsinline preload="metadata"
                         poster="images/stampe_digitale/sticker.png" data-play-on-hover>
@@ -627,8 +643,7 @@
                     data-panel-color="#00AEEF"
                     data-panel-desc="Banner, totem, roll-up e sistemi espositivi per fiere, eventi e punti vendita. Soluzioni professionali che rendono il tuo brand visibile e riconoscibile ovunque."
                     data-panel-bricks='[
-                        [{"label":"Banner e roll-up","img":"images/stampe_digitale/banner.png"},{"label":"Totem","img":""},{"label":"Espositori da banco","img":""},{"label":"Pannelli bifacciali","img":""},{"label":"Gazebo stampati","img":""}],
-                        [{"label":"Cornici a clic","img":""},{"label":"Display portadepliant","img":""},{"label":"Cavalletti","img":""},{"label":"Pannelli LED","img":""},{"label":"Porta poster","img":""}]
+                        [{"label":"Banner e roll-up","img":"images/stampe_digitale/banner.png"},{"label":"Espositori da banco","img":""},{"label":"Pannelli bifacciali","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/banner.png" alt="Banner" class="service-card-media">
                     <div class="card-header">
@@ -642,8 +657,8 @@
                     data-panel-color="#E2007A"
                     data-panel-desc="Stampa i tuoi ricordi su carta fotografica di alta qualità, canvas, tela o fotolibri. Ogni immagine viene riprodotta con colori fedeli e nitidezza impeccabile."
                     data-panel-bricks='[
-                        [{"label":"Foto 10×15","img":""},{"label":"Foto 20×30","img":""},{"label":"Album fotografici","img":""},{"label":"Canvas","img":""},{"label":"Fotolibri","img":""}],
-                        [{"label":"Fototessere","img":""},{"label":"Foto su tela","img":""},{"label":"Stampa panoramica","img":""},{"label":"Stampa passaporto","img":""},{"label":"Foto su forex","img":""}]
+                        [{"label":"Album fotografici","img":""},{"label":"Canvas","img":""},{"label":"Fotolibri","img":""},{"label":"Fototessere","img":""},{"label":"Foto su tela","img":""}],
+                        [{"label":"Foto su forex","img":""},{"label":"Stampa sublimatica","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/stampafoto.png" alt="Stampa foto" class="service-card-media">
                     <div class="card-header">
@@ -658,7 +673,7 @@
                     data-panel-desc="Trasforma i tuoi documenti cartacei in archivi digitali sicuri e ricercabili. Scansioni in alta risoluzione, OCR e salvataggio su USB o cloud per privati e aziende."
                     data-panel-bricks='[
                         [{"label":"Scansione A4","img":""},{"label":"Scansione A3","img":""},{"label":"Digitalizzazione archivi","img":""},{"label":"OCR e PDF ricercabile","img":""},{"label":"Scansione foto antiche","img":""}],
-                        [{"label":"Salvataggio USB/cloud","img":""},{"label":"Scansione libri","img":""},{"label":"Scansione documenti legali","img":""},{"label":"Restauro digitale foto","img":""},{"label":"Scansione diapositive","img":""}]
+                        [{"label":"Salvataggio USB/cloud","img":""},{"label":"Scansione libri","img":""},{"label":"Scansione documenti legali","img":""},{"label":"Restauro digitale foto","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/scansione.png" alt="Archiviazione digitale e scansioni" class="service-card-media">
                     <div class="card-header">
@@ -673,7 +688,7 @@
                     data-panel-desc="Timbri personalizzati per uffici, studi professionali e aziende. Realizziamo timbri tondi, rettangolari e autoinchiostranti con il tuo logo o testo in tempi rapidi."
                     data-panel-bricks='[
                         [{"label":"Timbro tondo","img":""},{"label":"Timbro rettangolare","img":""},{"label":"Autoinchiostrante","img":""},{"label":"Timbro data","img":""},{"label":"Numeratore","img":""}],
-                        [{"label":"Custodie","img":""},{"label":"Inchiostri ricambio","img":""},{"label":"Timbro firma","img":""},{"label":"Timbro grande formato","img":""},{"label":"Timbro personalizzato","img":""}]
+                        [{"label":"Inchiostri ricambio","img":""},{"label":"Timbro firma","img":""},{"label":"Timbro personalizzato","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/timbro.png" alt="Timbri" class="service-card-media">
                     <div class="card-header">
@@ -688,7 +703,7 @@
                     data-panel-desc="Rilegatura professionale per tesi, presentazioni, libri e documenti aziendali. Disponibile in spirale, brossura termica, punto metallico e con copertine rigide o flessibili."
                     data-panel-bricks='[
                         [{"label":"Spirale plastica","img":""},{"label":"Spirale metallica","img":""},{"label":"Brossura termica","img":""},{"label":"Copertine rigide","img":""},{"label":"Punto metallico","img":""}],
-                        [{"label":"Dorso telato","img":""},{"label":"Rilegatura giapponese","img":""},{"label":"Copertina soft touch","img":""},{"label":"Rilegatura a nastro","img":""},{"label":"Blocchi notes","img":""}]
+                        [{"label":"Copertina soft touch","img":""},{"label":"Blocchi notes","img":""},{"label":"Rilegatura a nastro","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/rilegatura.png" alt="Rilegatura" class="service-card-media">
                     <div class="card-header">
@@ -700,7 +715,7 @@
                 <div class="service-card" style="background:var(--apple-bg);"
                     data-panel-title="Centro copie"
                     data-panel-color="#00AEEF"
-                    data-panel-desc="Servizio di fotocopie e stampe rapido ed economico. Bianco e nero o colore, A4 o A3, fronte/retro, stampa da USB o email: tutto quello di cui hai bisogno in pochi minuti."
+                    data-panel-desc="Servizio di fotocopie e stampe rapido ed economico. Bianco e nero o colore, A4 o A3, fronte/retro, stampa da USB o email: tutto quello di cui hai bisogno in pochi minuti. Grazie alle nostre attrezzature, siamo in grado di produrre fino a 2100 copie all'ora."
                     data-panel-bricks='[
                         [{"label":"Fotocopie B/N","img":""},{"label":"Fotocopie colore","img":""},{"label":"Fronte/retro","img":""},{"label":"Stampa da USB","img":""},{"label":"Stampa da email","img":""}],
                         [{"label":"Formato A3","img":""},{"label":"Ordini urgenti","img":""},{"label":"Stampa multipla","img":""},{"label":"Riduzione/ingrandimento","img":""},{"label":"Stampa su carta speciale","img":""}]
@@ -718,7 +733,7 @@
                     data-panel-desc="Plastificazione professionale per proteggere e valorizzare i tuoi documenti, menù, cartelli e materiali promozionali. Disponibile in finitura lucida o opaca, dal formato tessera all'A3."
                     data-panel-bricks='[
                         [{"label":"Plastificazione A4","img":""},{"label":"Plastificazione A3","img":""},{"label":"Finitura lucida","img":""},{"label":"Finitura opaca","img":""},{"label":"Formato tessera","img":""}],
-                        [{"label":"Plastificazione a freddo","img":""},{"label":"Formato A5","img":""},{"label":"Plastificazione banner","img":""},{"label":"Plastificazione menù","img":""},{"label":"Anti-UV","img":""}]
+                        [{"label":"Plastificazione a freddo","img":""},{"label":"Formato A5","img":""},{"label":"Plastificazione grande formato","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/plastificazione.png" alt="Plastificazione" class="service-card-media">
                     <div class="card-header">
@@ -750,21 +765,17 @@
                     referrerpolicy="no-referrer-when-downgrade"
                     src="https://www.google.com/maps?q=NOLO+Print,+Via+Padova+49,+Milano&output=embed">
                 </iframe>
-                <a class="maps-link-preview"
-                    href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,3a,57.2y,290.38h,90.73t"
-                    target="_blank" rel="noopener noreferrer">
-                    <img src="images/mapintro.png" alt="Mappa NOLO Print" class="maps-frame">
-                </a>
-            </div>
-            <div class="visit-btn-wrap">
-                <a class="visit-btn"
-                    href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z"
-                    target="_blank" rel="noopener noreferrer">
-                    Vieni a trovarci!
-                    <img class="visit-btn-icon"
-                        src="https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png"
-                        alt="Google Maps">
-                </a>
+                <div class="where-info-box">
+                    <p class="where-address-title">Via Padova 49</p>
+                    <a class="visit-btn"
+                        href="https://www.google.com/maps/place/NOLO+Print/@45.4914487,9.2236507,14z"
+                        target="_blank" rel="noopener noreferrer">
+                        Vieni a trovarci!
+                        <img class="visit-btn-icon"
+                            src="https://www.gstatic.com/images/branding/product/2x/maps_96in128dp.png"
+                            alt="Google Maps">
+                    </a>
+                </div>
             </div>
         </div>
     </section>
@@ -894,7 +905,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let brickTimers       = [];
     let animTimer         = null;
     let closeAnimTimer    = null;
-    let lastOpenedCard    = null;   /* memorizza la card sorgente per il close-reverse */
+    let lastOpenedCard    = null;
 
     /* ── Scroll isolation ── */
     panel.addEventListener('wheel', (e) => {
@@ -1031,7 +1042,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         headerColorLine.style.backgroundColor = '#00AEEF';
 
-        /* Titolo dentro il pannello — sempre ciano */
         panelInlineTitle.textContent   = title;
         panelInlineTitle.style.color   = '#00AEEF';
         panelDesc.textContent          = desc;
@@ -1081,10 +1091,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 panel.style.transform    = 'translate(0px, 0px) scale(1, 1)';
                 panel.style.borderRadius = '0px';
 
-                /* Testo e mattoni partono insieme all'inizio dell'animazione */
                 panel.classList.add('content-visible');
 
-                /* Bottone indietro appare a destra */
                 backBtn.classList.add('visible');
                 dockedContainer.style.opacity       = '0';
                 dockedContainer.style.pointerEvents = 'none';
@@ -1104,7 +1112,6 @@ document.addEventListener("DOMContentLoaded", () => {
         panel.style.overflow = 'hidden';
         panel.scrollTop = 0;
 
-        /* ── Calcola la geometria di ritorno sulla card sorgente ── */
         let targetTransform  = 'translate(0, 40px) scale(0.92, 0.92)';
         let targetRadius     = '22px';
 
