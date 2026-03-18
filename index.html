@@ -67,6 +67,9 @@
             transition: background .5s ease, backdrop-filter .5s ease;
             pointer-events: none;
         }
+        #main-header.fast-hide {
+            transition: background .15s ease, backdrop-filter .15s ease !important;
+        }
         #main-header.scrolled,
         #main-header.panel-visible {
             background: rgba(255,255,255,0.92) !important;
@@ -300,19 +303,21 @@
             z-index: 850;
             visibility: hidden;
             pointer-events: none;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+            background: transparent;
         }
         #chi-siamo-panel.is-open {
             visibility: visible;
             pointer-events: auto;
         }
         .chi-siamo-panel-shell {
-            position: absolute;
-            inset: 0;
+            min-height: 100%;
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 40px 0;
+            justify-content: flex-start;
+            padding: 60px 0 80px;
             transform: translateX(100vw);
             transition: transform 0.82s cubic-bezier(0.65, 0, 0.35, 1);
             will-change: transform;
@@ -320,54 +325,44 @@
         body.chi-siamo-open .chi-siamo-panel-shell {
             transform: translateX(0);
         }
+
+        /* Nessun box — testo direttamente sull'immagine */
         .chi-siamo-card {
-            width: min(50%, 760px);
-            padding: 52px 56px;
-            border-radius: 32px;
-            background: rgba(255,255,255,0.88);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            box-shadow: 0 20px 56px rgba(0,0,0,0.14);
+            width: 50%;
+            max-width: 640px;
+            margin-left: 8%;
             opacity: 0;
-            transform: translateX(48px);
-            transition: opacity 0.36s ease 0.5s, transform 0.46s ease 0.5s;
+            transform: translateX(40px);
+            transition: opacity 0.44s ease 0.5s, transform 0.52s ease 0.5s;
         }
         body.chi-siamo-open .chi-siamo-card {
             opacity: 1;
             transform: translateX(0);
         }
-        .chi-siamo-kicker {
-            display: inline-block;
-            margin-bottom: 16px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 1.3px;
-            text-transform: uppercase;
-            color: #00AEEF;
-        }
         .chi-siamo-heading {
-            margin: 0 0 18px;
-            font-size: clamp(2.4rem, 4vw, 4.4rem);
-            line-height: 0.98;
+            margin: 0 0 36px;
+            font-size: clamp(3rem, 5vw, 5.6rem);
+            line-height: 0.92;
             font-weight: 800;
-            letter-spacing: -2px;
+            letter-spacing: -3px;
             color: #1d1d1f;
         }
         .chi-siamo-heading .heading-accent { color: #00AEEF; }
         .chi-siamo-copy {
-            margin: 0;
+            margin: 0 0 20px;
             font-size: 1rem;
-            line-height: 1.9;
+            line-height: 1.85;
             color: #3a3a3c;
-            max-width: 38ch;
         }
+        .chi-siamo-copy:last-of-type { margin-bottom: 0; }
+        .chi-siamo-copy strong { font-weight: 800; color: #1d1d1f; }
         .chi-siamo-close-hint {
-            margin-top: 28px;
-            font-size: 0.78rem;
+            margin-top: 32px;
+            font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
-            color: rgba(29,29,31,0.48);
+            color: rgba(29,29,31,0.35);
         }
 
         /* ═══════════════════════════════════════════
@@ -923,16 +918,12 @@
             .progetto-img { height: 240px; }
         }
         @media (max-width: 1200px) {
-            .chi-siamo-card { width: min(86%, 760px); }
+            .chi-siamo-card { width: 70%; margin-left: 6%; }
         }
         @media (max-width: 768px) {
-            .chi-siamo-panel-shell { padding: 24px 0; }
-            .chi-siamo-card {
-                width: 90%;
-                padding: 34px 26px;
-                border-radius: 26px;
-            }
-            .chi-siamo-copy { font-size: 0.94rem; }
+            .chi-siamo-panel-shell { padding: 40px 0 60px; }
+            .chi-siamo-card { width: 85%; margin-left: 5%; }
+            .chi-siamo-copy { font-size: 0.93rem; }
         }
     </style>
 </head>
@@ -973,10 +964,12 @@
 <div id="chi-siamo-panel" aria-label="Chi siamo">
     <div class="chi-siamo-panel-shell">
         <div class="chi-siamo-card">
-            <span class="chi-siamo-kicker">NOLO Print</span>
             <h2 class="chi-siamo-heading">Chi <span class="heading-accent">siamo</span></h2>
-            <p class="chi-siamo-copy">Siamo un laboratorio di stampa e personalizzazione a Milano: uniamo consulenza, creatività e produzione interna per trasformare ogni richiesta in un progetto concreto, rapido e curato nei dettagli. Accompagniamo privati, professionisti e attività del quartiere con soluzioni su misura, dalla grafica alla stampa finale, mantenendo un rapporto diretto e umano in ogni fase.</p>
-            <p class="chi-siamo-close-hint">Premi “Indietro” per tornare all’indice.</p>
+            <p class="chi-siamo-copy">Il cuore di Via Padova, oggi è per tutti <strong>NOLO</strong> — un distretto ricolmo di culture e storie che rimbalzano dai sette continenti fino al centro del quartiere.</p>
+            <p class="chi-siamo-copy">E proprio qui, quarant'anni fa, qualcuno ha avuto l'idea un po' folle di aprire un piccolo centro stampa e di farlo crescere giorno dopo giorno, un lavoro dopo l'altro.</p>
+            <p class="chi-siamo-copy">Da allora sono cambiate le macchine, sono cambiate le tecnologie e il mondo della stampa si è trasformato completamente. Abbiamo cambiato perfino nome — ma ciò che non cambia è lo spirito con cui questo posto è nato: fare bene il proprio lavoro, aiutare le persone a dare forma alle proprie idee e diventare, col tempo, un riferimento per il quartiere.</p>
+            <p class="chi-siamo-copy"><strong>Nolo Print</strong> è ancora qui, con quasi mezzo secolo di storia alle spalle e la stessa voglia di stampare, di farlo bene, farlo in fretta — e per i nostri milanesi imbruttiti, farlo al prezzo giusto. Per continuare ad essere quel posto dal quale tutti vorrete passare prima o poi.</p>
+            <p class="chi-siamo-close-hint">Premi "Indietro" per tornare all'indice.</p>
         </div>
     </div>
 </div>
@@ -1371,6 +1364,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const parallaxSpeed = .03, smoothing = .12;
     let rafId = null;
     let logoLockedToHeader = false;
+    let bgFrozen = false;
     let logoSlideTimer = null;
 
     function getScrollLogoTransform() {
@@ -1421,7 +1415,13 @@ document.addEventListener("DOMContentLoaded", () => {
     function update() {
         const sy = window.scrollY;
         const ep = 1 - Math.pow(1 - Math.min(sy/maxScroll, 1), 3);
-        header.classList.toggle('scrolled', sy > 50);
+        const wasScrolled = header.classList.contains('scrolled');
+        const isScrolled = sy > 50;
+        if (wasScrolled && !isScrolled) {
+            header.classList.add('fast-hide');
+            setTimeout(() => header.classList.remove('fast-hide'), 200);
+        }
+        header.classList.toggle('scrolled', isScrolled);
         body.classList.toggle('is-at-top', sy <= 50);
         if (!logoLockedToHeader) logo.style.transform = getScrollLogoTransform();
 
@@ -1449,7 +1449,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function rafLoop() {
         currentYPercent += (targetYPercent - currentYPercent) * smoothing;
         currentOpacity  += (targetOpacity  - currentOpacity)  * smoothing;
-        if (bg) {
+        if (bg && !bgFrozen) {
             bg.style.backgroundPosition = `center ${Math.max(0,Math.min(100,currentYPercent))}%`;
             bg.style.opacity = currentOpacity.toFixed(3);
         }
@@ -1458,6 +1458,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function openChiSiamoPanel() {
         if (!chiSiamoPanel || chiSiamoPanel.classList.contains('is-open')) return;
+        bgFrozen = true;
         moveLogoToHeader();
         chiSiamoPanel.classList.add('is-open');
         header.classList.add('panel-visible', 'scrolled');
@@ -1469,6 +1470,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function closeChiSiamoPanel() {
         if (!chiSiamoPanel || !chiSiamoPanel.classList.contains('is-open')) return;
+        bgFrozen = false;
         body.classList.remove('chi-siamo-open');
         restoreLogoFromHeader();
         backBtn.classList.remove('visible');
