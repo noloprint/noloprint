@@ -111,6 +111,9 @@
             will-change: transform;
             cursor: pointer;
         }
+        #main-logo.logo-sliding {
+            transition: transform 0.82s cubic-bezier(0.65, 0, 0.35, 1);
+        }
 
         /* ── Back button — ora a DESTRA ── */
         #header-back-btn {
@@ -1360,19 +1363,58 @@ document.addEventListener("DOMContentLoaded", () => {
     const chiSiamoAnchor  = document.getElementById('chi-siamo');
 
     const startScale = 3.5, maxScroll = 300;
+    const LOGO_SLIDE_MS = 820;
     let startX = 0, startY = 0;
     let targetYPercent = 50, currentYPercent = 50;
     let targetOpacity  = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--strip-opacity')) || .5;
     let currentOpacity = targetOpacity;
     const parallaxSpeed = .03, smoothing = .12;
     let rafId = null;
+    let logoLockedToHeader = false;
+    let logoSlideTimer = null;
+
+    function getScrollLogoTransform() {
+        const sy = window.scrollY;
+        const ep = 1 - Math.pow(1 - Math.min(sy/maxScroll, 1), 3);
+        return `translate(${startX*(1-ep)}px,${startY*(1-ep)}px) scale(${startScale-(startScale-1)*ep})`;
+    }
+
+    function setLogoSliding(enabled) {
+        logo.classList.toggle('logo-sliding', enabled);
+        if (!enabled && logoSlideTimer) {
+            clearTimeout(logoSlideTimer);
+            logoSlideTimer = null;
+        }
+    }
+
+    function moveLogoToHeader() {
+        logoLockedToHeader = true;
+        setLogoSliding(true);
+        requestAnimationFrame(() => {
+            logo.style.transform = 'translate(0px,0px) scale(1)';
+        });
+    }
+
+    function restoreLogoFromHeader() {
+        logoLockedToHeader = false;
+        setLogoSliding(true);
+        requestAnimationFrame(() => {
+            logo.style.transform = getScrollLogoTransform();
+        });
+        logoSlideTimer = setTimeout(() => setLogoSliding(false), LOGO_SLIDE_MS + 40);
+    }
 
     function initPositions() {
+        const shouldStayInHeader = logoLockedToHeader;
         logo.style.transform = 'none';
         const r = logo.getBoundingClientRect();
         startX = window.innerWidth/2 - r.left - r.width*startScale/2;
         startY = window.innerHeight*.11 - r.top;
-        update();
+        if (shouldStayInHeader) {
+            logo.style.transform = 'translate(0px,0px) scale(1)';
+        } else {
+            update();
+        }
         if (!rafId) rafLoop();
     }
 
@@ -1381,7 +1423,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const ep = 1 - Math.pow(1 - Math.min(sy/maxScroll, 1), 3);
         header.classList.toggle('scrolled', sy > 50);
         body.classList.toggle('is-at-top', sy <= 50);
-        logo.style.transform = `translate(${startX*(1-ep)}px,${startY*(1-ep)}px) scale(${startScale-(startScale-1)*ep})`;
+        if (!logoLockedToHeader) logo.style.transform = getScrollLogoTransform();
 
         titles.forEach(t => {
             const w = document.getElementById(t.getAttribute('data-target'));
@@ -1416,6 +1458,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function openChiSiamoPanel() {
         if (!chiSiamoPanel || chiSiamoPanel.classList.contains('is-open')) return;
+        moveLogoToHeader();
         chiSiamoPanel.classList.add('is-open');
         header.classList.add('panel-visible', 'scrolled');
         body.classList.add('panel-open', 'chi-siamo-open');
@@ -1427,6 +1470,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function closeChiSiamoPanel() {
         if (!chiSiamoPanel || !chiSiamoPanel.classList.contains('is-open')) return;
         body.classList.remove('chi-siamo-open');
+        restoreLogoFromHeader();
         backBtn.classList.remove('visible');
         dockedContainer.style.opacity = '';
         dockedContainer.style.pointerEvents = '';
@@ -1437,7 +1481,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 body.classList.remove('panel-open');
                 update();
             }
-        }, 840);
+        }, LOGO_SLIDE_MS + 20);
     }
 
     logo.addEventListener('click', () => {
