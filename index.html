@@ -294,6 +294,30 @@
             transform: translateX(-100vw);
         }
 
+        /* ── Immagine di sfondo fissa per Chi siamo ── */
+        #chi-siamo-bg {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: 100%;
+            height: calc(100vh - var(--header-height));
+            z-index: 848;
+            background: url('images/zonaintro_1.jpg') center / cover no-repeat;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        body.chi-siamo-open #chi-siamo-bg {
+            opacity: 1;
+        }
+        /* overlay scuro per leggibilità testo */
+        #chi-siamo-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.55);
+        }
+
         #chi-siamo-panel {
             position: fixed;
             top: var(--header-height);
@@ -960,6 +984,9 @@
 
 <!-- Backdrop scuro -->
 <div id="panel-backdrop"></div>
+
+<!-- Sfondo fisso Chi siamo -->
+<div id="chi-siamo-bg" aria-hidden="true"></div>
 
 <div id="chi-siamo-panel" aria-label="Chi siamo">
     <div class="chi-siamo-panel-shell">
