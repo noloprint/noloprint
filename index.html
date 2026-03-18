@@ -278,6 +278,95 @@
         .footer-black{background:#000;color:#f5f5f7;padding:70px 0;text-align:center;z-index:3;position:relative;}
         .footer-content{line-height:1.8;font-size:.9rem;opacity:.8;}
 
+        #main-content {
+            position: relative;
+            z-index: 2;
+            will-change: transform;
+            transition: transform 0.82s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+        body.chi-siamo-open #main-content {
+            transform: translateX(-100vw);
+        }
+
+        #chi-siamo-panel {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: 100%;
+            height: calc(100vh - var(--header-height));
+            z-index: 850;
+            visibility: hidden;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        #chi-siamo-panel.is-open {
+            visibility: visible;
+            pointer-events: auto;
+        }
+        .chi-siamo-panel-shell {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+            transform: translateX(100vw);
+            transition: transform 0.82s cubic-bezier(0.65, 0, 0.35, 1);
+            will-change: transform;
+        }
+        body.chi-siamo-open .chi-siamo-panel-shell {
+            transform: translateX(0);
+        }
+        .chi-siamo-card {
+            width: min(50%, 760px);
+            padding: 52px 56px;
+            border-radius: 32px;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 20px 56px rgba(0,0,0,0.14);
+            opacity: 0;
+            transform: translateX(48px);
+            transition: opacity 0.36s ease 0.5s, transform 0.46s ease 0.5s;
+        }
+        body.chi-siamo-open .chi-siamo-card {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .chi-siamo-kicker {
+            display: inline-block;
+            margin-bottom: 16px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 1.3px;
+            text-transform: uppercase;
+            color: #00AEEF;
+        }
+        .chi-siamo-heading {
+            margin: 0 0 18px;
+            font-size: clamp(2.4rem, 4vw, 4.4rem);
+            line-height: 0.98;
+            font-weight: 800;
+            letter-spacing: -2px;
+            color: #1d1d1f;
+        }
+        .chi-siamo-heading .heading-accent { color: #00AEEF; }
+        .chi-siamo-copy {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.9;
+            color: #3a3a3c;
+            max-width: 38ch;
+        }
+        .chi-siamo-close-hint {
+            margin-top: 28px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(29,29,31,0.48);
+        }
+
         /* ═══════════════════════════════════════════
            DETAIL PANEL — iOS Expand Animation
            ═══════════════════════════════════════════ */
@@ -830,6 +919,18 @@
             .progetto-slide:not(.active) { display: none; }
             .progetto-img { height: 240px; }
         }
+        @media (max-width: 1200px) {
+            .chi-siamo-card { width: min(86%, 760px); }
+        }
+        @media (max-width: 768px) {
+            .chi-siamo-panel-shell { padding: 24px 0; }
+            .chi-siamo-card {
+                width: 90%;
+                padding: 34px 26px;
+                border-radius: 26px;
+            }
+            .chi-siamo-copy { font-size: 0.94rem; }
+        }
     </style>
 </head>
 <body class="is-at-top">
@@ -865,6 +966,17 @@
 
 <!-- Backdrop scuro -->
 <div id="panel-backdrop"></div>
+
+<div id="chi-siamo-panel" aria-label="Chi siamo">
+    <div class="chi-siamo-panel-shell">
+        <div class="chi-siamo-card">
+            <span class="chi-siamo-kicker">NOLO Print</span>
+            <h2 class="chi-siamo-heading">Chi <span class="heading-accent">siamo</span></h2>
+            <p class="chi-siamo-copy">Siamo un laboratorio di stampa e personalizzazione a Milano: uniamo consulenza, creatività e produzione interna per trasformare ogni richiesta in un progetto concreto, rapido e curato nei dettagli. Accompagniamo privati, professionisti e attività del quartiere con soluzioni su misura, dalla grafica alla stampa finale, mantenendo un rapporto diretto e umano in ogni fase.</p>
+            <p class="chi-siamo-close-hint">Premi “Indietro” per tornare all’indice.</p>
+        </div>
+    </div>
+</div>
 
 <!-- ═══════════════════════════════
      PROGETTI EXPAND PANEL
@@ -1244,6 +1356,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const body            = document.body;
     const bg              = document.querySelector('.bg-strip');
     const footerEl        = document.querySelector('footer');
+    const chiSiamoPanel   = document.getElementById('chi-siamo-panel');
+    const chiSiamoAnchor  = document.getElementById('chi-siamo');
 
     const startScale = 3.5, maxScroll = 300;
     let startX = 0, startY = 0;
@@ -1300,7 +1414,36 @@ document.addEventListener("DOMContentLoaded", () => {
         rafId = requestAnimationFrame(rafLoop);
     }
 
-    logo.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+    function openChiSiamoPanel() {
+        if (!chiSiamoPanel || chiSiamoPanel.classList.contains('is-open')) return;
+        chiSiamoPanel.classList.add('is-open');
+        header.classList.add('panel-visible', 'scrolled');
+        body.classList.add('panel-open', 'chi-siamo-open');
+        backBtn.classList.add('visible');
+        dockedContainer.style.opacity = '0';
+        dockedContainer.style.pointerEvents = 'none';
+    }
+
+    function closeChiSiamoPanel() {
+        if (!chiSiamoPanel || !chiSiamoPanel.classList.contains('is-open')) return;
+        body.classList.remove('chi-siamo-open');
+        backBtn.classList.remove('visible');
+        dockedContainer.style.opacity = '';
+        dockedContainer.style.pointerEvents = '';
+        header.classList.remove('panel-visible');
+        setTimeout(() => {
+            if (!body.classList.contains('chi-siamo-open')) {
+                chiSiamoPanel.classList.remove('is-open');
+                body.classList.remove('panel-open');
+                update();
+            }
+        }, 840);
+    }
+
+    logo.addEventListener('click', () => {
+        closeChiSiamoPanel();
+        window.scrollTo({top:0, behavior:'smooth'});
+    });
 
     titles.forEach(t => {
         t.addEventListener('click', () => {
@@ -1321,10 +1464,23 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('#main-nav a[href^="#"]').forEach(a => {
         a.addEventListener('click', function(e) {
             e.preventDefault();
-            const el = document.querySelector(this.getAttribute('href'));
+            const target = this.getAttribute('href');
+            if (target === '#chi-siamo') {
+                openChiSiamoPanel();
+                return;
+            }
+            closeChiSiamoPanel();
+            const el = document.querySelector(target);
             if (el) window.scrollTo({top: Math.max(0, window.scrollY + el.getBoundingClientRect().top - 100), behavior:'smooth'});
         });
     });
+
+    if (chiSiamoAnchor) {
+        chiSiamoAnchor.addEventListener('click', (e) => {
+            e.preventDefault();
+            openChiSiamoPanel();
+        });
+    }
 
     window.addEventListener('scroll', update, {passive:true});
     window.addEventListener('resize', initPositions);
@@ -1609,11 +1765,15 @@ document.addEventListener("DOMContentLoaded", () => {
         card.addEventListener('click', () => openPanel(card));
     });
 
-    backBtn.addEventListener('click', closePanel);
+    backBtn.addEventListener('click', () => {
+        closePanel();
+        closeChiSiamoPanel();
+    });
     panelBackdrop.addEventListener('click', closePanel);
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && panel.classList.contains('is-open')) closePanel();
+        if (e.key === 'Escape' && chiSiamoPanel && chiSiamoPanel.classList.contains('is-open')) closeChiSiamoPanel();
     });
 
     /* ═══════════════════════════════════════════
