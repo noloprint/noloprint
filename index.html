@@ -68,7 +68,7 @@
             pointer-events: none;
         }
         #main-header.fast-hide {
-            transition: background .15s ease, backdrop-filter .15s ease !important;
+            transition: background .08s linear, backdrop-filter .08s linear !important;
         }
         #main-header.scrolled,
         #main-header.panel-visible {
@@ -184,7 +184,7 @@
         }
         #main-nav a:nth-child(1):hover{background:rgba(0,174,239,.16);}
         #main-nav a:nth-child(2):hover{background:rgba(226,0,122,.14);}
-        #main-nav a:nth-child(3):hover{background:rgba(255,230,0,.20);}
+        #main-nav a:nth-child(3):hover{background:rgba(255,230,0,.28);}
         #main-nav a:nth-child(4):hover{background:rgba(0,0,0,.08);}
 
         /* HERO */
@@ -340,7 +340,7 @@
             min-height: 100%;
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             padding: 60px 0 80px;
             transform: translateX(100vw);
             transition: transform 0.82s cubic-bezier(0.65, 0, 0.35, 1);
@@ -350,38 +350,43 @@
             transform: translateX(0);
         }
 
-        /* Nessun box — testo direttamente sull'immagine */
+        /* Card allineata al grid-limiter (stesso bordo sinistro del logo) */
         .chi-siamo-card {
             width: 50%;
-            max-width: 640px;
-            margin-left: 8%;
+            margin: 0 auto;
+            padding: 52px 56px;
+            border-radius: 32px;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 20px 56px rgba(0,0,0,0.14);
             opacity: 0;
-            transform: translateX(40px);
-            transition: opacity 0.44s ease 0.5s, transform 0.52s ease 0.5s;
+            transform: translateX(48px);
+            transition: opacity 0.36s ease 0.5s, transform 0.46s ease 0.5s;
         }
         body.chi-siamo-open .chi-siamo-card {
             opacity: 1;
             transform: translateX(0);
         }
         .chi-siamo-heading {
-            margin: 0 0 36px;
-            font-size: clamp(3rem, 5vw, 5.6rem);
+            margin: 0 0 28px;
+            font-size: clamp(2.6rem, 4vw, 4.8rem);
             line-height: 0.92;
             font-weight: 800;
-            letter-spacing: -3px;
+            letter-spacing: -2.5px;
             color: #1d1d1f;
         }
-        .chi-siamo-heading .heading-accent { color: #00AEEF; }
+        .chi-siamo-heading .heading-accent { color: #1d1d1f; }
         .chi-siamo-copy {
-            margin: 0 0 20px;
-            font-size: 1rem;
+            margin: 0 0 18px;
+            font-size: 0.97rem;
             line-height: 1.85;
             color: #3a3a3c;
         }
         .chi-siamo-copy:last-of-type { margin-bottom: 0; }
         .chi-siamo-copy strong { font-weight: 800; color: #1d1d1f; }
         .chi-siamo-close-hint {
-            margin-top: 32px;
+            margin-top: 28px;
             font-size: 0.72rem;
             font-weight: 700;
             letter-spacing: 1px;
@@ -942,11 +947,11 @@
             .progetto-img { height: 240px; }
         }
         @media (max-width: 1200px) {
-            .chi-siamo-card { width: 70%; margin-left: 6%; }
+            .chi-siamo-card { width: 88%; }
         }
         @media (max-width: 768px) {
             .chi-siamo-panel-shell { padding: 40px 0 60px; }
-            .chi-siamo-card { width: 85%; margin-left: 5%; }
+            .chi-siamo-card { width: 90%; padding: 34px 28px; border-radius: 26px; }
             .chi-siamo-copy { font-size: 0.93rem; }
         }
     </style>
@@ -1038,8 +1043,8 @@
                 <nav id="main-nav" aria-label="Indice sezioni">
                     <a href="#sec-cyan">cosa facciamo</a>
                     <a href="#sec-magenta">progetti</a>
-                    <a href="#chi-siamo">chi siamo</a>
                     <a href="#dove-siamo">dove siamo</a>
+                    <a href="#chi-siamo">chi siamo</a>
                 </nav>
             </div>
         </div>
@@ -1444,9 +1449,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const ep = 1 - Math.pow(1 - Math.min(sy/maxScroll, 1), 3);
         const wasScrolled = header.classList.contains('scrolled');
         const isScrolled = sy > 50;
-        if (wasScrolled && !isScrolled) {
+        if (wasScrolled && !isScrolled && sy < 10) {
             header.classList.add('fast-hide');
-            setTimeout(() => header.classList.remove('fast-hide'), 200);
+            setTimeout(() => header.classList.remove('fast-hide'), 100);
         }
         header.classList.toggle('scrolled', isScrolled);
         body.classList.toggle('is-at-top', sy <= 50);
@@ -1490,9 +1495,10 @@ document.addEventListener("DOMContentLoaded", () => {
         chiSiamoPanel.classList.add('is-open');
         header.classList.add('panel-visible', 'scrolled');
         body.classList.add('panel-open', 'chi-siamo-open');
-        backBtn.classList.add('visible');
-        dockedContainer.style.opacity = '0';
+        dockedContainer.style.transition    = 'none';
+        dockedContainer.style.opacity       = '0';
         dockedContainer.style.pointerEvents = 'none';
+        backBtn.classList.add('visible');
     }
 
     function closeChiSiamoPanel() {
@@ -1501,9 +1507,23 @@ document.addEventListener("DOMContentLoaded", () => {
         body.classList.remove('chi-siamo-open');
         restoreLogoFromHeader();
         backBtn.classList.remove('visible');
-        dockedContainer.style.opacity = '';
+        dockedContainer.style.transition    = '';
+        dockedContainer.style.opacity       = '';
         dockedContainer.style.pointerEvents = '';
+        // Scompare subito — override diretto, niente transition
+        header.style.transition = 'none';
+        header.style.background = 'rgba(255,255,255,0)';
+        header.style.backdropFilter = 'blur(0px)';
+        header.style.webkitBackdropFilter = 'blur(0px)';
         header.classList.remove('panel-visible');
+        if (window.scrollY <= 50) header.classList.remove('scrolled');
+        // Ripristina la transition dopo un frame
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            header.style.transition = '';
+            header.style.background = '';
+            header.style.backdropFilter = '';
+            header.style.webkitBackdropFilter = '';
+        }));
         setTimeout(() => {
             if (!body.classList.contains('chi-siamo-open')) {
                 chiSiamoPanel.classList.remove('is-open');
@@ -1753,6 +1773,11 @@ document.addEventListener("DOMContentLoaded", () => {
         header.classList.add('panel-visible', 'scrolled');
         body.classList.add('panel-open');
 
+        // Nascondi il titolo subito, senza transition, così non si sposta quando "Indietro" si allarga
+        dockedContainer.style.transition = 'none';
+        dockedContainer.style.opacity    = '0';
+        dockedContainer.style.pointerEvents = 'none';
+
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 panel.style.transition   = `transform ${DUR_OPEN}ms ${EASE_OPEN}, border-radius ${DUR_OPEN}ms ${EASE_OPEN}`;
@@ -1762,8 +1787,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 panel.classList.add('content-visible');
 
                 backBtn.classList.add('visible');
-                dockedContainer.style.opacity       = '0';
-                dockedContainer.style.pointerEvents = 'none';
 
                 animTimer = setTimeout(() => {
                     panel.style.overflow = '';
@@ -1815,6 +1838,7 @@ document.addEventListener("DOMContentLoaded", () => {
         panelBackdrop.classList.remove('visible');
 
         backBtn.classList.remove('visible');
+        dockedContainer.style.transition    = '';
         dockedContainer.style.opacity       = '';
         dockedContainer.style.pointerEvents = '';
         header.classList.remove('panel-visible');
@@ -1986,9 +2010,10 @@ document.addEventListener("DOMContentLoaded", () => {
             vediWrap.classList.add('is-hidden');
             header.classList.add('panel-visible', 'scrolled');
             body.classList.add('panel-open');
-            backBtn.classList.add('visible');
+            dockedContainer.style.transition    = 'none';
             dockedContainer.style.opacity       = '0';
             dockedContainer.style.pointerEvents = 'none';
+            backBtn.classList.add('visible');
 
             /* Expand fires immediately after panel is placed */
             requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -2041,6 +2066,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             header.classList.remove('panel-visible');
             backBtn.classList.remove('visible');
+            dockedContainer.style.transition    = '';
             dockedContainer.style.opacity       = '';
             dockedContainer.style.pointerEvents = '';
             vediWrap.classList.remove('is-hidden');
