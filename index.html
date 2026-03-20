@@ -1064,7 +1064,7 @@
                     data-panel-color="#00AEEF"
                     data-panel-desc="Con la stampa digitale a piccolo formato puoi trasformare le tue idee in prodotti concreti come biglietti da visita, volantini o menu, scegliendo tra la praticità dell'A4 per i tuoi documenti ufficiali o l'impatto visivo dell'A3 per locandine e pieghevoli. Se hai bisogno di pochi pezzi o di personalizzare ogni singola copia con nomi e grafiche differenti, questa tecnologia ti garantisce una precisione cromatica impeccabile su ogni supporto, dai cartoncini pregiati alle etichette adesive, eliminando i costi fissi delle lastre tradizionali. È un'opportunità versatile per la tua comunicazione e un modo efficiente per ottenere risultati professionali in tempi record, valorizzando ogni dettaglio del tuo brand o del tuo progetto creativo."
                     data-panel-bricks='[
-                        [{"label":"Biglietti da visita","img":"images/stampe_digitale/piccolo_formato/biglietti da visita.png"},{"label":"Volantini A4 / A5","img":""},{"label":"Brochure","img":""},{"label":"Locandine","img":"images/stampe_digitale/piccolo_formato/festival.png"}],
+                        [{"label":"Biglietti da visita","img":"images/stampe_digitale/piccolo_formato/biglietti_da visita1.png"},{"label":"Volantini A4 / A5","img":""},{"label":"Brochure","img":"images/stampe_digitale/piccolo_formato/brochure1.png"},{"label":"Locandine","img":"images/stampe_digitale/piccolo_formato/festival.png"}],
                         [{"label":"Cartoline","img":""},{"label":"Menù","img":""},{"label":"Listini prezzi","img":""},{"label":"Inviti","img":"images/stampe_digitale/piccolo_formato/lettere.png"}]
                     ]'>
                     <img src="images/stampe_digitale/sdig1.png" alt="Stampa digitale piccolo formato" class="service-card-media">
@@ -1614,12 +1614,193 @@ document.addEventListener("DOMContentLoaded", () => {
     const EASE_OPEN  = 'cubic-bezier(0.32, 0.72, 0, 1)';
     const EASE_CLOSE = 'cubic-bezier(0.2, 0, 0, 1)';
 
-    function makeBrickEl(b, extraClass) {
+    const PANEL_IMAGE_FOLDERS = {
+        'Stampa digitale piccolo formato': 'images/stampe_digitale/piccolo_formato',
+        'Stampa digitale grande formato': 'images/grande_formato',
+        'Stampe termiche – Gadget': 'images/termico_gadget',
+        'Stickers ed etichette': 'images/etichette',
+        'Stampa foto': 'images/stampa_foto'
+    };
+
+    const IMAGE_CATALOG = {
+        'Stampa digitale piccolo formato': [
+            'images/stampe_digitale/piccolo_formato/biglietti_da visita1.png',
+            'images/stampe_digitale/piccolo_formato/biglietti_da visita2.png',
+            'images/stampe_digitale/piccolo_formato/biglietti_da visita3.jpeg',
+            'images/stampe_digitale/piccolo_formato/biglietti_da visita4.jpeg',
+            'images/stampe_digitale/piccolo_formato/cartoline1.jpeg',
+            'images/stampe_digitale/piccolo_formato/cartoline2.jpeg',
+            'images/stampe_digitale/piccolo_formato/cartoline3.jpeg',
+            'images/stampe_digitale/piccolo_formato/cartoline4.JPG',
+            'images/stampe_digitale/piccolo_formato/cartoline5.jpeg',
+            'images/stampe_digitale/piccolo_formato/festival.png',
+            'images/stampe_digitale/piccolo_formato/lettere.png',
+            'images/stampe_digitale/piccolo_formato/menu_pieghevole.png',
+            'images/stampe_digitale/piccolo_formato/menù appoggio.png',
+            'images/stampe_digitale/piccolo_formato/stampa A4_A3.png'
+        ],
+        'Stampa digitale grande formato': [
+            'images/grande_formato/backlight1.jpeg',
+            'images/grande_formato/backlight2.jpeg',
+            'images/grande_formato/backlight3.jpeg',
+            'images/grande_formato/rollup1.JPG',
+            'images/grande_formato/rollup2.JPG',
+            'images/grande_formato/poster1.JPG',
+            'images/grande_formato/poster2.JPG',
+            'images/grande_formato/quadro1.jpeg',
+            'images/grande_formato/quadro2.jpeg',
+            'images/grande_formato/quadro3.jpeg',
+            'images/grande_formato/quadro4.jpeg',
+            'images/grande_formato/fotoforex1.jpg',
+            'images/grande_formato/fotoforex2.jpg',
+            'images/grande_formato/fotoforex3.jpg',
+            'images/grande_formato/fotoforex4.jpeg',
+            'images/grande_formato/fotoforex5.jpeg',
+            'images/grande_formato/fotoforex6.jpeg',
+            'images/grande_formato/fotoforex7.jpeg',
+            'images/grande_formato/fotoforex8.jpg',
+            'images/grande_formato/adesivi_pavimento.jpeg',
+            'images/grande_formato/adesivi_pavimento2.jpeg',
+            'images/grande_formato/vetrofania_prespaziati.png',
+            'images/grande_formato/vetrofania_stampa_su_trasparente.png',
+            'images/grande_formato/stampa_canvas.png',
+            'images/grande_formato/stampa _canvas2.png',
+            'images/grande_formato/stampa_canvas_plotter.png'
+        ],
+        'Stampe termiche – Gadget': [
+            'images/termico_gadget/t-shirt1.jpeg',
+            'images/termico_gadget/t-shirt2.jpeg',
+            'images/termico_gadget/felpa1.jpg',
+            'images/termico_gadget/borsa1.jpeg',
+            'images/termico_gadget/borsa2.JPG',
+            'images/termico_gadget/borsa3.JPG',
+            'images/termico_gadget/spille1.jpeg',
+            'images/termico_gadget/spillle2.jpeg',
+            'images/termico_gadget/spille3.jpeg',
+            'images/termico_gadget/splille4.jpeg'
+        ],
+        'Stickers ed etichette': [
+            'images/etichette/etichette1.jpeg',
+            'images/etichette/etichette2.jpeg',
+            'images/etichette/etichette3.jpeg',
+            'images/etichette/etichette01.jpeg',
+            'images/etichette/etichette02.jpeg',
+            'images/etichette/etichette03.jpeg',
+            'images/etichette/etichetta05.jpeg',
+            'images/etichette/personalizzato1.jpg',
+            'images/etichette/personalizzato2.jpeg',
+            'images/etichette/personalizzato3.jpeg',
+            'images/etichette/personalizzato4.jpeg'
+        ],
+        'Stampa foto': [
+            'images/stampa_foto/stampa_canvas_plotter.png',
+            'images/stampa_foto/stampa_ canvas.png',
+            'images/stampa_foto/stampa _canvas2.png',
+            'images/stampa_foto/stampasublimatica1.jpg',
+            'images/stampa_foto/stampasublimatica2.jpeg',
+            'images/stampa_foto/stampasublimatica3.jpeg'
+        ]
+    };
+
+    const PANEL_IMAGE_ALIASES = {
+        'Stampa digitale piccolo formato': {
+            'biglietti da visita': ['biglietti da visita'],
+            'volantini a4 a5': ['stampa a4 a3'],
+            'brochure': ['menu pieghevole'],
+            'locandine': ['festival'],
+            'cartoline': ['cartoline'],
+            'menu': ['menu pieghevole', 'menu appoggio'],
+            'listini prezzi': ['menu appoggio'],
+            'inviti': ['lettere']
+        },
+        'Stampa digitale grande formato': {
+            'striscioni': ['poster'],
+            'poster giganti': ['poster'],
+            'roll up': ['rollup'],
+            'tele canvas': ['stampa canvas'],
+            'forex e pannelli': ['fotoforex'],
+            'adesivi da pavimento': ['adesivi pavimento'],
+            'stampa su tessuto': ['stampa canvas plotter'],
+            'backlight': ['backlight'],
+            'vetrofanie': ['vetrofania'],
+            'segnaletica': ['quadro'],
+            'manifesti': ['poster']
+        },
+        'Stampe termiche – Gadget': {
+            't shirt': ['t shirt'],
+            'felpe': ['felpa'],
+            'borse in cotone': ['borsa'],
+            'spille': ['spille']
+        },
+        'Stickers ed etichette': {
+            'sticker su misura': ['etichette1'],
+            'etichette prodotto': ['etichette01'],
+            'etichette trasparenti': ['personalizzato2'],
+            'packaging personalizzato': ['personalizzato1'],
+            'adesivi antimanomissione': ['etichetta05'],
+            'bollini colorati': ['etichette2'],
+            'etichette per bottiglie': ['etichette03'],
+            'etichette per documenti': ['etichette02']
+        },
+        'Stampa foto': {
+            'canvas': ['stampa canvas'],
+            'foto su tela': ['stampa canvas'],
+            'stampa sublimatica': ['stampasublimatica']
+        }
+    };
+
+    function normalizeForMatch(value) {
+        return (value || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, ' ')
+            .trim();
+    }
+
+    function getImageRank(path, term) {
+        const normalizedPath = normalizeForMatch(path.split('/').pop() || '');
+        const normalizedTerm = normalizeForMatch(term);
+        const suffixMatch = normalizedPath.match(/(\d+)(?!.*\d)/);
+        const suffix = suffixMatch ? parseInt(suffixMatch[1], 10) : Number.POSITIVE_INFINITY;
+        const exact = normalizedPath === normalizedTerm ? 0 : 1;
+        const prefix = normalizedPath.startsWith(normalizedTerm) ? 0 : 1;
+        return [exact, prefix, suffix, normalizedPath.length];
+    }
+
+    function resolveBrickImage(panelTitle, label, currentImg) {
+        const preferredFolder = PANEL_IMAGE_FOLDERS[panelTitle];
+        const isAlreadyPreferred = preferredFolder && currentImg && currentImg.startsWith(preferredFolder + '/');
+        if (isAlreadyPreferred) return currentImg;
+
+        const catalog = IMAGE_CATALOG[panelTitle] || [];
+        const aliases = PANEL_IMAGE_ALIASES[panelTitle] || {};
+        const normalizedLabel = normalizeForMatch(label);
+        const terms = aliases[normalizedLabel] || [label];
+
+        for (const term of terms) {
+            const normalizedTerm = normalizeForMatch(term);
+            const matches = catalog
+                .filter(path => normalizeForMatch(path.split('/').pop() || '').includes(normalizedTerm))
+                .sort((a, b) => {
+                    const rankA = getImageRank(a, term);
+                    const rankB = getImageRank(b, term);
+                    return rankA.join('|').localeCompare(rankB.join('|'), undefined, { numeric: true });
+                });
+
+            if (matches.length) return matches[0];
+        }
+
+        return currentImg || '';
+    }
+
+    function makeBrickEl(panelTitle, b, extraClass) {
         const brick = document.createElement('div');
-        brick.className = 'panel-brick' + (b.img ? '' : ' no-img') + (extraClass ? ' '+extraClass : '');
-        if (b.img) {
+        const resolvedImg = resolveBrickImage(panelTitle, b.label, b.img);
+        brick.className = 'panel-brick' + (resolvedImg ? '' : ' no-img') + (extraClass ? ' '+extraClass : '');
+        if (resolvedImg) {
             const img = document.createElement('img');
-            img.src = b.img; img.alt = b.label;
+            img.src = resolvedImg; img.alt = b.label;
             brick.appendChild(img);
         }
         const lbl = document.createElement('div');
@@ -1629,7 +1810,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return brick;
     }
 
-    function setupInfiniteRow(row, bricks, rowIdx) {
+    function setupInfiniteRow(panelTitle, row, bricks, rowIdx) {
         const brickW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-w')) || 560;
         const gap    = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-gap')) || 20;
         const unit   = brickW + gap;
@@ -1638,12 +1819,12 @@ document.addEventListener("DOMContentLoaded", () => {
         row.innerHTML = '';
 
         const makeCopies = (arr, cls) => arr.map(b => {
-            const el = makeBrickEl(b, cls + ' brick-visible');
+            const el = makeBrickEl(panelTitle, b, cls + ' brick-visible');
             return el;
         });
 
         const tailClones = makeCopies(bricks, 'brick-clone');
-        const originals  = bricks.map(b => makeBrickEl(b, ''));
+        const originals  = bricks.map(b => makeBrickEl(panelTitle, b, ''));
         const headClones = makeCopies(bricks, 'brick-clone');
 
         tailClones.forEach(el => row.appendChild(el));
@@ -1680,7 +1861,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return unit * 2;
     }
 
-    function buildRows(rowsData) {
+    function buildRows(panelTitle, rowsData) {
         rowsContainer.innerHTML = '';
         brickTimers.forEach(clearTimeout);
         brickTimers = [];
@@ -1717,7 +1898,7 @@ document.addEventListener("DOMContentLoaded", () => {
             wrap.appendChild(arrR);
             rowsContainer.appendChild(wrap);
 
-            const step = setupInfiniteRow(row, rowBricks, rowIdx);
+            const step = setupInfiniteRow(panelTitle, row, rowBricks, rowIdx);
             arrL.addEventListener('click', () => row.scrollBy({left: -step, behavior:'smooth'}));
             arrR.addEventListener('click', () => row.scrollBy({left:  step, behavior:'smooth'}));
         });
@@ -1737,7 +1918,7 @@ document.addEventListener("DOMContentLoaded", () => {
         panelInlineTitle.style.color   = '#00AEEF';
         panelDesc.textContent          = desc;
 
-        buildRows(rows);
+        buildRows(title, rows);
 
         const headerH = header.offsetHeight;
         const rect    = card.getBoundingClientRect();
