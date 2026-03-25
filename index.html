@@ -579,6 +579,33 @@
         .row-arrow.arr-left  { left:  18px; }
         .row-arrow.arr-right { right: 18px; }
 
+        /* Zoom immagine brick */
+        #brick-zoom-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 2100;
+            background: rgba(0, 0, 0, 0.82);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .24s ease;
+            padding: 24px;
+        }
+        #brick-zoom-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #brick-zoom-modal img {
+            max-width: min(1200px, 92vw);
+            max-height: 90vh;
+            width: auto;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 18px 48px rgba(0,0,0,.45);
+        }
+
         /* ═══════════════════════════════
            RESPONSIVE
            ═══════════════════════════════ */
@@ -1031,6 +1058,10 @@
     </div>
 </div>
 
+<div id="brick-zoom-modal" aria-hidden="true">
+    <img id="brick-zoom-image" alt="Anteprima immagine">
+</div>
+
 <!-- ═══════════════════════════════
      MAIN CONTENT
      ═══════════════════════════════ -->
@@ -1092,9 +1123,9 @@
                 <div class="service-card"
                     data-panel-title="Stampe termiche – Gadget"
                     data-panel-color="#E2007A"
-                    data-panel-desc="Personalizza t-shirt, felpe, tazze e gadget con il tuo logo o design. La stampa a trasferimento termico garantisce colori vividi e duraturi su ogni tipo di supporto tessile e rigido."
+                    data-panel-desc="Personalizza t-shirt, felpe e gadget con il tuo logo o design. La stampa a trasferimento termico garantisce colori vividi e duraturi su ogni tipo di supporto tessile e rigido."
                     data-panel-bricks='[
-                        [{"label":"T-shirt","img":"images/stampe_digitale/termi.png"},{"label":"Felpe","img":""},{"label":"Tazze","img":""},{"label":"Borse in cotone","img":""},{"label":"Cuscini","img":""}],
+                        [{"label":"T-shirt","img":"images/stampe_digitale/termi.png"},{"label":"Felpe","img":""},{"label":"Borse in cotone","img":""},{"label":"Cuscini","img":""}],
                         [{"label":"Magneti","img":""},{"label":"Mouse pad","img":""},{"label":"Pochette","img":""},{"label":"Capellini","img":""},{"label":"Spille","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/termi.png" alt="Gadget" class="service-card-media">
@@ -1133,7 +1164,7 @@
                     </video>
                     <div class="card-header">
                         <span class="card-overline">ADESIVI E PACKAGING</span>
-                        <h3 class="card-title">Stikers etichette</h3>
+                        <h3 class="card-title">Stickers etichette</h3>
                     </div>
                 </div>
 
@@ -1142,7 +1173,7 @@
                     data-panel-color="#00AEEF"
                     data-panel-desc="Banner, totem, roll-up e sistemi espositivi per fiere, eventi e punti vendita. Soluzioni professionali che rendono il tuo brand visibile e riconoscibile ovunque."
                     data-panel-bricks='[
-                        [{"label":"Banner e roll-up","img":"images/stampe_digitale/banner.png"},{"label":"Espositori da banco","img":""},{"label":"Pannelli bifacciali","img":""}]
+                        [{"label":"Banner e roll-up","img":""},{"label":"Espositori da banco","img":""}]
                     ]'>
                     <img src="images/stampe_digitale/banner.png" alt="Banner" class="service-card-media">
                     <div class="card-header">
@@ -1592,6 +1623,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const panelInlineTitle= document.getElementById('panel-inline-title');
     const panelDesc       = document.getElementById('panel-description');
     const rowsContainer   = document.getElementById('panel-rows-container');
+    const brickZoomModal  = document.getElementById('brick-zoom-modal');
+    const brickZoomImage  = document.getElementById('brick-zoom-image');
     const backBtn         = document.getElementById('header-back-btn');
     let brickTimers       = [];
     let animTimer         = null;
@@ -1619,7 +1652,10 @@ document.addEventListener("DOMContentLoaded", () => {
         'Stampa digitale grande formato': 'images/grande_formato',
         'Stampe termiche – Gadget': 'images/termico_gadget',
         'Stickers ed etichette': 'images/etichette',
-        'Stampa foto': 'images/stampa_foto'
+        'Stampa foto': 'images/stampa_foto',
+        'Grafica': 'images/grafica',
+        'Archiviazione digitale e scansioni': 'images/archiviazione_scansioni',
+        'Soluzioni espositive': 'images/soluzioni_espositive'
     };
 
     const IMAGE_CATALOG = {
@@ -1677,7 +1713,14 @@ document.addEventListener("DOMContentLoaded", () => {
             'images/termico_gadget/spille1.jpeg',
             'images/termico_gadget/spillle2.jpeg',
             'images/termico_gadget/spille3.jpeg',
-            'images/termico_gadget/splille4.jpeg'
+            'images/termico_gadget/splille4.jpeg',
+            'images/termico_gadget/IMG_2891.jpg',
+            'images/termico_gadget/IMG_1695.jpeg',
+            'images/termico_gadget/cuscino.png',
+            'images/termico_gadget/mousepad.png',
+            'images/termico_gadget/calamita.png',
+            'images/termico_gadget/capellino.png',
+            'images/termico_gadget/Pochette.png'
         ],
         'Stickers ed etichette': [
             'images/etichette/etichette1.jpeg',
@@ -1690,7 +1733,8 @@ document.addEventListener("DOMContentLoaded", () => {
             'images/etichette/personalizzato1.jpg',
             'images/etichette/personalizzato2.jpeg',
             'images/etichette/personalizzato3.jpeg',
-            'images/etichette/personalizzato4.jpeg'
+            'images/etichette/personalizzato4.jpeg',
+            'images/etichette/qr_code.png'
         ],
         'Stampa foto': [
             'images/stampa_foto/stampa_canvas_plotter.png',
@@ -1698,7 +1742,31 @@ document.addEventListener("DOMContentLoaded", () => {
             'images/stampa_foto/stampa _canvas2.png',
             'images/stampa_foto/stampasublimatica1.jpg',
             'images/stampa_foto/stampasublimatica2.jpeg',
-            'images/stampa_foto/stampasublimatica3.jpeg'
+            'images/stampa_foto/stampasublimatica3.jpeg',
+            'images/stampa_foto/fotolibri.png',
+            'images/stampa_foto/foto_forex.png',
+            'images/stampa_foto/foto_album.png'
+        ],
+        'Grafica': [
+            'images/grafica/impaginazione.png',
+            'images/grafica/menu_listini.png',
+            'images/grafica/socialmedia_kit.png'
+        ],
+        'Archiviazione digitale e scansioni': [
+            'images/archiviazione_scansioni/scansione_a4.png',
+            'images/archiviazione_scansioni/scansione_a3.png',
+            'images/archiviazione_scansioni/archivio_sacansione.png',
+            'images/archiviazione_scansioni/scansione_libro.png',
+            'images/archiviazione_scansioni/archivio.png',
+            'images/archiviazione_scansioni/scansione_antiche.png',
+            'images/archiviazione_scansioni/restauro.png',
+            'images/archiviazione_scansioni/scansione_bianco.png',
+            'images/archiviazione_scansioni/salvataggio_usb.png',
+            'images/archiviazione_scansioni/ocr.png'
+        ],
+        'Soluzioni espositive': [
+            'images/soluzioni_espositive/Banner_rollup.png',
+            'images/soluzioni_espositive/Espositori_banco.png'
         ]
     };
 
@@ -1730,11 +1798,17 @@ document.addEventListener("DOMContentLoaded", () => {
             't shirt': ['t shirt'],
             'felpe': ['felpa'],
             'borse in cotone': ['borsa'],
+            'magneti': ['calamita'],
+            'capellini': ['capellino'],
+            'cuscini': ['cuscino'],
+            'mouse pad': ['mousepad'],
+            'pochette': ['pochette'],
             'spille': ['spille']
         },
         'Stickers ed etichette': {
             'sticker su misura': ['etichette1'],
             'etichette prodotto': ['etichette01'],
+            'qr code adesivi': ['qr code'],
             'etichette trasparenti': ['personalizzato2'],
             'packaging personalizzato': ['personalizzato1'],
             'adesivi antimanomissione': ['etichetta05'],
@@ -1743,9 +1817,31 @@ document.addEventListener("DOMContentLoaded", () => {
             'etichette per documenti': ['etichette02']
         },
         'Stampa foto': {
+            'album fotografici': ['foto album'],
             'canvas': ['stampa canvas'],
             'foto su tela': ['stampa canvas'],
+            'foto su forex': ['foto forex'],
             'stampa sublimatica': ['stampasublimatica']
+        },
+        'Grafica': {
+            'impaginazione flyer': ['impaginazione'],
+            'social media kit': ['socialmedia'],
+            'menu e listini': ['menu listini']
+        },
+        'Archiviazione digitale e scansioni': {
+            'scansione a4': ['scansione a4'],
+            'scansione a3': ['scansione a3'],
+            'digitalizzazione archivi': ['archivio'],
+            'ocr e pdf ricercabile': ['ocr'],
+            'scansione foto antiche': ['scansione antiche'],
+            'salvataggio usb cloud': ['salvataggio usb'],
+            'scansione libri': ['scansione libro'],
+            'restauro digitale foto': ['restauro'],
+            'scansione documenti legali': ['scansione bianco']
+        },
+        'Soluzioni espositive': {
+            'banner e roll up': ['banner rollup'],
+            'espositori da banco': ['espositori banco']
         }
     };
 
@@ -1794,6 +1890,23 @@ document.addEventListener("DOMContentLoaded", () => {
         return currentImg || '';
     }
 
+    function openBrickZoom(imagePath, label) {
+        if (!brickZoomModal || !brickZoomImage || !imagePath) return;
+        brickZoomImage.src = imagePath;
+        brickZoomImage.alt = label || 'Anteprima immagine';
+        brickZoomModal.classList.add('open');
+        brickZoomModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeBrickZoom() {
+        if (!brickZoomModal || !brickZoomImage) return;
+        brickZoomModal.classList.remove('open');
+        brickZoomModal.setAttribute('aria-hidden', 'true');
+        setTimeout(() => {
+            if (!brickZoomModal.classList.contains('open')) brickZoomImage.src = '';
+        }, 220);
+    }
+
     function makeBrickEl(panelTitle, b, extraClass) {
         const brick = document.createElement('div');
         const resolvedImg = resolveBrickImage(panelTitle, b.label, b.img);
@@ -1801,6 +1914,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (resolvedImg) {
             const img = document.createElement('img');
             img.src = resolvedImg; img.alt = b.label;
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openBrickZoom(resolvedImg, b.label);
+            });
             brick.appendChild(img);
         }
         const lbl = document.createElement('div');
@@ -1809,6 +1926,15 @@ document.addEventListener("DOMContentLoaded", () => {
         brick.appendChild(lbl);
         return brick;
     }
+
+    if (brickZoomModal) {
+        brickZoomModal.addEventListener('click', (e) => {
+            if (e.target === brickZoomModal) closeBrickZoom();
+        });
+    }
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeBrickZoom();
+    });
 
     function setupInfiniteRow(panelTitle, row, bricks, rowIdx) {
         const brickW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-w')) || 560;
