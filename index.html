@@ -579,6 +579,33 @@
         .row-arrow.arr-left  { left:  18px; }
         .row-arrow.arr-right { right: 18px; }
 
+        /* Zoom immagine brick */
+        #brick-zoom-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 2100;
+            background: rgba(0, 0, 0, 0.82);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .24s ease;
+            padding: 24px;
+        }
+        #brick-zoom-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #brick-zoom-modal img {
+            max-width: min(1200px, 92vw);
+            max-height: 90vh;
+            width: auto;
+            height: auto;
+            border-radius: 14px;
+            box-shadow: 0 18px 48px rgba(0,0,0,.45);
+        }
+
         /* ═══════════════════════════════
            RESPONSIVE
            ═══════════════════════════════ */
@@ -1029,6 +1056,10 @@
         </div>
         <div id="panel-rows-container" class="panel-rows-wrap"></div>
     </div>
+</div>
+
+<div id="brick-zoom-modal" aria-hidden="true">
+    <img id="brick-zoom-image" alt="Anteprima immagine">
 </div>
 
 <!-- ═══════════════════════════════
@@ -1592,6 +1623,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const panelInlineTitle= document.getElementById('panel-inline-title');
     const panelDesc       = document.getElementById('panel-description');
     const rowsContainer   = document.getElementById('panel-rows-container');
+    const brickZoomModal  = document.getElementById('brick-zoom-modal');
+    const brickZoomImage  = document.getElementById('brick-zoom-image');
     const backBtn         = document.getElementById('header-back-btn');
     let brickTimers       = [];
     let animTimer         = null;
@@ -1727,8 +1760,8 @@ document.addEventListener("DOMContentLoaded", () => {
             'images/archiviazione_scansioni/ocr.png'
         ],
         'Soluzioni espositive': [
-            'images/soluzioni_espositive/banner_rollup.png',
-            'images/soluzioni_espositive/espositori_banco.png'
+            'images/soluzioni_espositive/Banner_rollup.png',
+            'images/soluzioni_espositive/Espositori_banco.png'
         ]
     };
 
@@ -1846,6 +1879,23 @@ document.addEventListener("DOMContentLoaded", () => {
         return currentImg || '';
     }
 
+    function openBrickZoom(imagePath, label) {
+        if (!brickZoomModal || !brickZoomImage || !imagePath) return;
+        brickZoomImage.src = imagePath;
+        brickZoomImage.alt = label || 'Anteprima immagine';
+        brickZoomModal.classList.add('open');
+        brickZoomModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeBrickZoom() {
+        if (!brickZoomModal || !brickZoomImage) return;
+        brickZoomModal.classList.remove('open');
+        brickZoomModal.setAttribute('aria-hidden', 'true');
+        setTimeout(() => {
+            if (!brickZoomModal.classList.contains('open')) brickZoomImage.src = '';
+        }, 220);
+    }
+
     function makeBrickEl(panelTitle, b, extraClass) {
         const brick = document.createElement('div');
         const resolvedImg = resolveBrickImage(panelTitle, b.label, b.img);
@@ -1853,6 +1903,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (resolvedImg) {
             const img = document.createElement('img');
             img.src = resolvedImg; img.alt = b.label;
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openBrickZoom(resolvedImg, b.label);
+            });
             brick.appendChild(img);
         }
         const lbl = document.createElement('div');
@@ -1861,6 +1915,15 @@ document.addEventListener("DOMContentLoaded", () => {
         brick.appendChild(lbl);
         return brick;
     }
+
+    if (brickZoomModal) {
+        brickZoomModal.addEventListener('click', (e) => {
+            if (e.target === brickZoomModal) closeBrickZoom();
+        });
+    }
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeBrickZoom();
+    });
 
     function setupInfiniteRow(panelTitle, row, bricks, rowIdx) {
         const brickW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-w')) || 560;
