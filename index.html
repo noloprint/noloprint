@@ -1594,6 +1594,26 @@ document.addEventListener("DOMContentLoaded", () => {
     let animTimer         = null;
     let closeAnimTimer    = null;
     let lastOpenedCard    = null;
+    let brickImageObserver = null;
+
+    function ensureBrickObserver() {
+        if (!('IntersectionObserver' in window)) return null;
+        if (brickImageObserver) return brickImageObserver;
+        brickImageObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                const img = entry.target;
+                const src = img.dataset.src;
+                if (src && !img.src) img.src = src;
+                brickImageObserver.unobserve(img);
+            });
+        }, {
+            root: panel,
+            rootMargin: '220px 0px',
+            threshold: 0.01
+        });
+        return brickImageObserver;
+    }
 
     /* ── Scroll isolation ── */
     panel.addEventListener('wheel', (e) => {
@@ -1884,10 +1904,14 @@ document.addEventListener("DOMContentLoaded", () => {
         brick.className = 'panel-brick' + (resolvedImg ? '' : ' no-img') + (extraClass ? ' '+extraClass : '');
         if (resolvedImg) {
             const img = document.createElement('img');
-            img.src = resolvedImg; img.alt = b.label;
+            img.alt = b.label;
+            img.dataset.src = resolvedImg;
             img.loading = 'lazy';
             img.decoding = 'async';
             img.fetchPriority = 'low';
+            const observer = ensureBrickObserver();
+            if (observer) observer.observe(img);
+            else img.src = resolvedImg;
             img.addEventListener('click', (e) => {
                 e.stopPropagation();
                 openBrickZoom(resolvedImg, b.label);
