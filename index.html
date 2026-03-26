@@ -1595,6 +1595,11 @@ document.addEventListener("DOMContentLoaded", () => {
     let closeAnimTimer    = null;
     let lastOpenedCard    = null;
     let brickImageObserver = null;
+    let rowAutoDriftRaf   = null;
+    let rowAutoDriftLastTs = 0;
+    const rowAutoDriftItems = [];
+    const ROW_AUTO_DRIFT_SPEED = 4.2; // px/s: movimento lentissimo
+    const ROW_AUTO_DRIFT_PAUSE_AFTER_INPUT = 1400;
 
     function ensureBrickObserver() {
         if (!('IntersectionObserver' in window)) return null;
@@ -1985,10 +1990,45 @@ document.addEventListener("DOMContentLoaded", () => {
         return unit * 2;
     }
 
+    function stopRowAutoDrift() {
+        if (rowAutoDriftRaf) {
+            cancelAnimationFrame(rowAutoDriftRaf);
+            rowAutoDriftRaf = null;
+        }
+        rowAutoDriftLastTs = 0;
+        rowAutoDriftItems.length = 0;
+    }
+
+    function startRowAutoDrift() {
+        if (rowAutoDriftRaf || !rowAutoDriftItems.length) return;
+
+        const tick = (ts) => {
+            if (!panel.classList.contains('is-open')) {
+                rowAutoDriftRaf = null;
+                rowAutoDriftLastTs = 0;
+                return;
+            }
+
+            if (!rowAutoDriftLastTs) rowAutoDriftLastTs = ts;
+            const dt = (ts - rowAutoDriftLastTs) / 1000;
+            rowAutoDriftLastTs = ts;
+
+            rowAutoDriftItems.forEach((item) => {
+                if (ts - item.lastInputTs < ROW_AUTO_DRIFT_PAUSE_AFTER_INPUT) return;
+                item.row.scrollLeft += item.direction * ROW_AUTO_DRIFT_SPEED * dt;
+            });
+
+            rowAutoDriftRaf = requestAnimationFrame(tick);
+        };
+
+        rowAutoDriftRaf = requestAnimationFrame(tick);
+    }
+
     function buildRows(panelTitle, rowsData) {
         rowsContainer.innerHTML = '';
         brickTimers.forEach(clearTimeout);
         brickTimers = [];
+        stopRowAutoDrift();
         let globalIdx = 0;
 
         rowsData.forEach((rowBricks, rowIdx) => {
@@ -2025,7 +2065,22 @@ document.addEventListener("DOMContentLoaded", () => {
             const step = setupInfiniteRow(panelTitle, row, rowBricks, rowIdx);
             arrL.addEventListener('click', () => row.scrollBy({left: -step, behavior:'smooth'}));
             arrR.addEventListener('click', () => row.scrollBy({left:  step, behavior:'smooth'}));
+
+            const rowState = {
+                row,
+                direction: rowIdx % 2 === 0 ? -1 : 1,
+                lastInputTs: 0
+            };
+            const pauseAutoDrift = () => { rowState.lastInputTs = performance.now(); };
+            row.addEventListener('wheel', pauseAutoDrift, { passive: true });
+            row.addEventListener('touchstart', pauseAutoDrift, { passive: true });
+            row.addEventListener('pointerdown', pauseAutoDrift, { passive: true });
+            arrL.addEventListener('click', pauseAutoDrift);
+            arrR.addEventListener('click', pauseAutoDrift);
+            rowAutoDriftItems.push(rowState);
         });
+
+        startRowAutoDrift();
     }
 
     function openPanel(card) {
@@ -2106,6 +2161,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function closePanel() {
         if (animTimer) { clearTimeout(animTimer); animTimer = null; }
+        stopRowAutoDrift();
 
         panel.classList.remove('anim-done', 'content-visible');
         panel.style.overflow = 'hidden';
