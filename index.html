@@ -20,8 +20,8 @@
             --transition-apple: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             --header-height: 90px;
             --strip-opacity: 0.5;
-            --brick-w: 560px;
-            --brick-h: 320px;
+            --brick-w: 460px;
+            --brick-h: 270px;
             --brick-gap: 20px;
         }
 
@@ -1363,6 +1363,16 @@
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
+    function optimizeImageLoading() {
+        document.querySelectorAll('.service-card-media').forEach((media, idx) => {
+            if (media.tagName !== 'IMG') return;
+            if (idx > 1) media.loading = 'lazy';
+            media.decoding = 'async';
+            media.fetchPriority = idx === 0 ? 'high' : 'low';
+        });
+    }
+
+    optimizeImageLoading();
 
     /* ─── HEADER / LOGO / SCROLL ─── */
     const header          = document.getElementById('main-header');
@@ -1875,6 +1885,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (resolvedImg) {
             const img = document.createElement('img');
             img.src = resolvedImg; img.alt = b.label;
+            img.loading = 'lazy';
+            img.decoding = 'async';
+            img.fetchPriority = 'low';
             img.addEventListener('click', (e) => {
                 e.stopPropagation();
                 openBrickZoom(resolvedImg, b.label);
