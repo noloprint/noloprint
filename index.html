@@ -118,7 +118,7 @@
             transition: transform 0.82s cubic-bezier(0.65, 0, 0.35, 1);
         }
 
-        /* ── Back button — ora a DESTRA ── */
+        /* ── Back button — a DESTRA ── */
         #header-back-btn {
             display: flex; align-items: center; gap: 6px;
             background: none; border: none; cursor: pointer;
@@ -186,6 +186,7 @@
         #main-nav a:nth-child(2):hover{background:rgba(226,0,122,.14);}
         #main-nav a:nth-child(3):hover{background:rgba(255,230,0,.28);}
         #main-nav a:nth-child(4):hover{background:rgba(0,0,0,.08);}
+        #main-nav a:nth-child(5):hover{background:rgba(37,211,102,.18);}
 
         /* HERO */
         .hero-full-width {
@@ -283,6 +284,8 @@
 
         .footer-black{background:#000;color:#f5f5f7;padding:70px 0;text-align:center;z-index:3;position:relative;}
         .footer-content{line-height:1.8;font-size:.9rem;opacity:.8;}
+        .footer-content a{color:#f5f5f7;text-decoration:none;}
+        .footer-content a:hover{text-decoration:underline;}
 
         #main-content {
             position: relative;
@@ -292,8 +295,12 @@
         body.chi-siamo-open #main-content {
             transform: translateX(-100vw);
         }
+        /* Contatti panel slides in from the left — content goes right */
+        body.contatti-open #main-content {
+            transform: translateX(100vw);
+        }
 
-        /* ── Immagine di sfondo fissa per Chi siamo ── */
+        /* ── Sfondo fisso Chi siamo ── */
         #chi-siamo-bg {
             position: fixed;
             top: var(--header-height);
@@ -309,7 +316,6 @@
         body.chi-siamo-open #chi-siamo-bg {
             opacity: 1;
         }
-        /* overlay scuro per leggibilità testo */
         #chi-siamo-bg::after {
             content: '';
             position: absolute;
@@ -349,7 +355,6 @@
             transform: translateX(0);
         }
 
-        /* Card allineata al grid-limiter (stesso bordo sinistro del logo) */
         .chi-siamo-card {
             width: 50%;
             margin: 0 auto;
@@ -389,6 +394,239 @@
             letter-spacing: 1px;
             text-transform: uppercase;
             color: rgba(29,29,31,0.35);
+        }
+
+        /* ═══════════════════════════════════════════
+           CONTATTI PANEL — specchio del Chi Siamo,
+           scorre da sinistra verso destra
+           ═══════════════════════════════════════════ */
+        #contatti-bg {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: 100%;
+            height: calc(100vh - var(--header-height));
+            z-index: 848;
+            background: url('images/zonaintro_1.jpg') center / cover no-repeat;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        body.contatti-open #contatti-bg {
+            opacity: 1;
+        }
+        #contatti-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.60);
+        }
+
+        #contatti-panel {
+            position: fixed;
+            top: var(--header-height);
+            left: 0;
+            width: 100%;
+            height: calc(100vh - var(--header-height));
+            z-index: 850;
+            visibility: hidden;
+            pointer-events: none;
+            overflow-y: auto;
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+            background: transparent;
+        }
+        #contatti-panel.is-open {
+            visibility: visible;
+            pointer-events: auto;
+        }
+        /* Shell parte da sinistra (−100vw) — opposto di chi siamo */
+        .contatti-panel-shell {
+            min-height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 0 80px;
+            transform: translateX(-100vw);
+            transition: transform 0.82s cubic-bezier(0.65, 0, 0.35, 1);
+            will-change: transform;
+        }
+        body.contatti-open .contatti-panel-shell {
+            transform: translateX(0);
+        }
+
+        /* Card del pannello contatti */
+        .contatti-card {
+            width: 50%;
+            margin: 0 auto;
+            padding: 52px 56px;
+            border-radius: 32px;
+            background: #fff;
+            box-shadow: 0 20px 56px rgba(0,0,0,0.14);
+            opacity: 0;
+            /* Card entra da sinistra */
+            transform: translateX(-48px);
+            transition: opacity 0.36s ease 0.5s, transform 0.46s ease 0.5s;
+        }
+        body.contatti-open .contatti-card {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .contatti-heading {
+            margin: 0 0 10px;
+            font-size: clamp(2.6rem, 4vw, 4.8rem);
+            line-height: 0.92;
+            font-weight: 800;
+            letter-spacing: -2.5px;
+            color: #1d1d1f;
+        }
+        .contatti-subheading {
+            margin: 0 0 36px;
+            font-size: 0.92rem;
+            color: #6e6e73;
+            font-weight: 500;
+        }
+
+        /* ── Riga icone principali (Gmail · WhatsApp · Telegram) ── */
+        .contatti-icons-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+        .contatti-icon-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 9px;
+            text-decoration: none;
+            flex: 1 1 0;
+            min-width: 80px;
+        }
+        .contatti-icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        }
+        .contatti-icon-btn:hover .contatti-icon-circle {
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 14px 32px rgba(0,0,0,0.18);
+        }
+        .contatti-icon-circle svg {
+            width: 32px;
+            height: 32px;
+        }
+        .contatti-icon-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #3a3a3c;
+            text-align: center;
+        }
+
+        /* ── Divisore ── */
+        .contatti-divider {
+            height: 1px;
+            background: rgba(0,0,0,0.07);
+            margin: 28px 0;
+            border: none;
+        }
+
+        /* ── Riga social (Instagram · Facebook) ── */
+        .contatti-social-row {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .contatti-social-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            padding: 11px 18px;
+            border-radius: 999px;
+            border: 1px solid rgba(0,0,0,0.09);
+            background: #f5f5f7;
+            color: #1d1d1f;
+            font-size: 0.83rem;
+            font-weight: 700;
+            transition:
+                transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                background-color 0.25s ease,
+                box-shadow 0.3s ease,
+                color 0.2s ease;
+        }
+        .contatti-social-pill:hover {
+            transform: scale(1.06) translateY(-2px);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.13);
+        }
+        .contatti-social-pill svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        .contatti-social-pill.instagram:hover {
+            background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: #fff;
+        }
+        .contatti-social-pill.facebook:hover {
+            background: #1877F2;
+            color: #fff;
+        }
+        .contatti-social-pill.facebook:hover svg path,
+        .contatti-social-pill.instagram:hover svg path,
+        .contatti-social-pill.instagram:hover svg circle,
+        .contatti-social-pill.instagram:hover svg rect {
+            fill: #fff;
+        }
+
+        /* ── Indirizzo / info ── */
+        .contatti-info-block {
+            margin-top: 30px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .contatti-info-row {
+            font-size: 0.87rem;
+            color: #3a3a3c;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .contatti-info-row svg {
+            width: 15px;
+            height: 15px;
+            opacity: 0.45;
+            flex-shrink: 0;
+        }
+        .contatti-close-hint {
+            margin-top: 28px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(29,29,31,0.35);
+        }
+
+        @media (max-width:1200px) {
+            .chi-siamo-card, .contatti-card { width: 88%; }
+        }
+        @media (max-width:768px) {
+            .chi-siamo-panel-shell, .contatti-panel-shell { padding: 40px 0 60px; }
+            .chi-siamo-card, .contatti-card { width: 90%; padding: 34px 28px; border-radius: 26px; }
+            .chi-siamo-copy { font-size: 0.93rem; }
+            .contatti-icon-circle { width: 56px; height: 56px; border-radius: 14px; }
+            .contatti-icon-circle svg { width: 26px; height: 26px; }
         }
 
         /* ═══════════════════════════════════════════
@@ -437,7 +675,6 @@
             padding: 0 0 100px;
         }
 
-        /* ── Titolo pannello — sotto la barra header, dentro il pannello ── */
         #panel-inline-title {
             display: block;
             width: 50%;
@@ -460,7 +697,6 @@
         @media (max-width:1200px) { #panel-inline-title { width: 90%; font-size: 1.7rem; } }
         @media (max-width:768px)  { #panel-inline-title { font-size: 1.35rem; padding: 28px 0 14px; } }
 
-        /* ── Descrizione centrata ── */
         .panel-description-wrap {
             width: 52%;
             margin: 0 auto 56px;
@@ -480,7 +716,6 @@
             font-weight: 400;
         }
 
-        /* ── Righe sfalsate "mattoni" ── */
         .panel-rows-wrap {
             display: flex;
             flex-direction: column;
@@ -558,7 +793,6 @@
             text-align: right;
         }
 
-        /* Frecce navigazione riga */
         .row-arrow {
             position: absolute; top: 50%; transform: translateY(-50%);
             width: 42px; height: 42px; border-radius: 50%;
@@ -579,7 +813,6 @@
         .row-arrow.arr-left  { left:  18px; }
         .row-arrow.arr-right { right: 18px; }
 
-        /* Zoom immagine brick */
         #brick-zoom-modal {
             position: fixed;
             inset: 0;
@@ -689,7 +922,6 @@
             pointer-events: none;
         }
 
-        /* Bottone "Vedi altro" — centrato sotto il box */
         .progetti-vedi-wrap {
             display: flex;
             justify-content: center;
@@ -744,7 +976,6 @@
             margin-left: 8px;
         }
 
-        /* ── Pannello expand progetti — identico a #detail-panel ── */
         #progetti-expand-panel {
             position: fixed;
             top: var(--header-height);
@@ -783,7 +1014,6 @@
             transform: translateY(0);
         }
 
-        /* Titolo sezione dentro il pannello */
         .expand-panel-heading {
             font-size: 1.8rem;
             font-weight: 800;
@@ -801,7 +1031,6 @@
             margin: 0 auto 40px;
         }
 
-        /* Card progetto espanso */
         .expand-project-card {
             border-radius: 22px;
             overflow: hidden;
@@ -817,7 +1046,6 @@
             transform: translateY(0) scale(1);
         }
 
-        /* Hero image 16:9 */
         .expand-card-hero {
             width: 100%;
             aspect-ratio: 16 / 9;
@@ -832,7 +1060,6 @@
             transform: scale(1.03);
         }
 
-        /* Header testo */
         .expand-card-header {
             padding: 22px 28px 14px;
             background: #fff;
@@ -860,7 +1087,6 @@
             margin: 0;
         }
 
-        /* Gallery 3 colonne */
         .expand-card-gallery {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -972,14 +1198,6 @@
             .progetto-slide:not(.active) { display: none; }
             .progetto-img { height: 240px; }
         }
-        @media (max-width: 1200px) {
-            .chi-siamo-card { width: 88%; }
-        }
-        @media (max-width: 768px) {
-            .chi-siamo-panel-shell { padding: 40px 0 60px; }
-            .chi-siamo-card { width: 90%; padding: 34px 28px; border-radius: 26px; }
-            .chi-siamo-copy { font-size: 0.93rem; }
-        }
     </style>
 </head>
 <body class="is-at-top">
@@ -992,12 +1210,10 @@
 <header id="main-header">
     <div class="header-content grid-limiter">
 
-        <!-- Logo a sinistra — rimane solo il logo -->
         <div class="header-left">
             <img src="images/logo.png" alt="Logo" id="main-logo">
         </div>
 
-        <!-- Destra: titoli dockati + bottone Indietro -->
         <div class="header-right">
             <div id="docked-titles"></div>
             <button id="header-back-btn" aria-label="Torna indietro">
@@ -1019,6 +1235,12 @@
 <!-- Sfondo fisso Chi siamo -->
 <div id="chi-siamo-bg" aria-hidden="true"></div>
 
+<!-- Sfondo fisso Contatti -->
+<div id="contatti-bg" aria-hidden="true"></div>
+
+<!-- ═══════════════════════════════
+     CHI SIAMO PANEL
+     ═══════════════════════════════ -->
 <div id="chi-siamo-panel" aria-label="Chi siamo">
     <div class="chi-siamo-panel-shell">
         <div class="chi-siamo-card">
@@ -1033,13 +1255,116 @@
 </div>
 
 <!-- ═══════════════════════════════
+     CONTATTI PANEL
+     (specchio: entra da sinistra)
+     ═══════════════════════════════ -->
+<div id="contatti-panel" aria-label="Contatti">
+    <div class="contatti-panel-shell">
+        <div class="contatti-card">
+            <h2 class="contatti-heading">Contatti</h2>
+            <p class="contatti-subheading">Scrivici, chiamaci o seguici — siamo sempre a portata di tap.</p>
+
+            <!-- Icone principali: Gmail · WhatsApp · Telegram -->
+            <div class="contatti-icons-row">
+
+                <!-- Gmail -->
+                <a class="contatti-icon-btn" href="mailto:noloprint@gmail.com" title="Scrivici una mail">
+                    <div class="contatti-icon-circle" style="background:#EA4335;">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="4" width="20" height="16" rx="2" fill="rgba(255,255,255,0.15)" stroke="white" stroke-width="1.5"/>
+                            <path d="M2 7l10 7 10-7" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <span class="contatti-icon-label">Gmail</span>
+                </a>
+
+                <!-- WhatsApp -->
+                <a class="contatti-icon-btn" href="https://wa.me/390228283160" target="_blank" rel="noopener noreferrer" title="Scrivici su WhatsApp">
+                    <div class="contatti-icon-circle" style="background:#25D366;">
+                        <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.52 3.48A11.93 11.93 0 0012.04 0C5.44 0 .08 5.36.08 11.96c0 2.11.55 4.17 1.6 5.99L0 24l6.23-1.63a11.97 11.97 0 005.8 1.48h.01c6.6 0 11.96-5.36 11.96-11.96 0-3.19-1.24-6.19-3.48-8.41zM12.04 21.86h-.01a9.93 9.93 0 01-5.06-1.38l-.36-.21-3.74.98 1-3.65-.24-.38a9.93 9.93 0 01-1.52-5.26C2.11 6.48 6.59 2 12.04 2c2.65 0 5.14 1.03 7.01 2.91a9.87 9.87 0 012.9 7.03c0 5.47-4.48 9.92-9.91 9.92zm5.44-7.44c-.3-.15-1.76-.87-2.03-.97-.28-.1-.48-.15-.68.15s-.78.97-.95 1.17c-.18.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.18-.3-.02-.46.13-.6.14-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.68-1.63-.93-2.24-.24-.59-.49-.5-.68-.51-.18-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37s-1.04 1.02-1.04 2.48 1.06 2.87 1.21 3.07c.15.2 2.08 3.17 5.04 4.45.7.3 1.25.48 1.68.62.71.22 1.35.19 1.86.12.57-.09 1.76-.72 2.01-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.2-.57-.34z"/>
+                        </svg>
+                    </div>
+                    <span class="contatti-icon-label">WhatsApp</span>
+                </a>
+
+                <!-- Telegram -->
+                <a class="contatti-icon-btn" href="https://t.me/noloprint" target="_blank" rel="noopener noreferrer" title="Scrivici su Telegram">
+                    <div class="contatti-icon-circle" style="background:#0088CC;">
+                        <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm5.94 8.18l-2.02 9.54c-.15.67-.54.83-1.09.52l-3-2.21-1.45 1.39c-.16.16-.3.3-.61.3l.21-3.03 5.5-4.97c.24-.21-.05-.33-.37-.12L6.29 14.07l-2.95-.92c-.64-.2-.65-.64.13-.95l11.54-4.45c.53-.19 1 .13.93.43z"/>
+                        </svg>
+                    </div>
+                    <span class="contatti-icon-label">Telegram</span>
+                </a>
+
+            </div>
+
+            <hr class="contatti-divider">
+
+            <!-- Pill social: Instagram · Facebook -->
+            <div class="contatti-social-row">
+
+                <!-- Instagram -->
+                <a class="contatti-social-pill instagram"
+                   href="https://www.instagram.com/noloprint"
+                   target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="#E1306C" stroke-width="2"/>
+                        <circle cx="12" cy="12" r="4.5" fill="none" stroke="#E1306C" stroke-width="2"/>
+                        <circle cx="17.5" cy="6.5" r="1.2" fill="#E1306C"/>
+                    </svg>
+                    @noloprint
+                </a>
+
+                <!-- Facebook -->
+                <a class="contatti-social-pill facebook"
+                   href="https://www.facebook.com/noloprint"
+                   target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" fill="#1877F2"/>
+                    </svg>
+                    NOLO Print
+                </a>
+
+            </div>
+
+            <!-- Info aggiuntive -->
+            <div class="contatti-info-block">
+                <div class="contatti-info-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.82 19.79 19.79 0 01.02 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92v2z"/>
+                    </svg>
+                    02 2828316
+                </div>
+                <div class="contatti-info-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    Via Padova, 49 — 20127 Milano
+                </div>
+                <div class="contatti-info-row">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Lun–Ven 08:30–13:00 · 15:00–19:00
+                </div>
+            </div>
+
+            <p class="contatti-close-hint">Premi "Indietro" per tornare all'indice.</p>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════════════════
      PROGETTI EXPAND PANEL
      ═══════════════════════════════ -->
 <div id="progetti-expand-panel" aria-label="Tutti i progetti">
     <div class="expand-panel-inner" id="expand-panel-inner">
         <h2 class="expand-panel-heading">Tutti i progetti</h2>
         <p class="expand-panel-desc">Ogni progetto nasce da un'idea e prende forma attraverso la stampa. Qui raccogliamo alcuni dei lavori che ci hanno dato più soddisfazione: identità visive costruite da zero, campagne per eventi e fiere, packaging artigianali e molto altro. Ogni commessa, grande o piccola, porta con sé una storia — ed è quella storia che cerchiamo di raccontare in ogni foglio stampato.</p>
-        <!-- Le card vengono generate via JS -->
     </div>
 </div>
 
@@ -1048,9 +1373,7 @@
      ═══════════════════════════════ -->
 <div id="detail-panel" role="dialog" aria-modal="true" aria-label="Dettaglio servizio">
     <div class="panel-inner">
-        <!-- Titolo del servizio: sotto la barra, dentro il pannello -->
         <h2 id="panel-inline-title"></h2>
-
         <div class="panel-description-wrap">
             <p class="panel-description" id="panel-description"></p>
         </div>
@@ -1076,12 +1399,14 @@
                     <a href="#sec-magenta">progetti</a>
                     <a href="#dove-siamo">dove siamo</a>
                     <a href="#chi-siamo">chi siamo</a>
+                    <a href="#contatti">contatti</a>
                 </nav>
             </div>
         </div>
     </section>
 
     <div id="chi-siamo"></div>
+    <div id="contatti-anchor"></div>
 
     <section class="cmyk-section" id="sec-cyan">
         <div class="grid-limiter">
@@ -1305,7 +1630,6 @@
 
             </div>
 
-            <!-- Bottone Vedi altro centrato sotto -->
             <div class="progetti-vedi-wrap" id="progetti-vedi-wrap">
                 <button class="progetto-vedi-btn" id="progetto-vedi-btn">
                     Vedi altro
@@ -1353,14 +1677,13 @@
                 <p style="font-weight:700;font-size:1.2rem;margin-bottom:10px;">NOLO Print Srl</p>
                 <p>Via Padova, 49 - 20127 Milano</p>
                 <p>Tel. 02 2828316 · Fax 02 2894562</p>
-                <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5f313033302f2d36312b1f38323e3633713c3032">[email&#160;protected]</a> · P.IVA 11258900965</p>
+                <p><a href="mailto:noloprint@gmail.com">noloprint@gmail.com</a> · P.IVA 11258900965</p>
                 <p style="margin-top:30px;font-size:.8rem;color:#666;">© 2024 NOLO Print Srl. Tutti i diritti riservati.</p>
             </div>
         </div>
     </footer>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     function optimizeImageLoading() {
@@ -1371,7 +1694,6 @@ document.addEventListener("DOMContentLoaded", () => {
             media.fetchPriority = idx === 0 ? 'high' : 'low';
         });
     }
-
     optimizeImageLoading();
 
     /* ─── HEADER / LOGO / SCROLL ─── */
@@ -1384,6 +1706,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const footerEl        = document.querySelector('footer');
     const chiSiamoPanel   = document.getElementById('chi-siamo-panel');
     const chiSiamoAnchor  = document.getElementById('chi-siamo');
+    const contattiPanel   = document.getElementById('contatti-panel');
+    const contattiAnchor  = document.getElementById('contatti-anchor');
 
     const startScale = 3.5, maxScroll = 300;
     const LOGO_SLIDE_MS = 820;
@@ -1444,7 +1768,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function update() {
         const sy = window.scrollY;
-        const ep = 1 - Math.pow(1 - Math.min(sy/maxScroll, 1), 3);
         const wasScrolled = header.classList.contains('scrolled');
         const isScrolled = sy > 50;
         if (wasScrolled && !isScrolled && sy < 10) {
@@ -1486,8 +1809,10 @@ document.addEventListener("DOMContentLoaded", () => {
         rafId = requestAnimationFrame(rafLoop);
     }
 
+    /* ── Chi siamo open / close ── */
     function openChiSiamoPanel() {
         if (!chiSiamoPanel || chiSiamoPanel.classList.contains('is-open')) return;
+        closeContattiPanel(true);
         bgFrozen = true;
         moveLogoToHeader();
         chiSiamoPanel.classList.add('is-open');
@@ -1499,23 +1824,21 @@ document.addEventListener("DOMContentLoaded", () => {
         backBtn.classList.add('visible');
     }
 
-    function closeChiSiamoPanel() {
+    function closeChiSiamoPanel(silent) {
         if (!chiSiamoPanel || !chiSiamoPanel.classList.contains('is-open')) return;
         bgFrozen = false;
         body.classList.remove('chi-siamo-open');
-        restoreLogoFromHeader();
+        if (!silent) restoreLogoFromHeader();
         backBtn.classList.remove('visible');
         dockedContainer.style.transition    = '';
         dockedContainer.style.opacity       = '';
         dockedContainer.style.pointerEvents = '';
-        // Scompare subito — override diretto, niente transition
         header.style.transition = 'none';
         header.style.background = 'rgba(255,255,255,0)';
         header.style.backdropFilter = 'blur(0px)';
         header.style.webkitBackdropFilter = 'blur(0px)';
         header.classList.remove('panel-visible');
         if (window.scrollY <= 50) header.classList.remove('scrolled');
-        // Ripristina la transition dopo un frame
         requestAnimationFrame(() => requestAnimationFrame(() => {
             header.style.transition = '';
             header.style.background = '';
@@ -1531,8 +1854,54 @@ document.addEventListener("DOMContentLoaded", () => {
         }, LOGO_SLIDE_MS + 20);
     }
 
+    /* ── Contatti open / close ── */
+    function openContattiPanel() {
+        if (!contattiPanel || contattiPanel.classList.contains('is-open')) return;
+        closeChiSiamoPanel(true);
+        bgFrozen = true;
+        moveLogoToHeader();
+        contattiPanel.classList.add('is-open');
+        header.classList.add('panel-visible', 'scrolled');
+        body.classList.add('panel-open', 'contatti-open');
+        dockedContainer.style.transition    = 'none';
+        dockedContainer.style.opacity       = '0';
+        dockedContainer.style.pointerEvents = 'none';
+        backBtn.classList.add('visible');
+    }
+
+    function closeContattiPanel(silent) {
+        if (!contattiPanel || !contattiPanel.classList.contains('is-open')) return;
+        bgFrozen = false;
+        body.classList.remove('contatti-open');
+        if (!silent) restoreLogoFromHeader();
+        backBtn.classList.remove('visible');
+        dockedContainer.style.transition    = '';
+        dockedContainer.style.opacity       = '';
+        dockedContainer.style.pointerEvents = '';
+        header.style.transition = 'none';
+        header.style.background = 'rgba(255,255,255,0)';
+        header.style.backdropFilter = 'blur(0px)';
+        header.style.webkitBackdropFilter = 'blur(0px)';
+        header.classList.remove('panel-visible');
+        if (window.scrollY <= 50) header.classList.remove('scrolled');
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+            header.style.transition = '';
+            header.style.background = '';
+            header.style.backdropFilter = '';
+            header.style.webkitBackdropFilter = '';
+        }));
+        setTimeout(() => {
+            if (!body.classList.contains('contatti-open')) {
+                contattiPanel.classList.remove('is-open');
+                body.classList.remove('panel-open');
+                update();
+            }
+        }, LOGO_SLIDE_MS + 20);
+    }
+
     logo.addEventListener('click', () => {
         closeChiSiamoPanel();
+        closeContattiPanel();
         window.scrollTo({top:0, behavior:'smooth'});
     });
 
@@ -1546,7 +1915,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    /* ✅ VIDEO HOVER FIX */
+    /* VIDEO HOVER */
     document.querySelectorAll('[data-play-on-hover]').forEach(v => {
         v.addEventListener('mouseenter', () => { v.currentTime = 0; v.play().catch(()=>{}); });
         v.addEventListener('mouseleave', () => { v.pause(); v.currentTime = 0; });
@@ -1560,7 +1929,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 openChiSiamoPanel();
                 return;
             }
+            if (target === '#contatti') {
+                openContattiPanel();
+                return;
+            }
             closeChiSiamoPanel();
+            closeContattiPanel();
             const el = document.querySelector(target);
             if (el) window.scrollTo({top: Math.max(0, window.scrollY + el.getBoundingClientRect().top - 100), behavior:'smooth'});
         });
@@ -1570,6 +1944,12 @@ document.addEventListener("DOMContentLoaded", () => {
         chiSiamoAnchor.addEventListener('click', (e) => {
             e.preventDefault();
             openChiSiamoPanel();
+        });
+    }
+    if (contattiAnchor) {
+        contattiAnchor.addEventListener('click', (e) => {
+            e.preventDefault();
+            openContattiPanel();
         });
     }
 
@@ -1598,7 +1978,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let rowAutoDriftRaf   = null;
     let rowAutoDriftLastTs = 0;
     const rowAutoDriftItems = [];
-    const ROW_AUTO_DRIFT_SPEED = 4.2; // px/s: movimento lentissimo
+    const ROW_AUTO_DRIFT_SPEED = 4.2;
     const ROW_AUTO_DRIFT_PAUSE_AFTER_INPUT = 1400;
 
     function ensureBrickObserver() {
@@ -1612,15 +1992,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (src && !img.src) img.src = src;
                 brickImageObserver.unobserve(img);
             });
-        }, {
-            root: panel,
-            rootMargin: '220px 0px',
-            threshold: 0.01
-        });
+        }, { root: panel, rootMargin: '220px 0px', threshold: 0.01 });
         return brickImageObserver;
     }
 
-    /* ── Scroll isolation ── */
     panel.addEventListener('wheel', (e) => {
         if (!panel.classList.contains('is-open')) return;
         const atTop    = panel.scrollTop === 0;
@@ -1665,189 +2040,96 @@ document.addEventListener("DOMContentLoaded", () => {
             'images/stampe_digitale/piccolo_formato/stampa A4_A3.png'
         ],
         'Stampa digitale grande formato': [
-            'images/grande_formato/backlight1.jpeg',
-            'images/grande_formato/backlight2.jpeg',
-            'images/grande_formato/backlight3.jpeg',
-            'images/grande_formato/rollup1.JPG',
-            'images/grande_formato/rollup2.JPG',
-            'images/grande_formato/poster1.JPG',
-            'images/grande_formato/poster2.JPG',
-            'images/grande_formato/quadro1.jpeg',
-            'images/grande_formato/quadro2.jpeg',
-            'images/grande_formato/quadro3.jpeg',
-            'images/grande_formato/quadro4.jpeg',
-            'images/grande_formato/fotoforex1.jpg',
-            'images/grande_formato/fotoforex2.jpg',
-            'images/grande_formato/fotoforex3.jpg',
-            'images/grande_formato/fotoforex4.jpeg',
-            'images/grande_formato/fotoforex5.jpeg',
-            'images/grande_formato/fotoforex6.jpeg',
-            'images/grande_formato/fotoforex7.jpeg',
-            'images/grande_formato/fotoforex8.jpg',
-            'images/grande_formato/adesivi_pavimento.jpeg',
-            'images/grande_formato/adesivi_pavimento2.jpeg',
-            'images/grande_formato/vetrofania_prespaziati.png',
-            'images/grande_formato/vetrofania_stampa_su_trasparente.png',
-            'images/grande_formato/stampa_canvas.png',
-            'images/grande_formato/stampa _canvas2.png',
-            'images/grande_formato/stampa_canvas_plotter.png'
+            'images/grande_formato/backlight1.jpeg','images/grande_formato/backlight2.jpeg','images/grande_formato/backlight3.jpeg',
+            'images/grande_formato/rollup1.JPG','images/grande_formato/rollup2.JPG',
+            'images/grande_formato/poster1.JPG','images/grande_formato/poster2.JPG',
+            'images/grande_formato/quadro1.jpeg','images/grande_formato/quadro2.jpeg','images/grande_formato/quadro3.jpeg','images/grande_formato/quadro4.jpeg',
+            'images/grande_formato/fotoforex1.jpg','images/grande_formato/fotoforex2.jpg','images/grande_formato/fotoforex3.jpg','images/grande_formato/fotoforex4.jpeg','images/grande_formato/fotoforex5.jpeg','images/grande_formato/fotoforex6.jpeg','images/grande_formato/fotoforex7.jpeg','images/grande_formato/fotoforex8.jpg',
+            'images/grande_formato/adesivi_pavimento.jpeg','images/grande_formato/adesivi_pavimento2.jpeg',
+            'images/grande_formato/vetrofania_prespaziati.png','images/grande_formato/vetrofania_stampa_su_trasparente.png',
+            'images/grande_formato/stampa_canvas.png','images/grande_formato/stampa _canvas2.png','images/grande_formato/stampa_canvas_plotter.png'
         ],
         'Stampe termiche – Gadget': [
-            'images/termico_gadget/t-shirt1.jpeg',
-            'images/termico_gadget/t-shirt2.jpeg',
-            'images/termico_gadget/felpa1.jpg',
-            'images/termico_gadget/borsa1.jpeg',
-            'images/termico_gadget/borsa2.JPG',
-            'images/termico_gadget/borsa3.JPG',
-            'images/termico_gadget/spille1.jpeg',
-            'images/termico_gadget/spillle2.jpeg',
-            'images/termico_gadget/spille3.jpeg',
-            'images/termico_gadget/splille4.jpeg',
-            'images/termico_gadget/IMG_2891.jpg',
-            'images/termico_gadget/IMG_1695.jpeg',
-            'images/termico_gadget/cuscino.png',
-            'images/termico_gadget/mousepad.png',
-            'images/termico_gadget/calamita.png',
-            'images/termico_gadget/capellino.png',
-            'images/termico_gadget/Pochette.png'
+            'images/termico_gadget/t-shirt1.jpeg','images/termico_gadget/t-shirt2.jpeg','images/termico_gadget/felpa1.jpg',
+            'images/termico_gadget/borsa1.jpeg','images/termico_gadget/borsa2.JPG','images/termico_gadget/borsa3.JPG',
+            'images/termico_gadget/spille1.jpeg','images/termico_gadget/spillle2.jpeg','images/termico_gadget/spille3.jpeg','images/termico_gadget/splille4.jpeg',
+            'images/termico_gadget/IMG_2891.jpg','images/termico_gadget/IMG_1695.jpeg',
+            'images/termico_gadget/cuscino.png','images/termico_gadget/mousepad.png','images/termico_gadget/calamita.png','images/termico_gadget/capellino.png','images/termico_gadget/Pochette.png'
         ],
         'Stickers ed etichette': [
-            'images/etichette/etichette1.jpeg',
-            'images/etichette/etichette2.jpeg',
-            'images/etichette/etichette3.jpeg',
-            'images/etichette/etichette01.jpeg',
-            'images/etichette/etichette02.jpeg',
-            'images/etichette/etichette03.jpeg',
-            'images/etichette/etichetta05.jpeg',
-            'images/etichette/personalizzato1.jpg',
-            'images/etichette/personalizzato2.jpeg',
-            'images/etichette/personalizzato3.jpeg',
-            'images/etichette/personalizzato4.jpeg',
-            'images/etichette/qr_code.png'
+            'images/etichette/etichette1.jpeg','images/etichette/etichette2.jpeg','images/etichette/etichette3.jpeg',
+            'images/etichette/etichette01.jpeg','images/etichette/etichette02.jpeg','images/etichette/etichette03.jpeg',
+            'images/etichette/etichetta05.jpeg','images/etichette/personalizzato1.jpg','images/etichette/personalizzato2.jpeg',
+            'images/etichette/personalizzato3.jpeg','images/etichette/personalizzato4.jpeg','images/etichette/qr_code.png'
         ],
         'Stampa foto': [
-            'images/stampa_foto/stampa_canvas_plotter.png',
-            'images/stampa_foto/stampa_ canvas.png',
-            'images/stampa_foto/stampa _canvas2.png',
-            'images/stampa_foto/stampasublimatica1.jpg',
-            'images/stampa_foto/stampasublimatica2.jpeg',
-            'images/stampa_foto/stampasublimatica3.jpeg',
-            'images/stampa_foto/fotolibri.png',
-            'images/stampa_foto/foto_forex.png',
-            'images/stampa_foto/foto_album.png',
-            'images/stampa_foto/fototessera.png'
+            'images/stampa_foto/stampa_canvas_plotter.png','images/stampa_foto/stampa_ canvas.png','images/stampa_foto/stampa _canvas2.png',
+            'images/stampa_foto/stampasublimatica1.jpg','images/stampa_foto/stampasublimatica2.jpeg','images/stampa_foto/stampasublimatica3.jpeg',
+            'images/stampa_foto/fotolibri.png','images/stampa_foto/foto_forex.png','images/stampa_foto/foto_album.png','images/stampa_foto/fototessera.png'
         ],
         'Grafica': [
-            'images/grafica/impaginazione.png',
-            'images/grafica/menu_listini.png',
-            'images/grafica/socialmedia_kit.png',
-            'images/grafica/Brochure.png',
-            'images/grafica/Cartellonistica.png',
-            'images/grafica/Logo & brand identity.png'
+            'images/grafica/impaginazione.png','images/grafica/menu_listini.png','images/grafica/socialmedia_kit.png',
+            'images/grafica/Brochure.png','images/grafica/Cartellonistica.png','images/grafica/Logo & brand identity.png'
         ],
         'Archiviazione digitale e scansioni': [
-            'images/archiviazione_scansioni/scansione_a4.png',
-            'images/archiviazione_scansioni/scansione_a3.png',
-            'images/archiviazione_scansioni/archivio_sacansione.png',
-            'images/archiviazione_scansioni/scansione_libro.png',
-            'images/archiviazione_scansioni/archivio.png',
-            'images/archiviazione_scansioni/scansione_antiche.png',
-            'images/archiviazione_scansioni/restauro.png',
-            'images/archiviazione_scansioni/scansione_bianco.png',
-            'images/archiviazione_scansioni/salvataggio_usb.png',
-            'images/archiviazione_scansioni/ocr.png'
+            'images/archiviazione_scansioni/scansione_a4.png','images/archiviazione_scansioni/scansione_a3.png',
+            'images/archiviazione_scansioni/archivio_sacansione.png','images/archiviazione_scansioni/scansione_libro.png',
+            'images/archiviazione_scansioni/archivio.png','images/archiviazione_scansioni/scansione_antiche.png',
+            'images/archiviazione_scansioni/restauro.png','images/archiviazione_scansioni/scansione_bianco.png',
+            'images/archiviazione_scansioni/salvataggio_usb.png','images/archiviazione_scansioni/ocr.png'
         ],
         'Soluzioni espositive': [
-            'images/soluzioni_espositive/Banner_rollup.png',
-            'images/soluzioni_espositive/Espositori_banco.png'
+            'images/soluzioni_espositive/Banner_rollup.png','images/soluzioni_espositive/Espositori_banco.png'
         ]
     };
 
     const PANEL_IMAGE_ALIASES = {
         'Stampa digitale piccolo formato': {
-            'biglietti da visita': ['biglietti da visita'],
-            'volantini a4 a5': ['stampa a4 a3'],
-            'brochure': ['menu pieghevole'],
-            'locandine': ['festival'],
-            'cartoline': ['cartoline'],
-            'menu': ['menu pieghevole', 'menu appoggio'],
-            'listini prezzi': ['menu appoggio'],
-            'inviti': ['lettere']
+            'biglietti da visita': ['biglietti da visita'],'volantini a4 a5': ['stampa a4 a3'],
+            'brochure': ['menu pieghevole'],'locandine': ['festival'],'cartoline': ['cartoline'],
+            'menu': ['menu pieghevole', 'menu appoggio'],'listini prezzi': ['menu appoggio'],'inviti': ['lettere']
         },
         'Stampa digitale grande formato': {
-            'poster giganti': ['poster'],
-            'roll up': ['rollup'],
-            'tele canvas': ['stampa canvas'],
-            'forex e pannelli': ['fotoforex'],
-            'adesivi da pavimento': ['adesivi pavimento'],
-            'stampa su tessuto': ['stampa canvas plotter'],
-            'backlight': ['backlight'],
-            'vetrofanie': ['vetrofania'],
-            'segnaletica': ['quadro'],
-            'manifesti': ['poster']
+            'poster giganti': ['poster'],'roll up': ['rollup'],'tele canvas': ['stampa canvas'],
+            'forex e pannelli': ['fotoforex'],'adesivi da pavimento': ['adesivi pavimento'],
+            'stampa su tessuto': ['stampa canvas plotter'],'backlight': ['backlight'],
+            'vetrofanie': ['vetrofania'],'segnaletica': ['quadro'],'manifesti': ['poster']
         },
         'Stampe termiche – Gadget': {
-            't shirt': ['t shirt'],
-            'felpe': ['felpa'],
-            'borse in cotone': ['borsa'],
-            'magneti': ['calamita'],
-            'capellini': ['capellino'],
-            'cuscini': ['cuscino'],
-            'mouse pad': ['mousepad'],
-            'pochette': ['pochette'],
-            'spille': ['spille']
+            't shirt': ['t shirt'],'felpe': ['felpa'],'borse in cotone': ['borsa'],
+            'magneti': ['calamita'],'capellini': ['capellino'],'cuscini': ['cuscino'],
+            'mouse pad': ['mousepad'],'pochette': ['pochette'],'spille': ['spille']
         },
         'Stickers ed etichette': {
-            'sticker su misura': ['etichette1'],
-            'etichette prodotto': ['etichette01'],
-            'qr code adesivi': ['qr code'],
-            'etichette trasparenti': ['personalizzato2'],
-            'packaging personalizzato': ['personalizzato1'],
-            'adesivi antimanomissione': ['etichetta05'],
-            'bollini colorati': ['etichette2'],
-            'etichette per bottiglie': ['etichette03'],
+            'sticker su misura': ['etichette1'],'etichette prodotto': ['etichette01'],
+            'qr code adesivi': ['qr code'],'etichette trasparenti': ['personalizzato2'],
+            'packaging personalizzato': ['personalizzato1'],'adesivi antimanomissione': ['etichetta05'],
+            'bollini colorati': ['etichette2'],'etichette per bottiglie': ['etichette03'],
             'etichette per documenti': ['etichette02']
         },
         'Stampa foto': {
-            'album fotografici': ['foto album'],
-            'canvas': ['stampa canvas'],
-            'foto su tela': ['stampa canvas'],
-            'foto su forex': ['foto forex'],
-            'fototessere': ['fototessera'],
-            'stampa sublimatica': ['stampasublimatica']
+            'album fotografici': ['foto album'],'canvas': ['stampa canvas'],'foto su tela': ['stampa canvas'],
+            'foto su forex': ['foto forex'],'fototessere': ['fototessera'],'stampa sublimatica': ['stampasublimatica']
         },
         'Grafica': {
-            'logo brand identity': ['logo brand identity'],
-            'impaginazione flyer': ['impaginazione'],
-            'social media kit': ['socialmedia'],
-            'menu e listini': ['menu listini'],
-            'cartellonistica': ['cartellonistica'],
-            'brochure aziendali': ['brochure']
+            'logo brand identity': ['logo brand identity'],'impaginazione flyer': ['impaginazione'],
+            'social media kit': ['socialmedia'],'menu e listini': ['menu listini'],
+            'cartellonistica': ['cartellonistica'],'brochure aziendali': ['brochure']
         },
         'Archiviazione digitale e scansioni': {
-            'scansione a4': ['scansione a4'],
-            'scansione a3': ['scansione a3'],
-            'digitalizzazione archivi': ['archivio'],
-            'ocr e pdf ricercabile': ['ocr'],
-            'scansione foto antiche': ['scansione antiche'],
-            'salvataggio usb cloud': ['salvataggio usb'],
-            'scansione libri': ['scansione libro'],
-            'restauro digitale foto': ['restauro'],
+            'scansione a4': ['scansione a4'],'scansione a3': ['scansione a3'],
+            'digitalizzazione archivi': ['archivio'],'ocr e pdf ricercabile': ['ocr'],
+            'scansione foto antiche': ['scansione antiche'],'salvataggio usb cloud': ['salvataggio usb'],
+            'scansione libri': ['scansione libro'],'restauro digitale foto': ['restauro'],
             'scansione documenti legali': ['scansione bianco']
         },
         'Soluzioni espositive': {
-            'banner e roll up': ['banner rollup'],
-            'espositori da banco': ['espositori banco']
+            'banner e roll up': ['banner rollup'],'espositori da banco': ['espositori banco']
         }
     };
 
     function normalizeForMatch(value) {
-        return (value || '')
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '')
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, ' ')
-            .trim();
+        return (value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     }
 
     function getImageRank(path, term) {
@@ -1864,12 +2146,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const preferredFolder = PANEL_IMAGE_FOLDERS[panelTitle];
         const isAlreadyPreferred = preferredFolder && currentImg && currentImg.startsWith(preferredFolder + '/');
         if (isAlreadyPreferred) return currentImg;
-
         const catalog = IMAGE_CATALOG[panelTitle] || [];
         const aliases = PANEL_IMAGE_ALIASES[panelTitle] || {};
         const normalizedLabel = normalizeForMatch(label);
         const terms = aliases[normalizedLabel] || [label];
-
         for (const term of terms) {
             const normalizedTerm = normalizeForMatch(term);
             const matches = catalog
@@ -1879,10 +2159,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     const rankB = getImageRank(b, term);
                     return rankA.join('|').localeCompare(rankB.join('|'), undefined, { numeric: true });
                 });
-
             if (matches.length) return matches[0];
         }
-
         return currentImg || '';
     }
 
@@ -1898,9 +2176,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!brickZoomModal || !brickZoomImage) return;
         brickZoomModal.classList.remove('open');
         brickZoomModal.setAttribute('aria-hidden', 'true');
-        setTimeout(() => {
-            if (!brickZoomModal.classList.contains('open')) brickZoomImage.src = '';
-        }, 220);
+        setTimeout(() => { if (!brickZoomModal.classList.contains('open')) brickZoomImage.src = ''; }, 220);
     }
 
     function makeBrickEl(panelTitle, b, extraClass) {
@@ -1917,10 +2193,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const observer = ensureBrickObserver();
             if (observer) observer.observe(img);
             else img.src = resolvedImg;
-            img.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openBrickZoom(resolvedImg, b.label);
-            });
+            img.addEventListener('click', (e) => { e.stopPropagation(); openBrickZoom(resolvedImg, b.label); });
             brick.appendChild(img);
         }
         const lbl = document.createElement('div');
@@ -1931,96 +2204,61 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (brickZoomModal) {
-        brickZoomModal.addEventListener('click', (e) => {
-            if (e.target === brickZoomModal) closeBrickZoom();
-        });
+        brickZoomModal.addEventListener('click', (e) => { if (e.target === brickZoomModal) closeBrickZoom(); });
     }
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeBrickZoom();
-    });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeBrickZoom(); });
 
     function setupInfiniteRow(panelTitle, row, bricks, rowIdx) {
         const brickW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-w')) || 560;
         const gap    = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--brick-gap')) || 20;
         const unit   = brickW + gap;
         const N = bricks.length;
-
         row.innerHTML = '';
-
-        const makeCopies = (arr, cls) => arr.map(b => {
-            const el = makeBrickEl(panelTitle, b, cls + ' brick-visible');
-            return el;
-        });
-
+        const makeCopies = (arr, cls) => arr.map(b => { const el = makeBrickEl(panelTitle, b, cls + ' brick-visible'); return el; });
         const tailClones = makeCopies(bricks, 'brick-clone');
         const originals  = bricks.map(b => makeBrickEl(panelTitle, b, ''));
         const headClones = makeCopies(bricks, 'brick-clone');
-
         tailClones.forEach(el => row.appendChild(el));
         originals.forEach(el  => row.appendChild(el));
         headClones.forEach(el => row.appendChild(el));
-
         const loopWidth = N * unit;
         const initialLeft = loopWidth + (rowIdx % 2 !== 0 ? unit : 0);
-
         row.style.scrollBehavior = 'auto';
-        requestAnimationFrame(() => {
-            row.scrollLeft = initialLeft;
-            row.style.scrollBehavior = '';
-        });
-
+        requestAnimationFrame(() => { row.scrollLeft = initialLeft; row.style.scrollBehavior = ''; });
         let jumping = false;
         row.addEventListener('scroll', () => {
             if (jumping) return;
             const sl = row.scrollLeft;
-
             if (sl >= loopWidth * 2) {
-                jumping = true;
-                row.style.scrollBehavior = 'auto';
-                row.scrollLeft = sl - loopWidth;
+                jumping = true; row.style.scrollBehavior = 'auto'; row.scrollLeft = sl - loopWidth;
                 requestAnimationFrame(() => { row.style.scrollBehavior = ''; jumping = false; });
             } else if (sl <= 0) {
-                jumping = true;
-                row.style.scrollBehavior = 'auto';
-                row.scrollLeft = sl + loopWidth;
+                jumping = true; row.style.scrollBehavior = 'auto'; row.scrollLeft = sl + loopWidth;
                 requestAnimationFrame(() => { row.style.scrollBehavior = ''; jumping = false; });
             }
         }, { passive: true });
-
         return unit * 2;
     }
 
     function stopRowAutoDrift() {
-        if (rowAutoDriftRaf) {
-            cancelAnimationFrame(rowAutoDriftRaf);
-            rowAutoDriftRaf = null;
-        }
+        if (rowAutoDriftRaf) { cancelAnimationFrame(rowAutoDriftRaf); rowAutoDriftRaf = null; }
         rowAutoDriftLastTs = 0;
         rowAutoDriftItems.length = 0;
     }
 
     function startRowAutoDrift() {
         if (rowAutoDriftRaf || !rowAutoDriftItems.length) return;
-
         const tick = (ts) => {
-            if (!panel.classList.contains('is-open')) {
-                rowAutoDriftRaf = null;
-                rowAutoDriftLastTs = 0;
-                return;
-            }
-
+            if (!panel.classList.contains('is-open')) { rowAutoDriftRaf = null; rowAutoDriftLastTs = 0; return; }
             if (!rowAutoDriftLastTs) rowAutoDriftLastTs = ts;
             const dt = (ts - rowAutoDriftLastTs) / 1000;
             rowAutoDriftLastTs = ts;
-
             rowAutoDriftItems.forEach((item) => {
                 if (ts - item.lastInputTs < ROW_AUTO_DRIFT_PAUSE_AFTER_INPUT) return;
                 item.row.scrollLeft += item.direction * ROW_AUTO_DRIFT_SPEED * dt;
             });
-
             rowAutoDriftRaf = requestAnimationFrame(tick);
         };
-
         rowAutoDriftRaf = requestAnimationFrame(tick);
     }
 
@@ -2030,24 +2268,19 @@ document.addEventListener("DOMContentLoaded", () => {
         brickTimers = [];
         stopRowAutoDrift();
         let globalIdx = 0;
-
         rowsData.forEach((rowBricks, rowIdx) => {
             const wrap = document.createElement('div');
             wrap.className = 'brick-row-wrap';
-
             const arrL = document.createElement('button');
             arrL.className = 'row-arrow arr-left';
             arrL.setAttribute('aria-label','Scorri a sinistra');
             arrL.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>`;
-
             const arrR = document.createElement('button');
             arrR.className = 'row-arrow arr-right';
             arrR.setAttribute('aria-label','Scorri a destra');
             arrR.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>`;
-
             const row = document.createElement('div');
             row.className = `brick-row ${rowIdx % 2 === 0 ? 'row-odd' : 'row-even'}`;
-
             rowBricks.forEach((_, i) => {
                 const delay = globalIdx * 50;
                 globalIdx++;
@@ -2056,21 +2289,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (originals[i]) originals[i].classList.add('brick-visible');
                 }, delay));
             });
-
             wrap.appendChild(arrL);
             wrap.appendChild(row);
             wrap.appendChild(arrR);
             rowsContainer.appendChild(wrap);
-
             const step = setupInfiniteRow(panelTitle, row, rowBricks, rowIdx);
             arrL.addEventListener('click', () => row.scrollBy({left: -step, behavior:'smooth'}));
             arrR.addEventListener('click', () => row.scrollBy({left:  step, behavior:'smooth'}));
-
-            const rowState = {
-                row,
-                direction: rowIdx % 2 === 0 ? -1 : 1,
-                lastInputTs: 0
-            };
+            const rowState = { row, direction: rowIdx % 2 === 0 ? -1 : 1, lastInputTs: 0 };
             const pauseAutoDrift = () => { rowState.lastInputTs = performance.now(); };
             row.addEventListener('wheel', pauseAutoDrift, { passive: true });
             row.addEventListener('touchstart', pauseAutoDrift, { passive: true });
@@ -2079,45 +2305,34 @@ document.addEventListener("DOMContentLoaded", () => {
             arrR.addEventListener('click', pauseAutoDrift);
             rowAutoDriftItems.push(rowState);
         });
-
         startRowAutoDrift();
     }
 
     function openPanel(card) {
         if (closeAnimTimer) { clearTimeout(closeAnimTimer); closeAnimTimer = null; }
-
         const title = card.dataset.panelTitle || '';
         const color = card.dataset.panelColor || '#00AEEF';
         const desc  = card.dataset.panelDesc  || '';
         const rows  = JSON.parse(card.dataset.panelBricks || '[]');
-
         headerColorLine.style.backgroundColor = '#00AEEF';
-
         panelInlineTitle.textContent   = title;
         panelInlineTitle.style.color   = '#00AEEF';
         panelDesc.textContent          = desc;
-
         buildRows(title, rows);
-
         const headerH = header.offsetHeight;
         const rect    = card.getBoundingClientRect();
         const panelW  = window.innerWidth;
         const panelH  = window.innerHeight - headerH;
-
         const scaleX = rect.width  / panelW;
         const scaleY = rect.height / panelH;
-
         const cardCX  = rect.left + rect.width  / 2;
         const cardCY  = rect.top  + rect.height / 2;
         const panelCX = panelW / 2;
         const panelCY = headerH + panelH / 2;
-
         const dx = cardCX - panelCX;
         const dy = cardCY - panelCY;
-
         const cardRadius = parseFloat(getComputedStyle(card).borderRadius) || 22;
         const initRadius = cardRadius / Math.min(scaleX, scaleY);
-
         panel.style.transition      = 'none';
         panel.style.transform       = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
         panel.style.borderRadius    = `${initRadius}px`;
@@ -2126,31 +2341,22 @@ document.addEventListener("DOMContentLoaded", () => {
         panel.classList.remove('anim-done', 'content-visible');
         panel.classList.add('is-open');
         panel.scrollTop = 0;
-
         lastOpenedCard = card;
-
         card.classList.add('card-tapping');
         setTimeout(() => card.classList.remove('card-tapping'), 160);
-
         panelBackdrop.classList.add('visible');
         header.classList.add('panel-visible', 'scrolled');
         body.classList.add('panel-open');
-
-        // Nascondi il titolo subito, senza transition, così non si sposta quando "Indietro" si allarga
         dockedContainer.style.transition = 'none';
         dockedContainer.style.opacity    = '0';
         dockedContainer.style.pointerEvents = 'none';
-
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 panel.style.transition   = `transform ${DUR_OPEN}ms ${EASE_OPEN}, border-radius ${DUR_OPEN}ms ${EASE_OPEN}`;
                 panel.style.transform    = 'translate(0px, 0px) scale(1, 1)';
                 panel.style.borderRadius = '0px';
-
                 panel.classList.add('content-visible');
-
                 backBtn.classList.add('visible');
-
                 animTimer = setTimeout(() => {
                     panel.style.overflow = '';
                     panel.classList.add('anim-done');
@@ -2162,52 +2368,40 @@ document.addEventListener("DOMContentLoaded", () => {
     function closePanel() {
         if (animTimer) { clearTimeout(animTimer); animTimer = null; }
         stopRowAutoDrift();
-
         panel.classList.remove('anim-done', 'content-visible');
         panel.style.overflow = 'hidden';
         panel.scrollTop = 0;
-
         let targetTransform  = 'translate(0, 40px) scale(0.92, 0.92)';
         let targetRadius     = '22px';
-
         if (lastOpenedCard) {
             const headerH = header.offsetHeight;
             const rect    = lastOpenedCard.getBoundingClientRect();
             const panelW  = window.innerWidth;
             const panelH  = window.innerHeight - headerH;
-
             const scaleX = rect.width  / panelW;
             const scaleY = rect.height / panelH;
-
             const cardCX  = rect.left + rect.width  / 2;
             const cardCY  = rect.top  + rect.height / 2;
             const panelCX = panelW / 2;
             const panelCY = headerH + panelH / 2;
-
             const dx = cardCX - panelCX;
             const dy = cardCY - panelCY;
-
             const cardRadius = parseFloat(getComputedStyle(lastOpenedCard).borderRadius) || 22;
             const endRadius  = cardRadius / Math.min(scaleX, scaleY);
-
             targetTransform = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
             targetRadius    = `${endRadius}px`;
         }
-
         panel.style.transition   = `transform ${DUR_CLOSE}ms ${EASE_CLOSE}, border-radius ${DUR_CLOSE}ms ${EASE_CLOSE}, opacity ${DUR_CLOSE * 0.45}ms cubic-bezier(0.2, 0, 0, 1) ${DUR_CLOSE * 0.45}ms`;
         panel.style.transform    = targetTransform;
         panel.style.borderRadius = targetRadius;
         panel.style.opacity      = '0';
-
         panelBackdrop.classList.remove('visible');
-
         backBtn.classList.remove('visible');
         dockedContainer.style.transition    = '';
         dockedContainer.style.opacity       = '';
         dockedContainer.style.pointerEvents = '';
         header.classList.remove('panel-visible');
         headerColorLine.style.backgroundColor = '';
-
         closeAnimTimer = setTimeout(() => {
             panel.classList.remove('is-open');
             body.classList.remove('panel-open');
@@ -2229,12 +2423,16 @@ document.addEventListener("DOMContentLoaded", () => {
     backBtn.addEventListener('click', () => {
         closePanel();
         closeChiSiamoPanel();
+        closeContattiPanel();
     });
     panelBackdrop.addEventListener('click', closePanel);
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && panel.classList.contains('is-open')) closePanel();
-        if (e.key === 'Escape' && chiSiamoPanel && chiSiamoPanel.classList.contains('is-open')) closeChiSiamoPanel();
+        if (e.key === 'Escape') {
+            if (panel.classList.contains('is-open')) closePanel();
+            if (chiSiamoPanel && chiSiamoPanel.classList.contains('is-open')) closeChiSiamoPanel();
+            if (contattiPanel && contattiPanel.classList.contains('is-open')) closeContattiPanel();
+        }
     });
 
     /* ═══════════════════════════════════════════
@@ -2261,7 +2459,6 @@ document.addEventListener("DOMContentLoaded", () => {
         let pAnimTimer      = null;
         let pCloseTimer     = null;
 
-        /* ── Slideshow ── */
         function goTo(idx) {
             if (!hasMultipleSlides) return;
             slides[current].classList.remove('active');
@@ -2297,16 +2494,11 @@ document.addEventListener("DOMContentLoaded", () => {
             dot.addEventListener('click', () => { goTo(parseInt(dot.dataset.idx)); startAuto(); });
         });
 
-        /* Pausa al hover sullo slider */
         slider.addEventListener('mouseenter', () => { if (hasMultipleSlides) stopAuto(); });
         slider.addEventListener('mouseleave', () => { if (!isExpanded && hasMultipleSlides) startAuto(); });
 
-        if (hasMultipleSlides) {
-            resetProgress();
-            startAuto();
-        }
+        if (hasMultipleSlides) { resetProgress(); startAuto(); }
 
-        /* ── Build panel content ── */
         function buildExpandPanel() {
             expandInner.querySelectorAll('.expand-project-card').forEach(el => el.remove());
             slides.forEach(slide => {
@@ -2342,15 +2534,11 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        /* ── iOS open: geometry from slider box ── */
         function expandProjects() {
             if (pCloseTimer) { clearTimeout(pCloseTimer); pCloseTimer = null; }
-
             isExpanded = true;
             stopAuto();
             buildExpandPanel();
-
-            /* Capture rect IMMEDIATELY — before any DOM change */
             const headerH    = header.offsetHeight;
             const rect       = slider.getBoundingClientRect();
             const panelW     = window.innerWidth;
@@ -2361,14 +2549,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const dy         = (rect.top  + rect.height / 2) - (headerH + panelH / 2);
             const boxRadius  = parseFloat(getComputedStyle(slider).borderRadius) || 26;
             const initRadius = boxRadius / Math.min(scaleX, scaleY);
-
-            /* Fade text out */
-            slides.forEach(s => {
-                const txt = s.querySelector('.progetto-text');
-                if (txt) txt.classList.add('text-exit');
-            });
-
-            /* Silently place panel at exact slider position (invisible, no transition) */
+            slides.forEach(s => { const txt = s.querySelector('.progetto-text'); if (txt) txt.classList.add('text-exit'); });
             expandPanel.style.transition   = 'none';
             expandPanel.style.transform    = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
             expandPanel.style.borderRadius = `${initRadius}px`;
@@ -2377,7 +2558,6 @@ document.addEventListener("DOMContentLoaded", () => {
             expandPanel.classList.remove('anim-done', 'content-visible');
             expandPanel.classList.add('is-open');
             expandPanel.scrollTop = 0;
-
             vediWrap.classList.add('is-hidden');
             header.classList.add('panel-visible', 'scrolled');
             body.classList.add('panel-open');
@@ -2385,63 +2565,49 @@ document.addEventListener("DOMContentLoaded", () => {
             dockedContainer.style.opacity       = '0';
             dockedContainer.style.pointerEvents = 'none';
             backBtn.classList.add('visible');
-
-            /* Expand fires immediately after panel is placed */
             requestAnimationFrame(() => requestAnimationFrame(() => {
-                    expandPanel.style.transition   = `transform ${DUR_OPEN}ms ${EASE_OPEN}, border-radius ${DUR_OPEN}ms ${EASE_OPEN}`;
-                    expandPanel.style.transform    = 'translate(0,0) scale(1,1)';
-                    expandPanel.style.borderRadius = '0px';
-                    expandPanel.classList.add('content-visible');
-
-                    pAnimTimer = setTimeout(() => {
-                        expandPanel.style.overflow = '';
-                        expandPanel.classList.add('anim-done');
-                        staggerCards();
-                    }, DUR_OPEN);
-                }));
+                expandPanel.style.transition   = `transform ${DUR_OPEN}ms ${EASE_OPEN}, border-radius ${DUR_OPEN}ms ${EASE_OPEN}`;
+                expandPanel.style.transform    = 'translate(0,0) scale(1,1)';
+                expandPanel.style.borderRadius = '0px';
+                expandPanel.classList.add('content-visible');
+                pAnimTimer = setTimeout(() => {
+                    expandPanel.style.overflow = '';
+                    expandPanel.classList.add('anim-done');
+                    staggerCards();
+                }, DUR_OPEN);
+            }));
         }
 
-        /* ── iOS close: shrink back to box ── */
         function collapseProjects() {
             if (pAnimTimer) { clearTimeout(pAnimTimer); pAnimTimer = null; }
-
             isExpanded = false;
-
             expandPanel.classList.remove('anim-done', 'content-visible');
             expandPanel.style.overflow = 'hidden';
             expandPanel.scrollTop = 0;
-
             const headerH = header.offsetHeight;
             const rect    = slider.getBoundingClientRect();
             const panelW  = window.innerWidth;
             const panelH  = window.innerHeight - headerH;
-
             const scaleX = rect.width  / panelW;
             const scaleY = rect.height / panelH;
-
             const boxCX  = rect.left + rect.width  / 2;
             const boxCY  = rect.top  + rect.height / 2;
             const panCX  = panelW / 2;
             const panCY  = headerH + panelH / 2;
-
             const dx = boxCX - panCX;
             const dy = boxCY - panCY;
-
             const boxRadius  = parseFloat(getComputedStyle(slider).borderRadius) || 26;
             const endRadius  = boxRadius / Math.min(scaleX, scaleY);
-
             expandPanel.style.transition   = `transform ${DUR_CLOSE}ms ${EASE_CLOSE}, border-radius ${DUR_CLOSE}ms ${EASE_CLOSE}, opacity ${DUR_CLOSE*0.45}ms ${EASE_CLOSE} ${DUR_CLOSE*0.45}ms`;
             expandPanel.style.transform    = `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`;
             expandPanel.style.borderRadius = `${endRadius}px`;
             expandPanel.style.opacity      = '0';
-
             header.classList.remove('panel-visible');
             backBtn.classList.remove('visible');
             dockedContainer.style.transition    = '';
             dockedContainer.style.opacity       = '';
             dockedContainer.style.pointerEvents = '';
             vediWrap.classList.remove('is-hidden');
-
             pCloseTimer = setTimeout(() => {
                 expandPanel.classList.remove('is-open');
                 body.classList.remove('panel-open');
@@ -2449,28 +2615,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 expandPanel.style.transform    = '';
                 expandPanel.style.borderRadius = '';
                 expandPanel.style.opacity      = '';
-
-                /* Testo frosted glass rientra */
-                slides.forEach(s => {
-                    const txt = s.querySelector('.progetto-text');
-                    if (txt) txt.classList.remove('text-exit');
-                });
+                slides.forEach(s => { const txt = s.querySelector('.progetto-text'); if (txt) txt.classList.remove('text-exit'); });
                 vediBtn.classList.remove('btn-escape');
-
-                if (hasMultipleSlides) {
-                    resetProgress();
-                    startAuto();
-                }
+                if (hasMultipleSlides) { resetProgress(); startAuto(); }
                 pCloseTimer = null;
             }, DUR_CLOSE + 20);
         }
 
-        vediBtn.addEventListener('click', () => {
-            if (isExpanded) return;
-            vediBtn.classList.add('btn-escape');
-            expandProjects();
-        });
-        backBtn.addEventListener('click',  () => { if (isExpanded)  collapseProjects(); });
+        vediBtn.addEventListener('click', () => { if (isExpanded) return; vediBtn.classList.add('btn-escape'); expandProjects(); });
+        backBtn.addEventListener('click',  () => { if (isExpanded) collapseProjects(); });
         document.addEventListener('keydown', e => { if (e.key === 'Escape' && isExpanded) collapseProjects(); });
     })();
 });
